@@ -1,7 +1,7 @@
 const mongoose = require('../config/mongoose')
 
 const LinkSchema = mongoose.Schema({
-  link: {
+  url: {
     type: String
   },
   isRead: {
@@ -14,10 +14,10 @@ const LinkSchema = mongoose.Schema({
   },
   website: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: 'content'
+    ref: 'website'
   }
 })
 
-const LinkModel = mongoose.model('LinkSchema', LinkSchema, 'Link')
+const LinkModel = mongoose.model('LinkSchema', LinkSchema, 'link')
 
 module.exports = LinkModel

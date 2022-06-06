@@ -9,10 +9,12 @@ const WebsiteSchema = mongoose.Schema({
   }
 })
 WebsiteSchema.statics = {
-  add (website) {
-    return this.insert(website)
+  get (url) {
+    return this.findOne({ url })
+      .exec()
+      .then(website => website)
   }
 }
-const WebsiteModel = mongoose.model('Website', WebsiteSchema, 'Website')
+const WebsiteModel = mongoose.model('Website', WebsiteSchema, 'website')
 
 module.exports = WebsiteModel
