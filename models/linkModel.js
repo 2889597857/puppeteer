@@ -4,13 +4,9 @@ const LinkSchema = mongoose.Schema({
   url: {
     type: String
   },
-  isRead: {
-    type: Boolean,
-    default: false
-  },
-  content: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: 'content'
+  lastTime: {
+    type: Date,
+    default: Date.now
   },
   website: {
     type: mongoose.SchemaTypes.ObjectId,
