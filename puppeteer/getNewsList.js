@@ -1,7 +1,4 @@
 const puppeteer = require('puppeteer')
-const dayjs = require('dayjs')
-
-const { linkList } = require('./pageInfo')
 async function getNewsList (url, selector) {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
@@ -12,6 +9,5 @@ async function getNewsList (url, selector) {
 
   return links
 }
-let num = 3
-getNewsList(linkList[num].link, linkList[num].selector)
+
 module.exports = getNewsList
