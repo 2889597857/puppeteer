@@ -15,8 +15,8 @@ async function addLinkSelect({ url, selector }) {
   return res
 }
 
-async function getContentSelect(url, options) {
-  const topURL = getTopURL(url)
+async function getContentSelect(website) {
+  return await ContentSelectorModel.findOne({ website: website.toHexString() })
 }
 async function addContentSelect(options) {
   const { url, titleSelect, contentSelector, timeSelector } = options
@@ -30,5 +30,7 @@ async function addContentSelect(options) {
 
 module.exports = {
   getLinkSelector,
-  addLinkSelect
+  addLinkSelect,
+  getContentSelect,
+  addContentSelect
 }

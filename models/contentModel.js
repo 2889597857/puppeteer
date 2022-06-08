@@ -4,7 +4,7 @@ const ContentSchema = mongoose.Schema({
   title: {
     type: String
   },
-  date: {
+  time: {
     type: Date
   },
   content: {
@@ -14,7 +14,8 @@ const ContentSchema = mongoose.Schema({
     type: Array
   },
   isReported: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   url: {
     type: mongoose.SchemaTypes.ObjectId,

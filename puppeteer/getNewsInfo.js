@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer')
 const dayjs = require('dayjs')
 
-async function getNewsInfo (url, selector) {
+async function getNewsInfo(url, selector) {
   const { titleSelect, timeSelector, contentSelector } = selector
 
   const browser = await puppeteer.launch()
@@ -31,9 +31,8 @@ async function getNewsInfo (url, selector) {
   }
 
   await browser.close()
-  return [pageTitle, dayjs(pageTime).format(), pageContent]
+  return {
+    title: pageTitle, time: dayjs(pageTime).format(), content: pageContent
+  }
 }
-module.export = getNewsInfo
-module.exports = {
-  getNewsInfo
-}
+module.exports = getNewsInfo
