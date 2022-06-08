@@ -10,6 +10,9 @@ const ContentSchema = mongoose.Schema({
   content: {
     type: Array
   },
+  segmentation: {
+    type: Array
+  },
   isReported: {
     type: Boolean
   },

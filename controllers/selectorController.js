@@ -3,9 +3,8 @@ const ContentSelectorModel = require('../models/contentSelectorModel')
 const WebsiteModel = require('../models/websiteModel')
 const { getTopURL } = require('../utils')
 
-async function getLinkSelect(url) {
-  const topURL = getTopURL(url)
-  WebsiteModel.findOne({ url: topURL })
+async function getLinkSelector(website) {
+  return await LinkSelectorModel.findOne({ website: website.toHexString() })
 }
 async function addLinkSelect({ url, selector }) {
   const topURL = getTopURL(url)
@@ -27,4 +26,9 @@ async function addContentSelect(options) {
     { titleSelect, contentSelector, timeSelector, website: _id.toHexString() }
   ])
   return res
+}
+
+module.exports = {
+  getLinkSelector,
+  addLinkSelect
 }

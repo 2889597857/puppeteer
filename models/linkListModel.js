@@ -1,5 +1,5 @@
 const mongoose = require('../config/mongoose')
-
+const dayjs = require('dayjs')
 const LinkListSchema = mongoose.Schema({
     url: {
         type: String
@@ -10,7 +10,7 @@ const LinkListSchema = mongoose.Schema({
     },
     lastTime: {
         type: Date,
-        default: Date.now
+        default: dayjs().format()
     },
     content: {
         type: mongoose.SchemaTypes.ObjectId,
@@ -22,6 +22,6 @@ const LinkListSchema = mongoose.Schema({
     }
 })
 
-const LinkListModel = mongoose.model('LinkListSchema', LinkListSchema, 'LinkList')
+const LinkListModel = mongoose.model('LinkListSchema', LinkListSchema, 'linkList')
 
 module.exports = LinkListModel

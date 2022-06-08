@@ -1,7 +1,10 @@
 const LinkListModel = require('../models/linkListModel')
 
-async function addContentLinks (links) {
+async function addContentLink(links) {
   return await LinkListModel.insertMany(links)
 }
 
-module.exports = { addContentLinks }
+async function findContentLink(url) {
+  return await LinkListModel.findOne({ url })
+}
+module.exports = { addContentLink, findContentLink }

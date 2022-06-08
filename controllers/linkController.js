@@ -1,8 +1,9 @@
 const LinkModel = require('../models/linkModel')
 const { getTopURL } = require('../utils')
 const WebsiteModel = require('../models/websiteModel')
+const LinkSelectorModel = require('../models/linkSelectorModel')
 
-async function addLink (url) {
+async function addLink(url) {
   const link = await getLink(url)
   if (link !== null)
     return Promise.resolve({
@@ -29,14 +30,18 @@ async function addLink (url) {
   }
 }
 
-async function getLink (url) {
+async function getLink(url) {
   return await LinkModel.findOne({ url })
 }
-async function getLinks () {
+
+async function getAllLinks() {
   return await LinkModel.find()
 }
+
+
 module.exports = {
   addLink,
   getLink,
-  getLinks
+  getAllLinks,
 }
+
