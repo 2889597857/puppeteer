@@ -4,10 +4,10 @@ const getNewsInfo = require('../puppeteer/getNewsInfo')
 const jieba = require('@node-rs/jieba')
 const { getContentSelect } = require('../controllers/selectorController')
 
-async function addContent (pageContent) {
+async function addContent(pageContent) {
   return ContentModel.insertMany([pageContent])
 }
-async function getContent () {
+async function getContent() {
   let a2 = await LinkListModel.find({ state: 0 })
   const { url, website, _id } = a2[41]
   if (website && url) {
@@ -23,10 +23,14 @@ async function getContent () {
       const topN = 20
       pageContent.segmentation = jieba.extract(content.join(''), topN)
       pageContent.url = _id.toHexString()
+      console.log(pageContent);
       if (pageContent) {
         addContent(pageContent)
       }
     }
   }
 }
-getContent()
+
+module.exports = {
+  addContent
+}

@@ -9,9 +9,16 @@ async function getNewsList(url, selector) {
     links = await page.$$eval(selector, els => els.map(el => el.href))
     await browser.close()
 
-    return links
+    return {
+      state: true,
+      links
+    }
   } catch (error) {
-    return links
+    return {
+      state: false,
+      error
+    }
+
   }
 }
 module.exports = getNewsList
