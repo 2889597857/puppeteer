@@ -3,22 +3,16 @@ const {
   addWebsite,
   findWebsite
 } = require('../../controllers/websiteController')
+const { start: contentStart } = require('../../start/content')
 
 const router = Router()
 
 router.get('/', async (req, res) => {
-  let result = await addWebsite()
-  console.log(result)
-  if (result) {
-    res.json({
-      code: 200,
-      data: result
-    })
-  } else {
-    res.json({
-      code: 400
-    })
-  }
+  contentStart()
+  res.json({
+    code: 200,
+    msg: 'c '
+  })
 })
 
 module.exports = router

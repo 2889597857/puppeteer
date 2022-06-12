@@ -18,8 +18,7 @@ const ContentSchema = mongoose.Schema({
     default: false
   },
   url: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: 'url'
+    type: String
   },
   website: {
     type: mongoose.SchemaTypes.ObjectId,

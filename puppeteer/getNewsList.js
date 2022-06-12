@@ -1,8 +1,9 @@
-const puppeteer = require('puppeteer')
-async function getNewsList(url, selector) {
+const openBrowser = require('./browser')
+
+async function getNewsList (url, selector) {
   let links = null
   try {
-    const browser = await puppeteer.launch()
+    const browser = await openBrowser()
     const page = await browser.newPage()
     await page.goto(url)
 
@@ -18,7 +19,6 @@ async function getNewsList(url, selector) {
       state: false,
       error
     }
-
   }
 }
 module.exports = getNewsList

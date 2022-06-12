@@ -1,10 +1,34 @@
 const LinkListModel = require('../models/linkListModel')
 
-async function addContentLink(links) {
+async function addContentLink (links) {
   return await LinkListModel.insertMany(links)
 }
 
-async function findContentLink(url) {
+async function findOneContentLink (url) {
   return await LinkListModel.findOne({ url })
 }
-module.exports = { addContentLink, findContentLink }
+
+async function findAllContentLink () {
+  return await LinkListModel.find({ state: 0 })
+    .limit(10)
+    .exec()
+}
+
+async function removeContentLink (url) {
+  return await LinkListModel.deleteOne({ url })
+}
+
+async function updateLinkState (url, state) {
+  return await LinkListModel.findOneAndUpdate(
+    { url }, // 条件
+    { state }, // 更新的内容
+    { new: true } //  返回更新后的数据
+  )
+}
+module.exports = {
+  addContentLink,
+  findOneContentLink,
+  removeContentLink,
+  updateLinkState,
+  findAllContentLink
+}
