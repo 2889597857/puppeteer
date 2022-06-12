@@ -1,6 +1,5 @@
 const jieba = require('@node-rs/jieba')
 const { getNewsInfo } = require('../puppeteer/getNewsInfo')
-const LinkListModel = require('../models/linkListModel')
 const {
   removeContentLink,
   updateLinkState,
@@ -11,6 +10,7 @@ const { getContentSelect } = require('../controllers/selectorController')
 const { executeAsyncTask } = require('../utils')
 
 async function createTasks () {
+  // 获取链接（每次获取 100 条）
   const linkList = await findAllContentLink()
   if (linkList) {
     const taskList = []
@@ -21,48 +21,47 @@ async function createTasks () {
     return taskList
   }
 }
-let count = 0
-async function getContent ({ url, website }, cnt) {
-  console.log(`任务${cnt}开始`)
+async function getContent ({ url, website }) {
   let selector = null
   if (website && url) {
+    // 获取选择器
     selector = await getContentSelect(website)
   }
   if (selector) {
     const { titleSelect, timeSelector, contentSelector } = selector
+    // 获取页面内容
     const pageContent = await getNewsInfo(url, {
       titleSelect,
       timeSelector,
       contentSelector
     })
-    console.log(`任务${cnt}进行中`)
-    console.log(pageContent)
     if (pageContent) {
-      console.log(`任务${cnt}进行中`)
       const { content } = pageContent
       const topN = 20
+      // 获取新闻关键词
       pageContent.segmentation = jieba.extract(content.join(''), topN)
       pageContent.url = url
+      // 储存新闻
       const result = await addContent(pageContent)
       if (result) {
-        console.log(count++)
+        // 更新链接状态
         await updateLinkState(url, 1)
-        console.log(`任务${cnt}结束`)
         return true
       } else return false
     } else {
+      // 获取新闻内容失败
       await updateLinkState(url, 2)
-      console.log(`任务${cnt}结束`)
       return false
     }
   } else {
-    console.log(`任务${cnt}结束`)
+    // 获取选择器失败
     return false
   }
 }
 
 async function start () {
   const taskList = await createTasks()
-  const linkList = await executeAsyncTask(taskList, getContent)
+  executeAsyncTask(taskList, getContent)
+  return taskList
 }
 module.exports = { start }

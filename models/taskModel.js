@@ -1,14 +1,12 @@
-const { fail } = require('assert')
 const mongoose = require('../config/mongoose')
 const TaskSchema = mongoose.Schema({
-  id: {
-    type: Number
-  },
   name: String,
   description: String,
-  time: Date,
+  creationTime: Date,
   success: Number,
-  failed: Number
+  failed: Number,
+  linkNumber: Number,
+  type: Number
 })
 
 const TaskModel = mongoose.model('TaskSchema', TaskSchema, 'task')

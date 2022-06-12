@@ -63,14 +63,14 @@ async function start () {
   time = new Date()
   // 获取任务
   const taskList = await getLinkTask()
-  console.log(taskList.length)
   // 任务数量
   taskInfo.taskLength = taskList.length
   // 开始执行异步任务
-  await executeAsyncTask(taskList, getLink)
-  // 计算任务执行时间
-  taskInfo.time = new Date() - time
-  // 返回任务执行结果
-  return taskInfo
+  executeAsyncTask(taskList, getLink).then(() => {
+    // 计算任务执行时间
+    taskInfo.time = new Date() - time
+  })
+  // 返回任务列表
+  return taskList
 }
-start().then(res => console.log(res))
+module.exports = { start }

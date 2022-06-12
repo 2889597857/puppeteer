@@ -11,7 +11,7 @@ async function executeAsyncTask (taskList, fn) {
     let p = new Promise(resolve => {
       ;(async function loop (index) {
         if (index < MAX) {
-          await fn(taskList[index], cnt)
+          await fn(taskList[index])
           loop(cnt++)
           return
         }

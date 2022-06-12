@@ -8,7 +8,7 @@ const { start: contentStart } = require('../../start/content')
 const router = Router()
 
 router.get('/', async (req, res) => {
-  contentStart()
+  // contentStart()
   res.json({
     code: 200,
     msg: 'c '
