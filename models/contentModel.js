@@ -1,31 +1,34 @@
-const mongoose = require('../config/mongoose')
+const mongoose = require('../config/mongoose');
 
 const ContentSchema = mongoose.Schema({
   title: {
-    type: String
+    type: String,
   },
   time: {
-    type: Date
+    type: Date,
   },
   content: {
-    type: Array
+    type: Array,
   },
   segmentation: {
-    type: Array
+    type: Array,
+  },
+  report: {
+    type: String,
   },
   isReported: {
     type: Boolean,
-    default: false
+    default: false,
   },
   url: {
-    type: String
+    type: String,
   },
   website: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: 'website'
-  }
-})
+    ref: 'website',
+  },
+});
 
-const ContentModel = mongoose.model('ContentSchema', ContentSchema, 'content')
+const ContentModel = mongoose.model('ContentSchema', ContentSchema, 'content');
 
-module.exports = ContentModel
+module.exports = ContentModel;

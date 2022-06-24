@@ -15,7 +15,7 @@ const taskInfo = {
   failedTask: 0,
   successLink: 0
 }
-async function getLink ({ url, selector, website }) {
+async function getLink({ url, selector, website }) {
   const linkList = await getNewsList(url, selector)
   if (linkList.state) {
     const success = await saveLink(linkList.links, website)
@@ -28,7 +28,7 @@ async function getLink ({ url, selector, website }) {
   }
 }
 
-async function saveLink (linkList, website) {
+async function saveLink(linkList, website) {
   const finallyList = []
   for await (const link of linkList) {
     const contentLink = await findOneContentLink(link)
@@ -37,6 +37,7 @@ async function saveLink (linkList, website) {
     }
   }
   if (finallyList.length > 0) {
+    // console.log(finallyList);
     const success = await addContentLink(finallyList)
     return success.length
   } else {
@@ -44,7 +45,7 @@ async function saveLink (linkList, website) {
   }
 }
 
-async function getLinkTask () {
+async function getLinkTask() {
   const links = await getAllLinks()
   const taskList = []
   if (links.length > 0) {
@@ -59,7 +60,7 @@ async function getLinkTask () {
   return taskList
 }
 
-async function start () {
+async function start() {
   time = new Date()
   // 获取任务
   const taskList = await getLinkTask()

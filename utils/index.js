@@ -1,6 +1,6 @@
 const getTopURL = url => url.replace(/^https?:\/\/(.*?)(:\d+)?\/.*$/, '$1')
 
-async function executeAsyncTask (taskList, fn) {
+async function executeAsyncTask(taskList, fn) {
   const INIT = 0
   const MAX = taskList.length
   const CONCURRENCY = 3
@@ -9,8 +9,9 @@ async function executeAsyncTask (taskList, fn) {
 
   for (let i = 0; i < CONCURRENCY; i++) {
     let p = new Promise(resolve => {
-      ;(async function loop (index) {
+      ; (async function loop(index) {
         if (index < MAX) {
+          console.log(`任务${cnt}`);
           await fn(taskList[index])
           loop(cnt++)
           return

@@ -1,7 +1,7 @@
 const dayjs = require('dayjs')
 const openBrowser = require('./browser')
 
-async function getNewsInfo (url, selector) {
+async function getNewsInfo(url, selector) {
   try {
     const { titleSelect, timeSelector, contentSelector } = selector
 
@@ -42,3 +42,4 @@ async function getNewsInfo (url, selector) {
   }
 }
 module.exports = { getNewsInfo }
+// console.log(dayjs('2022-06-13T01:04:19.000Z').format('YY-MM-DD HH:mm:ss.000Z'));

@@ -19,13 +19,15 @@ router.post('/link/create', async (req, res) => {
   const { name, description } = req.body
   if (name && description) {
     const result = await createTask(name, description, 0)
+    const { _id } = result
+    // console.log(_id);
     if (result) {
       res.json({
         code: 200,
         data: result
       })
     }
-  }
+  } else res.sendStatus(404)
 })
 
 router.post('/content/create', async (req, res) => {
@@ -38,7 +40,7 @@ router.post('/content/create', async (req, res) => {
         data: result
       })
     }
-  }
+  } else res.sendStatus(404)
 })
 
 module.exports = router
