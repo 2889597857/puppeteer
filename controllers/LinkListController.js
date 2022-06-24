@@ -10,7 +10,7 @@ async function findOneContentLink (url) {
 
 async function findAllContentLink () {
   return await LinkListModel.find({ state: 0 })
-    .limit(10)
+    .limit(100)
     .exec()
 }
 

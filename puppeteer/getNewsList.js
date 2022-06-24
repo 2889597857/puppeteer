@@ -1,10 +1,6 @@
-const openBrowser = require('./browser')
-
-async function getNewsList (url, selector) {
+async function getNewsList (url, selector,page) {
   let links = null
   try {
-    const browser = await openBrowser()
-    const page = await browser.newPage()
     await page.goto(url)
 
     links = await page.$$eval(selector, els => els.map(el => el.href))

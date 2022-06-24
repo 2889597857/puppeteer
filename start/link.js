@@ -15,8 +15,8 @@ const taskInfo = {
   failedTask: 0,
   successLink: 0
 }
-async function getLink({ url, selector, website }) {
-  const linkList = await getNewsList(url, selector)
+async function getLink({ url, selector, website },page) {
+  const linkList = await getNewsList(url, selector,page)
   if (linkList.state) {
     const success = await saveLink(linkList.links, website)
     taskInfo.successLink += success
