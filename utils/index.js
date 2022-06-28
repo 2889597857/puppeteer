@@ -4,7 +4,7 @@ const getTopURL = (url) => url.replace(/^https?:\/\/(.*?)(:\d+)?\/.*$/, '$1');
 // 浏览器 
 const caches = [];
 async function openBrowser() {
-  const browser = await puppeteer.launch({ timeout:1000 });
+  const browser = await puppeteer.launch({headless:false ,timeout:1000 });
   caches.push(browser);
   return browser.newPage();
 }

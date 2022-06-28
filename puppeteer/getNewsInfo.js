@@ -29,8 +29,7 @@ async function getNewsInfo(url, selector, page) {
     } else {
       pageTime = dayjs(pageTime.match(/\d*-\d*-\d*.?\d*:\d*:?\d*?/g)).format();
     }
-
-    await browser.close();
+    console.log(pageTime);
     return {
       title: pageTitle,
       time: dayjs(pageTime).format(),
