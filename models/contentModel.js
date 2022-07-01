@@ -8,7 +8,7 @@ const ContentSchema = mongoose.Schema({
     type: Date,
   },
   content: {
-    type: Array,
+    type: String,
   },
   segmentation: {
     type: Array,
@@ -19,6 +19,9 @@ const ContentSchema = mongoose.Schema({
   isReported: {
     type: Boolean,
     default: false,
+  },
+  reportTime: {
+    type: Date,
   },
   url: {
     type: String,

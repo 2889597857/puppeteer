@@ -16,5 +16,5 @@ app.use(express.json())
 
 routers(app)
 app.listen(port, () => {
-  console.log(port)
+  console.log(`监听端口:${port}`)
 })

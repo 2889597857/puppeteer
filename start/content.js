@@ -43,7 +43,7 @@ async function getContent({ url, website }, page) {
       const { content } = pageContent;
       const topN = 20;
       // 获取新闻关键词
-      pageContent.segmentation = jieba.extract(content.join(''), topN);
+      pageContent.segmentation = jieba.extract(content, topN);
       pageContent.url = url;
       // 储存新闻
       const result = await addContent(pageContent);
