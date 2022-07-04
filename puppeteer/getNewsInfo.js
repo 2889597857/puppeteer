@@ -1,4 +1,5 @@
 const dayjs = require('dayjs');
+const { getTopURL } = require('../utils');
 
 async function getNewsInfo(url, selector, page) {
   try {
@@ -33,14 +34,21 @@ async function getNewsInfo(url, selector, page) {
     } else {
       pageTime = dayjs(pageTime.match(/\d*-\d*-\d*.?\d*:\d*:?\d*?/g)).format();
     }
-    // 默认报送内容为新闻前两段
+
+    const topURL = getTopURL(url);
+    if (topURL === 'www.ahwang.cn') {
+      pageContent.shift();
+    }
+    // 默认报送内容为新闻前两段1
     const contentLength = pageContent.length >= 2;
-    const report =  contentLength ? `${pageContent[0]}${pageContent[1]}` : pageContent[0]
+    const report = contentLength
+      ? `${pageContent[0]}${pageContent[1]}`
+      : pageContent[0];
     return {
       title: pageTitle,
       time: pageTime,
       content: pageContent.join(''),
-      report
+      report,
     };
   } catch (e) {
     return false;

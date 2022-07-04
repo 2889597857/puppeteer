@@ -1,10 +1,14 @@
 const puppeteer = require('puppeteer');
 const getTopURL = (url) => url.replace(/^https?:\/\/(.*?)(:\d+)?\/.*$/, '$1');
+// mongoose.Types.ObjectId.isValid(id)
+function verifyID(id) {
+  return /^[a-fA-F0-9]{24}$/.test(id);
+}
 
-// 浏览器 
+// 浏览器
 const caches = [];
 async function openBrowser() {
-  const browser = await puppeteer.launch({headless:false ,timeout:1000 });
+  const browser = await puppeteer.launch({ headless: false, timeout: 1000 });
   caches.push(browser);
   return browser.newPage();
 }
@@ -23,7 +27,7 @@ async function executeAsyncTask(taskList, fn) {
     let p = new Promise((resolve) => {
       (async function loop(index, page) {
         if (!page) {
-         page = await openBrowser()
+          page = await openBrowser();
         }
         if (index < MAX) {
           console.log(`任务${cnt}`);
@@ -40,4 +44,4 @@ async function executeAsyncTask(taskList, fn) {
   caches.map((el) => el.close());
 }
 
-module.exports = { getTopURL, executeAsyncTask };
+module.exports = { getTopURL, executeAsyncTask, verifyID };

@@ -43,7 +43,8 @@ async function getContent({ url, website }, page) {
       const { content } = pageContent;
       const topN = 20;
       // 获取新闻关键词
-      pageContent.segmentation = jieba.extract(content, topN);
+      const keywords = jieba.extract(content, topN);
+      pageContent.segmentation = keywords.map((el) => el.keyword);
       pageContent.url = url;
       // 储存新闻
       const result = await addContent(pageContent);
@@ -54,6 +55,7 @@ async function getContent({ url, website }, page) {
       } else return false;
     } else {
       // 获取新闻内容失败
+      // 更新链接状态
       await updateLinkState(url, 2);
       return false;
     }
@@ -65,6 +67,7 @@ async function getContent({ url, website }, page) {
 
 async function start() {
   const taskList = await createTasks();
+  console.log(taskList);
   if (taskList.length > 0) {
     executeAsyncTask(taskList, getContent);
     return taskList;
