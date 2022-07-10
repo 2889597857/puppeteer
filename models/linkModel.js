@@ -1,5 +1,5 @@
 const mongoose = require('../config/mongoose')
-
+// 获取新闻列表的页面
 const LinkSchema = mongoose.Schema({
   url: {
     type: String

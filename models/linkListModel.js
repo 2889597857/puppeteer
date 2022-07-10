@@ -1,5 +1,6 @@
 const mongoose = require('../config/mongoose')
 const dayjs = require('dayjs')
+// 新闻列表
 const LinkListSchema = mongoose.Schema({
     url: {
         type: String

@@ -1,7 +1,6 @@
 const jieba = require('@node-rs/jieba');
 const { getNewsInfo } = require('../puppeteer/getNewsInfo');
 const {
-  removeContentLink,
   updateLinkState,
   findAllContentLink,
 } = require('../controllers/LinkListController');

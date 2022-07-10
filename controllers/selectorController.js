@@ -3,6 +3,11 @@ const ContentSelectorModel = require('../models/contentSelectorModel')
 const WebsiteModel = require('../models/websiteModel')
 const { getTopURL } = require('../utils')
 
+/**
+ * 获取链接选择器
+ * @param {*} website 
+ * @returns 
+ */
 async function getLinkSelector(website) {
   return await LinkSelectorModel.findOne({ website: website.toHexString() })
 }
@@ -14,7 +19,11 @@ async function addLinkSelect({ url, selector }) {
   ])
   return res
 }
-
+/**
+ *  获取内容选择器
+ * @param {*} website 
+ * @returns 
+ */
 async function getContentSelect(website) {
   return await ContentSelectorModel.findOne({ website: website.toHexString() })
 }

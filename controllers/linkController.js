@@ -2,7 +2,7 @@ const LinkModel = require('../models/linkModel')
 const { getTopURL } = require('../utils')
 const WebsiteModel = require('../models/websiteModel')
 const LinkSelectorModel = require('../models/linkSelectorModel')
-
+// 添加获取新闻列表页面的URL
 async function addLink(url) {
   const link = await getLink(url)
   if (link !== null)

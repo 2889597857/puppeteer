@@ -31,6 +31,7 @@ async function getLink({ url, selector, website },page) {
 async function saveLink(linkList, website) {
   const finallyList = []
   for await (const link of linkList) {
+    // 链接是否存在
     const contentLink = await findOneContentLink(link)
     if (!contentLink) {
       finallyList.push({ url: link, website })
