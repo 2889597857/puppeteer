@@ -3,3 +3,4 @@ const { start: linksStart } = require('./link')
 module.exports = { contentStart, linksStart }
 contentStart()
 // linksStart()
+console.log();

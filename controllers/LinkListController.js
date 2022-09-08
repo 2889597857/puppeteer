@@ -17,12 +17,12 @@ async function findOneContentLink(url) {
  * 0 未收集
  * 1 已收集
  * 2 收集失败
- * @param {number} state 
- * @returns 
+ * @param {number} state
+ * @returns
  */
 async function findAllContentLink(state = 0) {
   return await LinkListModel.find({ state })
-    .sort({ _id: -1 })
+    .sort({ lastTime: -1 })
     .limit(100)
     .exec();
 }
@@ -31,9 +31,9 @@ async function findAllContentLink(state = 0) {
  * 0 未收集
  * 1 已收集
  * 2 收集失败
- * @param {*} url 
- * @param {*} state 
- * @returns 
+ * @param {*} url
+ * @param {*} state
+ * @returns
  */
 
 async function updateLinkState(url, state) {

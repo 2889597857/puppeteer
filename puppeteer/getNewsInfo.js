@@ -4,12 +4,13 @@ const { getTopURL } = require('../utils');
 async function getNewsInfo(url, selector, page) {
   try {
     const { titleSelect, timeSelector, contentSelector } = selector;
-
+    // 打开新闻页面
     await page.goto(url);
-
+    // 获取新闻标题
     const pageTitle = await page.$eval(titleSelect, (el) =>
       el.innerText.trim()
     );
+    // 获取新闻内容
     const pageContent = await page.$eval(contentSelector, (el) =>
       // 新闻内容进行处理，去除 \n 等无效内容
       el.innerText
@@ -39,8 +40,11 @@ async function getNewsInfo(url, selector, page) {
     if (topURL === 'www.ahwang.cn') {
       pageContent.shift();
     }
-    // 默认报送内容为新闻前两段1
-    const contentLength = pageContent.length >= 2;
+    // 默认报送内容为新闻前两段
+    // 如果新闻第一段字数大于 150 字。报送内容为新闻第一段
+    const contentLength =
+      pageContent.length >= 2 && pageContent[0].length <= 150;
+    /** 新闻摘要 */
     const report = contentLength
       ? `${pageContent[0]}${pageContent[1]}`
       : pageContent[0];

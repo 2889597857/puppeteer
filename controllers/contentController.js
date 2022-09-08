@@ -10,21 +10,21 @@ async function addContent(pageContent) {
   return ContentModel.insertMany([pageContent]);
 }
 /**
- * 获取新闻。每页 50 条
+ * 获取新闻。每页 25 条
  * @param {number} page 第几页
  * @returns
  */
 async function getContent(page) {
   const totalCount = await ContentModel.count();
-  const totalPages = Math.ceil(totalCount / 50);
+  const totalPages = Math.ceil(totalCount / 25);
   if (page > 0 && page <= totalPages) {
     const data = await ContentModel.find(
       { isReported: false },
       { __v: 0, isReported: 0, content: 0 }
     )
       .sort({ time: -1 })
-      .skip((page - 1) * 50)
-      .limit(50)
+      .skip((page - 1) * 25)
+      .limit(25)
       .exec();
     return {
       state: true,
@@ -52,7 +52,7 @@ async function getNewContent(_id) {
     return {
       state: true,
       data: {
-        _id: id,
+        _id,
         content,
       },
     };
