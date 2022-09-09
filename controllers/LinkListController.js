@@ -23,7 +23,7 @@ async function findOneContentLink(url) {
 async function findAllContentLink(state = 0) {
   return await LinkListModel.find({ state })
     .sort({ lastTime: -1 })
-    .limit(100)
+    .limit(10)
     .exec();
 }
 /**
@@ -49,3 +49,7 @@ module.exports = {
   updateLinkState,
   findAllContentLink,
 };
+
+// findOneContentLink('http://www.ahwang.cn/anhuadi/20220909/2424582.html').then(
+//   (res) => console.log(res)
+// );
