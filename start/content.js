@@ -66,8 +66,7 @@ async function getContent({ url, website }, page) {
 
 async function start() {
   const taskList = await createTasks();
-  console.log(taskList);
-  if (taskList.length > 0) {
+    if (taskList.length > 0) {
     executeAsyncTask(taskList, getContent);
     return taskList;
   }

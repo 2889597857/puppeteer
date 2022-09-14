@@ -36,7 +36,7 @@ async function saveLink(linkList, website) {
   for await (const link of linkList) {
     // 链接是否存在.不存在返回 null
     const contentLink = await findOneContentLink(link);
-    if (contentLink !== null) {
+    if (contentLink == null) {
       finallyList.push({ url: link, website });
     }
   }
@@ -69,7 +69,7 @@ async function getLinkTask() {
 }
 /**
  * 开始执行获取新闻链接任务
- * @returns 
+ * @returns
  */
 async function start() {
   time = new Date();
@@ -81,8 +81,8 @@ async function start() {
   executeAsyncTask(taskList, getLink).then(() => {
     // 计算任务执行时间
     taskInfo.time = new Date() - time;
+    return taskList;
   });
   // 返回任务列表
-  return taskList;
 }
 module.exports = { start };

@@ -38,7 +38,9 @@ async function getNewsInfo(url, selector, page) {
 
     const topURL = getTopURL(url);
     if (topURL === 'www.ahwang.cn') {
-      pageContent.shift();
+      if (pageContent[0].includes('凡本报记者署名文字')) {
+        pageContent.shift();
+      }
     }
     // 默认报送内容为新闻前两段
     // 如果新闻第一段字数大于 150 字。报送内容为新闻第一段

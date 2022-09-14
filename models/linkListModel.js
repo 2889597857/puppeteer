@@ -1,28 +1,33 @@
-const mongoose = require('../config/mongoose')
-const dayjs = require('dayjs')
+const mongoose = require('../config/mongoose');
+const dayjs = require('dayjs');
 // 新闻列表
 const LinkListSchema = mongoose.Schema({
-    url: {
-        type: String
-    },
-    state: {
-        type: Number,
-        default: 0
-    },
-    lastTime: {
-        type: Date,
-        default: dayjs().format()
-    },
-    content: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'content'
-    },
-    website: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'website'
-    }
-})
+  url: {
+    type: String,
+    unique: true,
+  },
+  state: {
+    type: Number,
+    default: 0,
+  },
+  lastTime: {
+    type: Date,
+    default: dayjs().format(),
+  },
+  content: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'content',
+  },
+  website: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'website',
+  },
+});
 
-const LinkListModel = mongoose.model('LinkListSchema', LinkListSchema, 'linkList')
+const LinkListModel = mongoose.model(
+  'LinkListSchema',
+  LinkListSchema,
+  'linkList'
+);
 
-module.exports = LinkListModel
+module.exports = LinkListModel;

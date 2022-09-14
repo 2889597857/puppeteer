@@ -1,3 +1,4 @@
+const { findOneAndUpdate } = require('../models/linkListModel');
 const LinkListModel = require('../models/linkListModel');
 
 // 添加新闻链接
@@ -23,7 +24,7 @@ async function findOneContentLink(url) {
 async function findAllContentLink(state = 0) {
   return await LinkListModel.find({ state })
     .sort({ lastTime: -1 })
-    .limit(10)
+    .limit()
     .exec();
 }
 /**
@@ -35,12 +36,17 @@ async function findAllContentLink(state = 0) {
  * @param {*} state
  * @returns
  */
+// findOneAndUpdate
+// findOneContentLink
+//  { url }, // 条件
+//  { state }, // 更新链接的状态 0 未抓取 1 抓取成功 2 抓取失败
+//  { new: true } //  返回更新后的数据 默认返回更新前的数据
 
 async function updateLinkState(url, state) {
-  return await LinkListModel.findOneAndUpdate(
+  console.log(url);
+  return await LinkListModel.updateOne(
     { url }, // 条件
     { state }, // 更新链接的状态 0 未抓取 1 抓取成功 2 抓取失败
-    { new: true } //  返回更新后的数据 默认返回更新前的数据
   );
 }
 module.exports = {

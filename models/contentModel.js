@@ -43,6 +43,7 @@ const NewsContent = {
   },
   url: {
     type: String,
+    unique: true,
   },
   website: {
     type: mongoose.SchemaTypes.ObjectId,

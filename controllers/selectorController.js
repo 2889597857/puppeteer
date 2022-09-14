@@ -44,7 +44,7 @@ module.exports = {
   addContentSelect,
 };
 
-addLinkSelect({
-  url: 'http://www.wuhunews.cn/yaowen/index.html',
-  selector: '#ContentList li a',
-}).then((res) => console.log(res));
+// addLinkSelect({
+//   url: 'http://www.wuhunews.cn/yaowen/index.html',
+//   selector: '#ContentList li a',
+// }).then((res) => console.log(res));

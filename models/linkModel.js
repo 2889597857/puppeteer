@@ -1,19 +1,20 @@
-const mongoose = require('../config/mongoose')
+const mongoose = require('../config/mongoose');
 // 获取新闻列表的页面
 const LinkSchema = mongoose.Schema({
   url: {
-    type: String
+    type: String,
+    unique: true,
   },
   lastTime: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   website: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: 'website'
-  }
-})
+    ref: 'website',
+  },
+});
 
-const LinkModel = mongoose.model('LinkSchema', LinkSchema, 'link')
+const LinkModel = mongoose.model('LinkSchema', LinkSchema, 'link');
 
-module.exports = LinkModel
+module.exports = LinkModel;
