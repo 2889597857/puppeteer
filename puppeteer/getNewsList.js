@@ -1,21 +1,22 @@
-async function getNewsList (url, selector,page) {
+async function getNewsList(url, selector, page) {
   // 储存获取的新闻链接
-  let links = null
+  let links = null;
   try {
     // 打开获取新闻链接的页面
-    await page.goto(url)
-    // 获取新闻链接 
-    links = await page.$$eval(selector, els => els.map(el => el.href))
-
+    await page.goto(url);
+    // 获取新闻链接
+    links = await page.$$eval(selector, (els) => els.map((el) => el.href));
+    // 去重
+    links = [...new Set(links)];
     return {
       state: true,
-      links
-    }
+      links,
+    };
   } catch (error) {
     return {
       state: false,
-      error
-    }
+      error,
+    };
   }
 }
-module.exports = getNewsList
+module.exports = getNewsList;
