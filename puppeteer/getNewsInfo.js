@@ -1,5 +1,6 @@
 const dayjs = require('dayjs');
 const { getTopURL } = require('../utils');
+const jieba = require('@node-rs/jieba');
 
 async function getNewsInfo(url, selector, page) {
   try {
@@ -50,11 +51,20 @@ async function getNewsInfo(url, selector, page) {
     const report = contentLength
       ? `${pageContent[0]}${pageContent[1]}`
       : pageContent[0];
+
+    // 获取新闻关键词
+    const topN = 10;
+    const content = pageContent.join('');
+    const keywords = jieba.extract(content, topN);
+    const segmentation = keywords.map((el) => el.keyword);
+
     return {
       title: pageTitle,
+      url,
       time: pageTime,
-      content: pageContent.join(''),
+      content,
       report,
+      segmentation,
     };
   } catch (e) {
     return false;

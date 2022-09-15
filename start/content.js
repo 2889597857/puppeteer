@@ -1,4 +1,3 @@
-const jieba = require('@node-rs/jieba');
 const { getNewsInfo } = require('../puppeteer/getNewsInfo');
 const {
   updateLinkState,
@@ -39,12 +38,6 @@ async function getContent({ url, website }, page) {
       page
     );
     if (pageContent) {
-      const { content } = pageContent;
-      const topN = 20;
-      // 获取新闻关键词
-      const keywords = jieba.extract(content, topN);
-      pageContent.segmentation = keywords.map((el) => el.keyword);
-      pageContent.url = url;
       // 储存新闻
       const result = await addContent(pageContent);
       if (result) {
