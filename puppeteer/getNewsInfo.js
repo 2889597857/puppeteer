@@ -37,12 +37,17 @@ async function getNewsInfo(url, selector, page) {
       pageTime = dayjs(pageTime.match(/\d*-\d*-\d*.?\d*:\d*:?\d*?/g)).format();
     }
 
+    if (!pageContent || pageContent.length === 0) {
+      return false;
+    }
+
     const topURL = getTopURL(url);
     if (topURL === 'www.ahwang.cn') {
       if (pageContent[0].includes('凡本报记者署名文字')) {
         pageContent.shift();
       }
     }
+
     // 默认报送内容为新闻前两段
     // 如果新闻第一段字数大于 150 字。报送内容为新闻第一段
     const contentLength =
