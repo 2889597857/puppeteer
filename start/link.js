@@ -32,21 +32,20 @@ async function getLink({ url, selector, website }, page) {
 }
 
 async function saveLink(linkList, website) {
-  const finallyList = [];
+  let count = 0;
   for await (const link of linkList) {
-    // 链接是否存在.不存在返回 null
-    const contentLink = await findOneContentLink(link);
-    if (contentLink == null) {
-      finallyList.push({ url: link, website });
+    try {
+      // 链接是否存在.不存在返回 null
+      const isExistenceLink = await findOneContentLink(link);
+      if (isExistenceLink == null) {
+        const success = await addContentLink([{ url: link, website }]);
+        if (success) count++;
+      }
+    } catch (error) {
+      continue;
     }
   }
-  // 没有收集过的链接存入数据库
-  if (finallyList.length > 0) {
-    const success = await addContentLink(finallyList);
-    return success.length;
-  } else {
-    return 0;
-  }
+  return count;
 }
 
 async function getLinkTask() {
