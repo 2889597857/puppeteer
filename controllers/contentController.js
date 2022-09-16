@@ -15,11 +15,11 @@ async function addContent(pageContent) {
  * @returns
  */
 async function getContent(page) {
-  const totalCount = await ContentModel.count({ state });
+  const totalCount = await ContentModel.count();
   const totalPages = Math.ceil(totalCount / 25);
   if (page > 0 && page <= totalPages) {
-    const option = { __v: 0, content: 0 };
-    const data = await ContentModel.find({ state }, option)
+    const option = { __v: 0, content: 0, reportTime: 0 };
+    const data = await ContentModel.find({}, option)
       .sort({ time: -1 })
       .skip((page - 1) * 25)
       .limit(25)
