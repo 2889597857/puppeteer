@@ -14,14 +14,11 @@ async function addContent(pageContent) {
  * @param {number} page 第几页
  * @returns
  */
-async function getContent(page, state = 0) {
+async function getContent(page) {
   const totalCount = await ContentModel.count({ state });
   const totalPages = Math.ceil(totalCount / 25);
   if (page > 0 && page <= totalPages) {
-    const option =
-      state === 1
-        ? { __v: 0, content: 0, segmentation: 0, time: 0, reportTime: 0 }
-        : { __v: 0, content: 0 };
+    const option = { __v: 0, content: 0 };
     const data = await ContentModel.find({ state }, option)
       .sort({ time: -1 })
       .skip((page - 1) * 25)
@@ -42,6 +39,27 @@ async function getContent(page, state = 0) {
     };
   }
 }
+
+async function getReportNews(date) {
+  const option = {
+    __v: 0,
+    content: 0,
+    segmentation: 0,
+    time: 0,
+    reportTime: 0,
+    state: 0,
+  };
+
+  const data = await ContentModel.find({ state: 1 }, option)
+    .sort({ reportTime: 1 })
+    .exec();
+
+  return {
+    state: true,
+    data,
+  };
+}
+
 /**
  * 获取新闻全文
  * @param {*} id
@@ -162,4 +180,7 @@ module.exports = {
   updateNewsState,
   deleteNews,
   getNewReport,
+  getReportNews,
 };
+
+// getReportNews().then((res) => console.log(res));

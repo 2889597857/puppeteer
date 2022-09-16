@@ -5,6 +5,7 @@ const {
   updateReport,
   updateNewsState,
   deleteNews,
+  getReportNews,
 } = require('../../controllers/contentController');
 const { verifyID } = require('../../utils');
 const router = Router();
@@ -24,16 +25,11 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/reportNews', async (req, res) => {
-  const pageSize = req.query.page || 1;
-  if (pageSize && parseInt(pageSize, 10)) {
-    const data = await getContent(parseInt(pageSize, 10), 1);
-    if (data.state) {
-      res.json({ code: 200, data: data.data });
-    } else {
-      res.json({ code: 200, msg: data.msg });
-    }
+  const data = await getReportNews();
+  if (data.state) {
+    res.json({ code: 200, data: data.data });
   } else {
-    res.json({ code: 404, msg: '参数不存在或参数错误' });
+    res.json({ code: 200, msg: data.msg });
   }
 });
 
@@ -55,8 +51,7 @@ router.post('/updateNewsState', async (req, res) => {
   const { _id, state } = req.body;
   if (verifyID(_id) && (state == 0 || state == 1)) {
     const data = await updateNewsState(_id, state);
-
-    res.json({ data });
+    res.json({ code: 200, data: data.data });
   } else {
     res.json({ code: 202, msg: '_id ' });
   }
