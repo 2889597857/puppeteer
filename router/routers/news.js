@@ -3,15 +3,30 @@ const {
   getContent,
   getNewContent,
   updateReport,
+  updateNewsState,
   deleteNews,
 } = require('../../controllers/contentController');
 const { verifyID } = require('../../utils');
 const router = Router();
 
 router.get('/', async (req, res) => {
-  const pageSize = req.query.page;
+  const pageSize = req.query.page || 1;
   if (pageSize && parseInt(pageSize, 10)) {
     const data = await getContent(parseInt(pageSize, 10));
+    if (data.state) {
+      res.json({ code: 200, data: data.data });
+    } else {
+      res.json({ code: 200, msg: data.msg });
+    }
+  } else {
+    res.json({ code: 404, msg: '参数不存在或参数错误' });
+  }
+});
+
+router.get('/reportNews', async (req, res) => {
+  const pageSize = req.query.page || 1;
+  if (pageSize && parseInt(pageSize, 10)) {
+    const data = await getContent(parseInt(pageSize, 10), 1);
     if (data.state) {
       res.json({ code: 200, data: data.data });
     } else {
@@ -33,6 +48,17 @@ router.get('/content', async (req, res) => {
     }
   } else {
     res.json({ code: 404, msg: '参数不存在或参数错误' });
+  }
+});
+
+router.post('/updateNewsState', async (req, res) => {
+  const { _id, state } = req.body;
+  if (verifyID(_id) && (state == 0 || state == 1)) {
+    const data = await updateNewsState(_id, state);
+
+    res.json({ data });
+  } else {
+    res.json({ code: 202, msg: '_id ' });
   }
 });
 

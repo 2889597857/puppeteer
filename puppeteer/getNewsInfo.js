@@ -7,10 +7,7 @@ async function getNewsInfo(url, selector, page) {
     const { titleSelect, timeSelector, contentSelector } = selector;
     // 打开新闻页面
     await page.goto(url);
-    // 获取新闻标题
-    const pageTitle = await page.$eval(titleSelect, (el) =>
-      el.innerText.trim()
-    );
+
     // 获取新闻内容
     const pageContent = await page.$eval(contentSelector, (el) =>
       // 新闻内容进行处理，去除 \n 等无效内容
@@ -19,6 +16,9 @@ async function getNewsInfo(url, selector, page) {
         .filter(Boolean)
         .map((el) => el.trim())
     );
+
+    if (!pageContent || pageContent.length === 0) return false;
+
     // 获取新闻发布时间
     let pageTime = await page.$eval(timeSelector, (el) => el.innerText.trim());
     // 发布时间有多种格式
@@ -36,10 +36,10 @@ async function getNewsInfo(url, selector, page) {
     } else {
       pageTime = dayjs(pageTime.match(/\d*-\d*-\d*.?\d*:\d*:?\d*?/g)).format();
     }
-
-    if (!pageContent || pageContent.length === 0) {
-      return false;
-    }
+    // 获取新闻标题
+    const pageTitle = await page.$eval(titleSelect, (el) =>
+      el.innerText.trim()
+    );
 
     const topURL = getTopURL(url);
     if (topURL === 'www.ahwang.cn') {

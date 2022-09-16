@@ -5,45 +5,38 @@ const NewsContent = {
   title: {
     type: String,
   },
-  /** 新闻发布时间 */
-  time: {
-    type: Date,
-  },
-  /** 新闻详情 */
-  content: {
+  /** 新闻链接 */
+  url: {
     type: String,
-  },
-  /** 关键词 */
-  segmentation: {
-    type: Array,
+    unique: true,
   },
   /** 报送内容 */
   report: {
     type: String,
   },
-  /** 是否报送 */
-  isReported: {
-    type: Boolean,
-    default: false,
+  /** 新闻详情 */
+  content: {
+    type: String,
+  },
+  /** 新闻发布时间 */
+  time: {
+    type: Date,
+  },
+  /** 关键词 */
+  segmentation: {
+    type: Array,
   },
   /** 报送时间 */
   reportTime: {
     type: Date,
   },
-  /** 是否删除 */
+  /**
+   * 0  未报送
+   * 1  已报送
+   * 2 已删除 */
   state: {
     type: Number,
-    /**
-     *  0 未删除
-     * 1 已删除 */
     default: 0,
-  },
-  reportTime: {
-    type: Date,
-  },
-  url: {
-    type: String,
-    unique: true,
   },
   website: {
     type: mongoose.SchemaTypes.ObjectId,

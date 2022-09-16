@@ -14,14 +14,15 @@ async function addContent(pageContent) {
  * @param {number} page 第几页
  * @returns
  */
-async function getContent(page) {
-  const totalCount = await ContentModel.count();
+async function getContent(page, state = 0) {
+  const totalCount = await ContentModel.count({ state });
   const totalPages = Math.ceil(totalCount / 25);
   if (page > 0 && page <= totalPages) {
-    const data = await ContentModel.find(
-      { isReported: false },
-      { __v: 0, isReported: 0, content: 0 }
-    )
+    const option =
+      state === 1
+        ? { __v: 0, content: 0, segmentation: 0, time: 0, reportTime: 0 }
+        : { __v: 0, content: 0 };
+    const data = await ContentModel.find({ state }, option)
       .sort({ time: -1 })
       .skip((page - 1) * 25)
       .limit(25)
@@ -105,7 +106,7 @@ async function updateReport(_id, report) {
     { report },
     { new: true }
   );
-  
+
   if (data !== null) {
     // 更新成功
     const { report } = data;
@@ -119,6 +120,18 @@ async function updateReport(_id, report) {
   } else {
     // 更新失败
     return { state: false, msg: '_id 不存在' };
+  }
+}
+
+async function updateNewsState(_id, state) {
+  const data = await ContentModel.findOneAndUpdate(
+    { _id },
+    { state, reportTime: dayjs().format() },
+    { new: true }
+  );
+  if (data !== null) {
+    const { _id, state } = data;
+    return { state: true, data: { _id, state } };
   }
 }
 /**
@@ -146,5 +159,7 @@ module.exports = {
   getContent,
   getNewContent,
   updateReport,
+  updateNewsState,
   deleteNews,
+  getNewReport,
 };

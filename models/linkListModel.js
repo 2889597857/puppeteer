@@ -6,17 +6,21 @@ const LinkListSchema = mongoose.Schema({
     type: String,
     unique: true,
   },
+  /** 
+   * 0 内容未采集
+   * 1 采集成功
+   * 2 采集失败
+   */
   state: {
     type: Number,
     default: 0,
   },
+  /**
+   * 链接收集时间
+   */
   lastTime: {
     type: Date,
     default: dayjs().format(),
-  },
-  content: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: 'content',
   },
   website: {
     type: mongoose.SchemaTypes.ObjectId,
