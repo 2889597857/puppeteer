@@ -25,7 +25,8 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/reportNews', async (req, res) => {
-  const data = await getReportNews();
+  const date = req.query.date;
+  const data = await getReportNews(parseInt(date, 10));
   if (data.state) {
     res.json({ code: 200, data: data.data });
   } else {

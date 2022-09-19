@@ -18,8 +18,8 @@ async function getContent(page) {
   const totalCount = await ContentModel.count();
   const totalPages = Math.ceil(totalCount / 25);
   if (page > 0 && page <= totalPages) {
-    const option = { __v: 0, content: 0, reportTime: 0 };
-    const data = await ContentModel.find({}, option)
+    const option = { __v: 0, content: 0, reportTime: 0, state: 0 };
+    const data = await ContentModel.find({ state: 0 }, option)
       .sort({ time: -1 })
       .skip((page - 1) * 25)
       .limit(25)
@@ -39,8 +39,23 @@ async function getContent(page) {
     };
   }
 }
-
+/**
+ * 获取报送的信息
+ * @param {*} date
+ * @returns
+ */
 async function getReportNews(date) {
+  const gte = dayjs(date).format();
+  const lte = dayjs(date).add(1, 'day').format();
+  console.log(date);
+
+  const sort = {
+    state: 1,
+    reportTime: {
+      $gte: gte,
+      $lte: lte,
+    },
+  };
   const option = {
     __v: 0,
     content: 0,
@@ -50,10 +65,11 @@ async function getReportNews(date) {
     state: 0,
   };
 
-  const data = await ContentModel.find({ state: 1 }, option)
+  const data = await ContentModel.find(sort, option)
     .sort({ reportTime: 1 })
     .exec();
-
+  console.log(data);
+  console.log(sort);
   return {
     state: true,
     data,
@@ -140,7 +156,12 @@ async function updateReport(_id, report) {
     return { state: false, msg: '_id 不存在' };
   }
 }
-
+/**
+ * 更新新闻状态
+ * @param {*} _id
+ * @param {*} state
+ * @returns
+ */
 async function updateNewsState(_id, state) {
   const data = await ContentModel.findOneAndUpdate(
     { _id },
