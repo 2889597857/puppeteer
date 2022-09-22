@@ -171,10 +171,21 @@ async function updateNewsState(_id, state) {
     { state, reportTime: dayjs().format() },
     { new: true }
   );
-  console.log(data);
   if (data !== null) {
     const { _id, state } = data;
     return { state: true, data: { _id, state } };
+  }
+}
+
+async function updateReportTime(_id, date) {
+  const data = await ContentModel.findOneAndUpdate(
+    { _id },
+    { reportTime: dayjs(date).format() },
+    { new: true }
+  );
+  if (data !== null) {
+    const { _id, reportTime } = data;
+    return { state: true, data: { _id, time: reportTime } };
   }
 }
 /**
@@ -206,6 +217,7 @@ module.exports = {
   deleteNews,
   getNewReport,
   getReportNews,
+  updateReportTime,
 };
 
 // getReportNews().then((res) => console.log(res));

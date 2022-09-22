@@ -6,6 +6,7 @@ const {
   updateNewsState,
   deleteNews,
   getReportNews,
+  updateReportTime,
 } = require('../../controllers/contentController');
 const { verifyID } = require('../../utils');
 const router = Router();
@@ -50,8 +51,19 @@ router.get('/content', async (req, res) => {
 
 router.post('/updateNewsState', async (req, res) => {
   const { _id, state } = req.body;
-  if (verifyID(_id) && parseInt(state)) {
+
+  if (verifyID(_id) && parseInt(state) >= 0) {
     const data = await updateNewsState(_id, state);
+    res.json({ code: 200, data: data.data });
+  } else {
+    res.json({ code: 202, msg: '_id ' });
+  }
+});
+
+router.post('/updateReportTime', async (req, res) => {
+  const { _id, date } = req.body;
+  if (verifyID(_id) && parseInt(date)) {
+    const data = await updateReportTime(_id, date);
     res.json({ code: 200, data: data.data });
   } else {
     res.json({ code: 202, msg: '_id ' });

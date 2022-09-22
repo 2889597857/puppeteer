@@ -76,6 +76,7 @@ async function start() {
   const taskList = await getLinkTask();
   // 任务数量
   taskInfo.taskLength = taskList.length;
+  console.log("Started task list");
   // 开始执行异步任务
   executeAsyncTask(taskList, getLink).then(() => {
     // 计算任务执行时间
