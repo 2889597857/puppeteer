@@ -15,10 +15,16 @@ async function addContent(pageContent) {
  * @returns
  */
 async function getContent(page) {
-  const totalCount = await ContentModel.count();
+  const totalCount = await ContentModel.count({ state: 0 });
   const totalPages = Math.ceil(totalCount / 25);
   if (page > 0 && page <= totalPages) {
-    const option = { __v: 0, content: 0, reportTime: 0, state: 0 };
+    const option = {
+      __v: 0,
+      content: 0,
+      segmentation: 0,
+      reportTime: 0,
+      state: 0,
+    };
     const data = await ContentModel.find({ state: 0 }, option)
       .sort({ time: -1 })
       .skip((page - 1) * 25)
@@ -47,7 +53,6 @@ async function getContent(page) {
 async function getReportNews(date) {
   const gte = dayjs(date).format();
   const lte = dayjs(date).add(1, 'day').format();
-  console.log(date);
 
   const sort = {
     state: 1,
@@ -61,15 +66,13 @@ async function getReportNews(date) {
     content: 0,
     segmentation: 0,
     time: 0,
-    reportTime: 0,
     state: 0,
   };
 
   const data = await ContentModel.find(sort, option)
     .sort({ reportTime: 1 })
     .exec();
-  console.log(data);
-  console.log(sort);
+
   return {
     state: true,
     data,
@@ -168,6 +171,7 @@ async function updateNewsState(_id, state) {
     { state, reportTime: dayjs().format() },
     { new: true }
   );
+  console.log(data);
   if (data !== null) {
     const { _id, state } = data;
     return { state: true, data: { _id, state } };

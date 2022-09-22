@@ -36,7 +36,7 @@ router.get('/reportNews', async (req, res) => {
 
 router.get('/content', async (req, res) => {
   const id = req.query._id;
-  if (id) {
+  if (verifyID(id)) {
     const data = await getNewContent(id);
     if (data.state) {
       res.json({ code: 200, data: data.data });
@@ -50,7 +50,7 @@ router.get('/content', async (req, res) => {
 
 router.post('/updateNewsState', async (req, res) => {
   const { _id, state } = req.body;
-  if (verifyID(_id) && (state == 0 || state == 1)) {
+  if (verifyID(_id) && parseInt(state)) {
     const data = await updateNewsState(_id, state);
     res.json({ code: 200, data: data.data });
   } else {

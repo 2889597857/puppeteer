@@ -62,9 +62,13 @@ async function executeAsyncTask(taskList, fn) {
     });
     promises.push(p);
   }
+  
   await Promise.all(promises);
   // 关闭浏览器
-  caches.map((el) => el.close());
+  for (let i = 0; i < caches.length; i++) {
+    await caches[i].close();
+  }
+
   locks = false;
   cnt = 0;
 }
