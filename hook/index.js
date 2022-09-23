@@ -1,15 +1,30 @@
-const { addTask } = require('../controllers/taskController')
-const dayjs = require('dayjs')
+const { addTask } = require('../controllers/taskController');
+const { contentStart, linksStart } = require('../start');
+const {
+  getTaskList,
+  getExecutingTask,
+} = require('../controllers/taskController');
+const dayjs = require('dayjs');
 
-async function createTask (name, description, type) {
+async function createTask(type) {
+  // 查询是否有正在执行的任务
+  const isExecuting = await getExecutingTask(0);
+  if (isExecuting.length == 0) return false;
+
+  // 创建任务
   const result = await addTask({
-    name,
-    description,
+    name: type ? '获取链接' : '获取内容',
     creationTime: dayjs().format(),
-    type
-  })
-  const { _id, name: taskName, description: desc, creationTime } = result[0]
-  return { _id, taskName, desc, creationTime }
+    state: 0,
+    type,
+  });
+
+  const { _id, creationTime } = result[0];
+
+  type ? contentStart(_id) : linksStart(_id);
+
+  return { _id, creationTime };
+  
 }
 
-module.exports = { createTask }
+module.exports = { createTask };

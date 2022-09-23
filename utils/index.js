@@ -10,6 +10,15 @@ function verifyID(id) {
   // mongoose.Types.ObjectId.isValid(id)
   return /^[a-fA-F0-9]{24}$/.test(id);
 }
+
+function taskInfo() {
+  return {
+    time: 0,
+    count: 0,
+    success: 0,
+    failed: 0,
+  };
+}
 // 任务计数器
 const INIT = 0;
 let cnt = INIT;
@@ -62,7 +71,7 @@ async function executeAsyncTask(taskList, fn) {
     });
     promises.push(p);
   }
-  
+
   await Promise.all(promises);
   // 关闭浏览器
   for (let i = 0; i < caches.length; i++) {
@@ -73,4 +82,4 @@ async function executeAsyncTask(taskList, fn) {
   cnt = 0;
 }
 
-module.exports = { getTopURL, executeAsyncTask, verifyID, taskState };
+module.exports = { getTopURL, executeAsyncTask, verifyID, taskState, taskInfo };
