@@ -180,6 +180,12 @@ async function updateNewsState(_id, state) {
   }
 }
 
+/**
+ * 更新新闻报送时间
+ * @param {*} _id
+ * @param {*} date
+ * @returns
+ */
 async function updateReportTime(_id, date) {
   const data = await ContentModel.findOneAndUpdate(
     { _id },
@@ -191,6 +197,7 @@ async function updateReportTime(_id, date) {
     return { state: true, data: { _id, time: reportTime } };
   }
 }
+
 /**
  * 删除新闻
  * @param {*} _id
@@ -210,6 +217,18 @@ async function deleteNews(_id) {
     };
   }
 }
+/**
+ * 清除无效新闻
+ * @returns 已删除的文档数
+ */
+async function clearInvalidNews() {
+  const { acknowledged, deletedCount } = await ContentModel.deleteMany({
+    state: 0,
+    time: { $lte: dayjs().subtract(2, 'day').format() },
+  });
+
+  if (acknowledged) return deletedCount;
+}
 
 module.exports = {
   addContent,
@@ -221,6 +240,5 @@ module.exports = {
   getNewReport,
   getReportNews,
   updateReportTime,
+  clearInvalidNews,
 };
-
-// getReportNews().then((res) => console.log(res));
