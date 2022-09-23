@@ -32,7 +32,7 @@ function taskState() {
 const caches = [];
 
 async function openBrowser() {
-  const browser = await puppeteer.launch({ headless: false, timeout: 1000 });
+  const browser = await puppeteer.launch({ headless: true, timeout: 1000 });
   caches.push(browser);
   return browser.newPage();
 }

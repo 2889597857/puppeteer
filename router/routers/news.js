@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
     if (data.state) {
       res.json({ code: 200, data: data.data });
     } else {
-      res.json({ code: 200, msg: data.msg });
+      res.json({ code: 201, msg: data.msg });
     }
   } else {
     res.json({ code: 404, msg: '参数不存在或参数错误' });

@@ -49,9 +49,9 @@ async function getNewsInfo(url, selector, page) {
     }
 
     // 默认报送内容为新闻前两段
-    // 如果新闻第一段字数大于 135 字。报送内容为新闻第一段
+    // 如果新闻第一段字数大于 75 字。报送内容为新闻第一段
     const contentLength =
-      pageContent.length >= 2 && pageContent[0].length <= 135;
+      pageContent.length >= 2 && pageContent[0].length <= 75;
     /** 新闻摘要 */
     const report = contentLength
       ? `${pageContent[0]}${pageContent[1]}`
