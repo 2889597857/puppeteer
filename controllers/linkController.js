@@ -37,7 +37,7 @@ async function getLink(url) {
  * @return 所有新闻列表网页的url
  */
 async function getAllLinks() {
-  return await LinkModel.find();
+  return await LinkModel.find({ website: '631afe80981ce83d1b89a7c7' });
 }
 
 module.exports = {
@@ -46,3 +46,5 @@ module.exports = {
   getAllLinks,
 };
 
+// addLink('http://www.cnr.cn/ah/news').then((res) => console.log(res));
+// addLink('http://www.ahnews.com.cn/yaowen1/pc/lay/node_496.html').then((res) => console.log(res));

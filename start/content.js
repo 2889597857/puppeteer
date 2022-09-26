@@ -5,17 +5,21 @@ const {
 } = require('../controllers/LinkListController');
 const { addContent } = require('../controllers/contentController');
 const { getContentSelect } = require('../controllers/selectorController');
-const { executeAsyncTask } = require('../utils');
+const { executeAsyncTask, taskInfo } = require('../utils');
+const { updateTaskInfo } = require('../controllers/taskController');
+
+let info;
 
 async function createTasks() {
   // 获取链接（每次获取 100 条）
   const linkList = await findAllContentLink();
-  if (linkList) {
+  if (linkList.length !== 0) {
     const taskList = [];
     for (const link of linkList) {
       const { url, website } = link;
       taskList.push({ url, website });
     }
+    info.count = taskList.length;
     return taskList;
   }
 }
@@ -26,25 +30,13 @@ async function getContent({ url, website }, page) {
     selector = await getContentSelect(website);
   }
   if (selector) {
-    const { titleSelect, timeSelector, contentSelector } = selector;
     // 获取页面内容
-    const pageContent = await getNewsInfo(
-      url,
-      {
-        titleSelect,
-        timeSelector,
-        contentSelector,
-      },
-      page
-    );
+    const pageContent = await getNewsInfo(url, selector, page);
     if (pageContent) {
       // 储存新闻
-      const result = await addContent(pageContent);
-      if (result) {
-        // 更新链接状态
-        await updateLinkState(url, 1);
-        return true;
-      } else return false;
+      const result = await saveContent(pageContent);
+      if (result) return true;
+      else return false;
     } else {
       // 获取新闻内容失败
       // 更新链接状态
@@ -52,7 +44,24 @@ async function getContent({ url, website }, page) {
       return false;
     }
   } else {
+    info.failed++;
     // 获取选择器失败
+    return false;
+  }
+}
+
+async function saveContent(content) {
+  // 储存新闻
+  const result = await addContent(content);
+  console.log(result);
+  if (result) {
+    // 更新链接状态
+    await updateLinkState(url, 1);
+    info.success++;
+    return true;
+  } else {
+    await updateLinkState(url, 2);
+    info.failed++;
     return false;
   }
 }
@@ -60,8 +69,14 @@ async function getContent({ url, website }, page) {
 async function start() {
   const taskList = await createTasks();
   if (taskList.length > 0) {
+    info = taskInfo();
+    let time = new Date();
     await executeAsyncTask(taskList, getContent);
-    return taskList;
+    // 计算任务执行时间
+    info.elapsedTime = new Date() - time;
+    info.state = 1;
+    return await updateTaskInfo(_id, info);
   }
 }
+
 module.exports = { start };

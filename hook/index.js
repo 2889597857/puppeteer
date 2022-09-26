@@ -9,11 +9,10 @@ const dayjs = require('dayjs');
 async function createTask(type) {
   // 查询是否有正在执行的任务
   const isExecuting = await getExecutingTask(0);
-  if (isExecuting.length == 0) return false;
+  if (isExecuting.length !== 0) return false;
 
   // 创建任务
   const result = await addTask({
-    name: type ? '获取链接' : '获取内容',
     creationTime: dayjs().format(),
     state: 0,
     type,
@@ -24,7 +23,7 @@ async function createTask(type) {
   type ? contentStart(_id) : linksStart(_id);
 
   return { _id, creationTime };
-  
 }
 
 module.exports = { createTask };
+createTask(1);

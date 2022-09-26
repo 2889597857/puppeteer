@@ -6,7 +6,6 @@ const {
   addContentLink,
 } = require('../controllers/LinkListController');
 const { executeAsyncTask, taskInfo } = require('../utils');
-
 const { updateTaskInfo } = require('../controllers/taskController');
 
 // time: 0,
@@ -16,12 +15,13 @@ const { updateTaskInfo } = require('../controllers/taskController');
 
 let info;
 
-async function getLink({ url, selector, website }, page) {
+async function getLink({ url, selector, website }, page, index) {
   /** 获取新闻链接 [] */
+  console.log(`任务${index}开始执行`);
   const linkList = await getNewsList(url, selector, page);
   if (linkList.state) {
     /** 将收集到的链接放入数据库 */
-    info.count += linkList.links;
+    info.count += linkList.links.length;
     const success = await saveLink(linkList.links, website);
     info.success += success;
     return;
@@ -73,16 +73,18 @@ async function createTasks() {
 async function start(_id) {
   info = taskInfo();
   let time = new Date();
+
   // 获取任务
   const taskList = await createTasks();
+
   // 开始执行异步任务
-  executeAsyncTask(taskList, getLink).then(() => {
-    // 计算任务执行时间
-    info.time = new Date() - time;
-    info.state = 1;
-    updateTaskInfo(_id, info);
-    return info;
-  });
+  await executeAsyncTask(taskList, getLink);
+
+  // 计算任务执行时间
+  info.elapsedTime = new Date() - time;
+  info.state = 1;
+  console.log(info);
+  return await updateTaskInfo(_id, info);
   // 返回任务列表
 }
 

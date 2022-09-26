@@ -61,8 +61,7 @@ async function executeAsyncTask(taskList, fn) {
           page = await openBrowser();
         }
         if (index < MAX) {
-          console.log(`任务${cnt}`);
-          await fn(taskList[index], page);
+          await fn(taskList[index], page, index);
           loop(cnt++, page);
           return;
         }
@@ -80,6 +79,15 @@ async function executeAsyncTask(taskList, fn) {
 
   locks = false;
   cnt = 0;
+  console.log('任务执行结束');
 }
 
-module.exports = { getTopURL, executeAsyncTask, verifyID, taskState, taskInfo };
+module.exports = {
+  getTopURL,
+  executeAsyncTask,
+  verifyID,
+  taskState,
+  taskInfo,
+  openBrowser,
+  caches,
+};

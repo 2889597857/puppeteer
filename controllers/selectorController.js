@@ -43,8 +43,17 @@ module.exports = {
   getContentSelect,
   addContentSelect,
 };
-
+// 央广网 安徽
 // addLinkSelect({
-//   url: 'http://www.wuhunews.cn/yaowen/index.html',
-//   selector: '#ContentList li a',
+//   url: 'http://www.cnr.cn/ah/news',
+//   selector: '.url_http a',
 // }).then((res) => console.log(res));
+
+// addContentSelect({
+//   url: 'http://www.cnr.cn/ah/news',
+//   titleSelect: '#articleTit h1',
+//   contentSelector: '#wrap p',
+//   timeSelector: '#articleTit > div.info.clearfix > div > span:nth-child(1)',
+// });
+
+

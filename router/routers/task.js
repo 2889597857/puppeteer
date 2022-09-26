@@ -8,13 +8,14 @@ const {
 const router = Router();
 
 router.get('/', async (req, res) => {
-  /** type 任务类型 0 全部 1 链接任务 2内容任务 */
+  /** type 任务类型  0 链接任务 1 内容任务 2 全部 */
   const type = req.query.type;
-  getTaskList(type);
+  await getTaskList(type);
 });
 
-router.post('/link/create', async (req, res) => {
-  const result = await createTask(0);
+router.post('/create', async (req, res) => {
+  const type = req.query.type;
+  const result = await createTask(type);
   if (result) {
     const { _id } = result;
     // console.log(_id);
@@ -25,21 +26,8 @@ router.post('/link/create', async (req, res) => {
       });
     }
   } else {
-    res.json({ code: 200, msg: '任务正在执行中' });
+    res.json({ code: 201, msg: '有任务正在执行中' });
   }
-});
-
-router.post('/content/create', async (req, res) => {
-  const { name, description } = req.body;
-  if (name && description) {
-    const result = await createTask(name, description, 1);
-    if (result) {
-      res.json({
-        code: 200,
-        data: result,
-      });
-    }
-  } else res.sendStatus(404);
 });
 
 module.exports = router;

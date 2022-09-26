@@ -1,3 +1,4 @@
+
 const dayjs = require('dayjs');
 const { getTopURL } = require('../utils');
 const jieba = require('@node-rs/jieba');
@@ -9,13 +10,14 @@ async function getNewsInfo(url, selector, page) {
     await page.goto(url);
 
     // 获取新闻内容
-    const pageContent = await page.$eval(contentSelector, (el) =>
+    const pageContent = await page.$eval(contentSelector, (el) => {
       // 新闻内容进行处理，去除 \n 等无效内容
-      el.innerText
+      let content = el.innerText
         .split('\n')
         .filter(Boolean)
-        .map((el) => el.trim())
-    );
+        .map((el) => el.trim());
+      return content.length <= 10 ? content : content.slice(0, 10);
+    });
 
     if (!pageContent || pageContent.length === 0) return false;
 
@@ -76,3 +78,27 @@ async function getNewsInfo(url, selector, page) {
   }
 }
 module.exports = { getNewsInfo };
+
+
+// const puppeteer = require('puppeteer');
+
+// async function openBrowser() {
+//   const browser = await puppeteer.launch({ headless: true, timeout: 1000 });
+//   return browser.newPage();
+// }
+
+// async function a() {
+//   const page = await openBrowser();
+
+//   getNewsInfo(
+//     'http://www.ahnews.com.cn/yaowen1/pc/con/2022-09/26/496_678169.html',
+//     {
+//       titleSelect: '.h-p3.clearfix.bb1 > div > div.h-title',
+//       contentSelector: '#p-detail',
+//       timeSelector: '.clearfix.bb1 > div > div.h-info > span.h-time',
+//     },
+//     page
+//   ).then((res) => console.log(res));
+// }
+
+// a();

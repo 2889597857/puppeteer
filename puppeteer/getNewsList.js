@@ -5,7 +5,11 @@ async function getNewsList(url, selector, page) {
     // 打开获取新闻链接的页面
     await page.goto(url);
     // 获取新闻链接
-    links = await page.$$eval(selector, (els) => els.map((el) => el.href));
+    links = await page.$$eval(selector, (els) =>
+      els.length <= 15
+        ? els.map((el) => el.href)
+        : els.slice(0, 15).map((el) => el.href)
+    );
     // 去重
     links = [...new Set(links)];
     return {
