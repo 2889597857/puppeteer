@@ -1,5 +1,5 @@
 const Router = require('express');
-const { createTask } = require('../../hook');
+const { createTask } = require('../../middlewares');
 const {
   getTaskList,
   getExecutingTask,
