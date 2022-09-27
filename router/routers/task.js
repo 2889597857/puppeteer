@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
   await getTaskList(type);
 });
 
-router.post('/create', async (req, res) => {
+router.get('/create', async (req, res) => {
   const type = req.query.type;
   const result = await createTask(type);
   if (result) {

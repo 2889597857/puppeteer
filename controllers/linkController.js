@@ -37,7 +37,7 @@ async function getLink(url) {
  * @return 所有新闻列表网页的url
  */
 async function getAllLinks() {
-  return await LinkModel.find({ website: '631afe80981ce83d1b89a7c7' });
+  return await LinkModel.find({});
 }
 
 module.exports = {

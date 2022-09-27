@@ -73,7 +73,6 @@ async function createTasks() {
 async function start(_id) {
   info = taskInfo();
   let time = new Date();
-
   // 获取任务
   const taskList = await createTasks();
 

@@ -3,7 +3,7 @@ const routers = require('./router');
 const cors = require('cors');
 
 const app = express();
-const port = 3100;
+const port = 888;
 
 app.use(cors());
 app.use(express.static('public'));

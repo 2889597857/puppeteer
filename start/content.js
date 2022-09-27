@@ -21,9 +21,10 @@ async function createTasks() {
     }
     info.count = taskList.length;
     return taskList;
-  }
+  } else return [];
 }
-async function getContent({ url, website }, page) {
+async function getContent({ url, website }, page,index) {
+  console.log(`任务${index}开始执行`);
   let selector = null;
   if (website && url) {
     // 获取选择器
@@ -34,7 +35,7 @@ async function getContent({ url, website }, page) {
     const pageContent = await getNewsInfo(url, selector, page);
     if (pageContent) {
       // 储存新闻
-      const result = await saveContent(pageContent);
+      const result = await saveContent(pageContent, url);
       if (result) return true;
       else return false;
     } else {
@@ -50,11 +51,10 @@ async function getContent({ url, website }, page) {
   }
 }
 
-async function saveContent(content) {
+async function saveContent(content, url) {
   // 储存新闻
   const result = await addContent(content);
-  console.log(result);
-  if (result) {
+  if (result.length > 0) {
     // 更新链接状态
     await updateLinkState(url, 1);
     info.success++;
@@ -66,10 +66,10 @@ async function saveContent(content) {
   }
 }
 
-async function start() {
+async function start(_id) {
+  info = taskInfo();
   const taskList = await createTasks();
   if (taskList.length > 0) {
-    info = taskInfo();
     let time = new Date();
     await executeAsyncTask(taskList, getContent);
     // 计算任务执行时间

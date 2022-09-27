@@ -26,4 +26,3 @@ async function createTask(type) {
 }
 
 module.exports = { createTask };
-createTask(1);
