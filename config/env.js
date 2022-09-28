@@ -1,2 +1,2 @@
-const { parsed: DBEnv } = require('dotenv').config('')
-module.exports = DBEnv
+const { parsed: env } = require('dotenv').config('');
+module.exports = env;

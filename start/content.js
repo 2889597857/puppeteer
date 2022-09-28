@@ -37,7 +37,10 @@ async function getContent({ url, website }, page, index) {
       // 储存新闻
       const result = await saveContent(pageContent, url);
       if (result) return true;
-      else return false;
+      else {
+        info.failed++;
+        return false;
+      }
     } else {
       // 获取新闻内容失败
       // 更新链接状态

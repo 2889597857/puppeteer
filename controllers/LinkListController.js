@@ -25,7 +25,6 @@ async function findAllContentLink(state = 0) {
   return await LinkListModel.find({ state })
     .sort({ lastTime: -1 })
     .limit()
-    .exec();
 }
 /**
  * 更新链接状态
@@ -45,7 +44,7 @@ async function findAllContentLink(state = 0) {
 async function updateLinkState(url, state) {
   return await LinkListModel.updateOne(
     { url }, // 条件
-    { state }, // 更新链接的状态 0 未抓取 1 抓取成功 2 抓取失败
+    { state } // 更新链接的状态 0 未抓取 1 抓取成功 2 抓取失败
   );
 }
 module.exports = {
@@ -54,7 +53,3 @@ module.exports = {
   updateLinkState,
   findAllContentLink,
 };
-
-// findOneContentLink('http://www.ahwang.cn/anhuadi/20220909/2424582.html').then(
-//   (res) => console.log(res)
-// );

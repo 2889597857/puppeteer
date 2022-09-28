@@ -4,6 +4,7 @@ const auth = `${DBEnv.USER}:${DBEnv.PASSWD}@`;
 const host = `${DBEnv.IP}:${DBEnv.PORT}/`;
 const database = DBEnv.DATABASE;
 const mongoURL = `mongodb://${auth + host + database}?authSource=admin`;
+
 mongoose.connect(
   mongoURL,
   {
