@@ -3,7 +3,7 @@ const {
   updateLinkState,
   findAllContentLink,
 } = require('../controllers/LinkListController');
-const { addContent } = require('../controllers/contentController');
+const { createNews } = require('../controllers/newsController');
 const { getContentSelect } = require('../controllers/selectorController');
 const { executeAsyncTask, taskInfo } = require('../utils');
 const { updateTaskInfo } = require('../controllers/taskController');
@@ -23,7 +23,7 @@ async function createTasks() {
     return taskList;
   } else return [];
 }
-async function getContent({ url, website }, page,index) {
+async function getContent({ url, website }, page, index) {
   console.log(`任务${index}开始执行`);
   let selector = null;
   if (website && url) {
@@ -53,7 +53,7 @@ async function getContent({ url, website }, page,index) {
 
 async function saveContent(content, url) {
   // 储存新闻
-  const result = await addContent(content);
+  const result = await createNews(content);
   if (result.length > 0) {
     // 更新链接状态
     await updateLinkState(url, 1);
@@ -75,6 +75,7 @@ async function start(_id) {
     // 计算任务执行时间
     info.elapsedTime = new Date() - time;
     info.state = 1;
+    console.log(info);
     return await updateTaskInfo(_id, info);
   }
 }

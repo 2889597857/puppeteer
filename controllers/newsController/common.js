@@ -84,11 +84,11 @@ async function updateNewsState(req, res) {
 
 /**
  * 添加新闻
- * @param {*} pageContent
+ * @param {*} content
  * @returns
  */
 async function createNews(content) {
-  return ContentModel.insertMany([pageContent]);
+  return ContentModel.insertMany([content]);
 }
 
 /**
@@ -114,9 +114,9 @@ async function deleteNews(_id) {
 async function clearInvalidNews() {
   const { acknowledged, deletedCount } = await ContentModel.deleteMany({
     state: 0,
-    time: { $lte: dayjs().subtract(2, 'day').format() },
+    time: { $lte: dayjs().subtract(3, 'day').format() },
   });
-
+  console.log(acknowledged, deletedCount);
   if (acknowledged) return deletedCount;
 }
 

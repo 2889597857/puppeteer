@@ -50,7 +50,7 @@ async function updateReportTime(req, res) {
   }
 }
 
-async function updateReport(_id, report) {
+async function updateReport(req, res) {
   const { _id, report } = req.body;
   if (verifyID(_id) && report) {
     const data = await ContentModel.findOneAndUpdate(
