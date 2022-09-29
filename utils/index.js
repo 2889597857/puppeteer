@@ -42,7 +42,7 @@ const caches = [];
 
 async function openBrowser() {
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox'],
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
     headless: true,
     timeout: 1000,
   });
