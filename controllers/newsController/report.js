@@ -12,7 +12,6 @@ async function getReportNews(req, res) {
         $lte: dayjs(date).add(1, 'day').format(),
       },
     };
-    console.log(condition);
     const option = {
       __v: 0,
       content: 0,

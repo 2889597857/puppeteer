@@ -14,11 +14,9 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/create', async (req, res) => {
-  const type = req.query.type;
+  const type = parseInt(req.query.type);
   const result = await createTask(type);
   if (result) {
-    const { _id } = result;
-    // console.log(_id);
     if (result) {
       res.json({
         code: 200,

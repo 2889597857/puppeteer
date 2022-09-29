@@ -1,4 +1,5 @@
 {
+	"name": "app",
 	"version": "1.0.0",
 	"dependencies": {
 		"@node-rs/jieba": "^1.6.1",
