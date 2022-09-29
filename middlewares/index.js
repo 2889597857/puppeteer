@@ -1,3 +1,3 @@
-const createTask = require('./createTask');
+const {createTask} = require('./createTask');
 
 module.exports = { createTask };
