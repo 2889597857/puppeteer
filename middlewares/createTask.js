@@ -8,7 +8,8 @@ const dayjs = require('dayjs');
 
 async function createTask(type) {
   // 查询是否有正在执行的任务
-  const isExecuting = await getExecutingTask(0);
+  // 0 获取链接任务  1 获取内容任务
+  const isExecuting = await getExecutingTask(type);
   if (isExecuting.length !== 0) return false;
   // 创建任务
   const result = await addTask({
