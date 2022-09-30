@@ -47,7 +47,7 @@ async function openBrowser() {
     timeout: 1000,
   });
   caches.push(browser);
-  return browser.newPage();
+  return await browser.newPage();
 }
 
 async function executeAsyncTask(taskList, fn) {
