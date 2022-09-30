@@ -76,14 +76,19 @@ async function executeAsyncTask(taskList, fn) {
   }
 
   await Promise.all(promises);
-  // 关闭浏览器
+  console.log('任务执行结束');
+  console.log('开始关闭浏览器');
   for (let i = 0; i < caches.length; i++) {
-    await caches[i].close();
+    try {
+      await caches[i].close();
+      console.log(`关闭浏览器${i + 1}`);
+    } catch {
+      console.log(`关闭浏览器${i + 1}失败`);
+    }
   }
 
   locks = false;
   cnt = 0;
-  console.log('任务执行结束');
 }
 
 module.exports = {
