@@ -91,6 +91,8 @@ async function executeAsyncTask(taskList, fn) {
   locks = false;
   cnt = 0;
 
+  caches.length = 0;
+  
   return;
 }
 
