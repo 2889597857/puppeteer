@@ -79,7 +79,8 @@ async function start(_id) {
     info.elapsedTime = new Date() - time;
     info.state = 1;
     console.log(info);
-    return await updateTaskInfo(_id, info);
+    await updateTaskInfo(_id, info);
+    return info
   }
 }
 

@@ -56,7 +56,8 @@ async function executeAsyncTask(taskList, fn) {
   const CONCURRENCY = 3;
 
   let promises = [];
-
+  
+  console.log('开始执行任务');
   for (let i = 0; i < CONCURRENCY; i++) {
     locks = true;
     let p = new Promise((resolve) => {
@@ -89,6 +90,8 @@ async function executeAsyncTask(taskList, fn) {
 
   locks = false;
   cnt = 0;
+
+  return;
 }
 
 module.exports = {

@@ -71,7 +71,6 @@ async function createTasks() {
  * @returns
  */
 async function start(_id) {
-  console.log('开始执行任务');
   info = taskInfo();
   let time = new Date();
   // 获取任务
@@ -83,9 +82,9 @@ async function start(_id) {
   // 计算任务执行时间
   info.elapsedTime = new Date() - time;
   info.state = 1;
+  await updateTaskInfo(_id, info);
   console.log(info);
-  return await updateTaskInfo(_id, info);
-  // 返回任务列表
+  return info;
 }
 
-module.exports = { start, createTasks };
+module.exports = { start };
