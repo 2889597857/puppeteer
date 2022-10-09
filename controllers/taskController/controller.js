@@ -38,7 +38,7 @@ async function updateTaskInfo(_id, info) {
  */
 async function getExecutingTask(type) {
   const options = type == null ? { state: 0 } : { type, state: 0 };
-  return await TaskModel.find(options);
+  return await TaskModel.find(options).sort({ creationTime: -1 });
 }
 
 async function findLatestTask(type = 1) {

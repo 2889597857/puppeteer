@@ -9,7 +9,8 @@ async function findTaskState() {
   if (result && result.length > 0) {
     return {
       code: 1,
-      message: '任务正在执行',
+      creationTime: result[0].creationTime,
+      success: '-',
     };
   } else {
     const { creationTime, success } = await findLatestTask();
@@ -19,20 +20,15 @@ async function findTaskState() {
 }
 
 async function createTask(req, res) {
-  const {
-    code,
-    message,
-    creationTime: ctime,
-    success: count,
-    difference,
-  } = await findTaskState();
+  const { code, creationTime, success, difference } = await findTaskState();
 
   if (code === 1) {
     res.json({
       code: 200,
       data: {
-        status: false,
-        message,
+        isExecuting: false,
+        creationTime,
+        success,
       },
     });
   } else if (code === 2) {
@@ -42,46 +38,33 @@ async function createTask(req, res) {
       res.json({
         code: 200,
         data: {
-          status: true,
-          _id,
+          cooldown: true,
           creationTime,
         },
       });
     } else {
-      res.json({ code: 201, message: '技能冷却中' });
+      res.json({
+        code: 201,
+        data: { cooldown: false },
+        message: '技能冷却中',
+      });
     }
   }
 }
 
 async function findTask(req, res) {
-  const { code, message, creationTime, success, difference } =
-    await findTaskState();
-  if (code === 1) {
-    res.json({
-      code: 200,
-      data: {
-        status: false,
-        message,
-      },
-    });
-  } else if (code === 2) {
-    res.json({
-      code: 200,
-      data: {
-        status: true,
-        success,
-        creationTime,
-        difference,
-        success,
-      },
-    });
-  }
+  const { code, creationTime, success, difference } = await findTaskState();
+
+  const isExecuting = code === 1 ? true : false;
 
   res.json({
     code: 200,
     data: {
-      _id,
+      isExecuting,
+      success,
       creationTime,
+      difference,
+      success,
     },
   });
 }
