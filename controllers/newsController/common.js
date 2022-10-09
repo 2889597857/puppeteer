@@ -137,5 +137,5 @@ module.exports = {
   clearInvalidNews,
   deleteNews,
 };
-clearInvalidNews();
+// clearInvalidNews();
 // deleteNews(false, true);

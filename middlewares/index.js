@@ -1,3 +1,8 @@
-const {createTask} = require('./createTask');
+const {
+  createTypeTask,
+  executeTask,
+  startTask,
+  createAndExecuteTypeTask,
+} = require('./createTask');
 
-module.exports = { createTask };
+module.exports = { createTypeTask, executeTask, startTask, createAndExecuteTypeTask };

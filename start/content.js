@@ -19,12 +19,12 @@ async function createTasks() {
       const { url, website } = link;
       taskList.push({ url, website });
     }
-    info.count = taskList.length;
+
     return taskList;
   } else return [];
 }
 async function getContent({ url, website }, page, index) {
-  console.log(`任务${index}开始执行`);
+  console.log(`任务${index + 1}开始执行`);
   let selector = null;
   if (website && url) {
     // 获取选择器
@@ -37,13 +37,11 @@ async function getContent({ url, website }, page, index) {
       // 储存新闻
       const result = await saveContent(pageContent, url);
       if (result) return true;
-      else {
-        info.failed++;
-        return false;
-      }
+      else return false;
     } else {
       // 获取新闻内容失败
       // 更新链接状态
+      info.failed++;
       await updateLinkState(url, 2);
       return false;
     }
@@ -72,18 +70,22 @@ async function saveContent(content, url) {
 async function start(_id) {
   const taskList = await createTasks();
   if (taskList.length > 0) {
-
     info = taskInfo();
+    info.count = taskList.length;
+
     let time = new Date();
 
     console.log('开始执行获取新闻内容任务');
 
     await executeAsyncTask(taskList, getContent);
+
     // 计算任务执行时间
     info.elapsedTime = new Date() - time;
     info.state = 1;
-    console.log(info);
+
     await updateTaskInfo(_id, info);
+    console.log(info);
+
     return info;
   } else return false;
 }

@@ -2,7 +2,12 @@ const { addTask } = require('../controllers/taskController');
 const { contentStart, linksStart } = require('../start');
 const { getExecutingTask } = require('../controllers/taskController');
 const dayjs = require('dayjs');
-
+/**
+ * 0 链接任务
+ * 1 内容任务
+ * @param {number} type
+ * @returns
+ */
 async function createTask(type) {
   // 查询是否有正在执行的任务
   // 0 获取链接任务  1 获取内容任务
@@ -22,28 +27,59 @@ async function createTask(type) {
   return { _id, creationTime, taskFN };
 }
 
+async function createTypeTask(type) {
+  return await createTask(type);
+}
+/**
+ * 开始执行任务
+ * @param {string} _id
+ * @param {function} taskFN
+ * @returns
+ */
 async function executeTask(_id, taskFN) {
-  return await taskFN(_id);
+  if (typeof taskFN === 'function') {
+    return await taskFN(_id);
+  } else return false;
+}
+/**
+ * 0 启动链接任务
+ * 1 启动内容任务
+ * @param {number} type 0 | 1
+ * @returns
+ */
+async function createAndExecuteTypeTask(type) {
+  const { _id, taskFN } = await createTypeTask(type);
+  return await executeTask(_id, taskFN);
 }
 
+/**
+ * 传入链接任务并执行，
+ * 根据执行结果（是否获取到新连接），
+ * 决定是否执行获取内容任务
+ * @param {string} _id
+ * @param {function} taskFN
+ * @returns
+ */
 async function startTask(_id, taskFN) {
   const result = await executeTask(_id, taskFN);
   if (result.success > 0) {
-    const { _id, taskFN } = await createTask(1);
-    return await executeTask(_id, taskFN);
+    return await createAndExecuteTypeTask(1);
   } else return;
 }
-
-module.exports = { createTask, executeTask, startTask };
 
 async function start() {
-  const { _id, taskFN } = await createTask(0);
-  const result = await executeTask(_id, taskFN);
-  console.log(result.success);
-  if (result.success > 0) {
-    const { _id, taskFN } = await createTask(1);
-    return await executeTask(_id, taskFN);
-  } else return;
+  const result = await createAndExecuteTypeTask(0);
+  if (result && result.success > 0) {
+    return await createAndExecuteTypeTask(1);
+  } else return result;
 }
 
-start();
+module.exports = {
+  createTypeTask,
+  executeTask,
+  startTask,
+  createAndExecuteTypeTask,
+  start,
+};
+
+createAndExecuteTypeTask(1).then((res) => console.log(res));

@@ -35,7 +35,8 @@ function resetTaskState() {
 
 async function executeAsyncTask(taskList, fn) {
   MAX = taskList.length;
-
+  console.log(`共计${MAX}个任务`);
+  
   let promises = [];
 
   for (let i = 0; i < CONCURRENCY; i++) {
