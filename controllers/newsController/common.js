@@ -94,18 +94,22 @@ async function createNews(content) {
 /**
  * 彻底删除新闻
  * state = 2 或 具体某一条
- * @param {*} _id
+ * @param {string | boolean} _id
+ * @param {boolean} all
  * @returns
  */
 async function deleteNews(_id, all = false) {
-
   let data;
   if (!_id && all) data = await ContentModel.deleteMany({ state: 2 });
-  else if (_id && !all) data = await ContentModel.deleteOne({ id });
+  else if (_id && !all) data = await ContentModel.deleteOne({ _id });
 
-  if (data.acknowledged && data.deletedCount > 0) return data;
-  else return '删除失败';
-  
+  if (data.acknowledged && data.deletedCount > 0) {
+    const message = _id
+      ? `已删除${_id}`
+      : `删除${data.deletedCount}条新闻,回收站已清空`;
+    console.log(message);
+    return data;
+  } else return '删除失败';
 }
 
 /**
@@ -118,7 +122,10 @@ async function clearInvalidNews() {
     state: 0,
     time: { $lte: dayjs().subtract(2, 'day').format() },
   });
-  if (acknowledged) return deletedCount;
+  if (acknowledged) {
+    console.log(`已删除${deletedCount}条过期新闻`);
+    return deletedCount;
+  }
 }
 
 module.exports = {
@@ -130,5 +137,5 @@ module.exports = {
   clearInvalidNews,
   deleteNews,
 };
-// clearInvalidNews();
-deleteNews(false, true);
+clearInvalidNews();
+// deleteNews(false, true);

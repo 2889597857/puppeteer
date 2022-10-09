@@ -71,20 +71,21 @@ async function createTasks() {
  * @returns
  */
 async function start(_id) {
-  info = taskInfo();
-  let time = new Date();
   // 获取任务
   const taskList = await createTasks();
-
-  // 开始执行异步任务
-  await executeAsyncTask(taskList, getLink);
-
-  // 计算任务执行时间
-  info.elapsedTime = new Date() - time;
-  info.state = 1;
-  await updateTaskInfo(_id, info);
-  console.log(info);
-  return info;
+  if (taskList.length > 0) {
+    info = taskInfo();
+    let time = new Date();
+    // 开始执行异步任务
+    console.log('开始执行获取新闻链接任务');
+    await executeAsyncTask(taskList, getLink);
+    // 计算任务执行时间
+    info.elapsedTime = new Date() - time;
+    info.state = 1;
+    await updateTaskInfo(_id, info);
+    console.log(info);
+    return info;
+  } else return false;
 }
 
 module.exports = { start };

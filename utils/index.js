@@ -57,7 +57,6 @@ async function executeAsyncTask(taskList, fn) {
 
   let promises = [];
   
-  console.log('开始执行任务');
   for (let i = 0; i < CONCURRENCY; i++) {
     locks = true;
     let p = new Promise((resolve) => {

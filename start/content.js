@@ -70,18 +70,22 @@ async function saveContent(content, url) {
 }
 
 async function start(_id) {
-  info = taskInfo();
   const taskList = await createTasks();
   if (taskList.length > 0) {
+
+    info = taskInfo();
     let time = new Date();
+
+    console.log('开始执行获取新闻内容任务');
+
     await executeAsyncTask(taskList, getContent);
     // 计算任务执行时间
     info.elapsedTime = new Date() - time;
     info.state = 1;
     console.log(info);
     await updateTaskInfo(_id, info);
-    return info
-  }
+    return info;
+  } else return false;
 }
 
 module.exports = { start };

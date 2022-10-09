@@ -1,7 +1,6 @@
 const TaskModel = require('../models/taskModel');
 
 async function addTask(options) {
-  console.log(options);
   return await TaskModel.insertMany([options]);
 }
 /**
