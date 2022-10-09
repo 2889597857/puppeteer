@@ -6,7 +6,7 @@ const {
   addContentLink,
 } = require('../controllers/LinkListController');
 const { executeAsyncTask, taskInfo } = require('../utils');
-const { updateTaskInfo } = require('../controllers/taskController');
+const { updateTaskInfo } = require('../controllers/taskController/controller');
 
 // time: 0,
 // count: 0,
@@ -70,7 +70,7 @@ async function createTasks() {
  * 开始执行获取新闻链接任务
  * @returns
  */
-async function start(_id) {
+async function linksStart(_id) {
   // 获取任务
   const taskList = await createTasks();
   if (taskList.length > 0) {
@@ -92,4 +92,4 @@ async function start(_id) {
   } else return false;
 }
 
-module.exports = { start };
+module.exports = { linksStart };

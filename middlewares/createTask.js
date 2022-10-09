@@ -1,6 +1,8 @@
-const { addTask } = require('../controllers/taskController');
 const { contentStart, linksStart } = require('../start');
-const { getExecutingTask } = require('../controllers/taskController');
+const {
+  getExecutingTask,
+  addTask,
+} = require('../controllers/taskController/controller');
 const dayjs = require('dayjs');
 /**
  * 0 链接任务
@@ -81,5 +83,3 @@ module.exports = {
   createAndExecuteTypeTask,
   start,
 };
-
-createAndExecuteTypeTask(1).then((res) => console.log(res));

@@ -41,6 +41,14 @@ async function getExecutingTask(type) {
   return await TaskModel.find(options);
 }
 
-module.exports = { addTask, getTaskList, getExecutingTask, updateTaskInfo };
+async function findLatestTask(type = 1) {
+  return await TaskModel.findOne({ type }).sort({ creationTime: -1 });
+}
 
-// getExecutingTask(1).then((res) => console.log(res));
+module.exports = {
+  addTask,
+  getTaskList,
+  getExecutingTask,
+  updateTaskInfo,
+  findLatestTask,
+};

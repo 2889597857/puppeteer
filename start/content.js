@@ -6,7 +6,7 @@ const {
 const { createNews } = require('../controllers/newsController');
 const { getContentSelect } = require('../controllers/selectorController');
 const { executeAsyncTask, taskInfo } = require('../utils');
-const { updateTaskInfo } = require('../controllers/taskController');
+const { updateTaskInfo } = require('../controllers/taskController/controller');
 
 let info;
 
@@ -23,6 +23,7 @@ async function createTasks() {
     return taskList;
   } else return [];
 }
+
 async function getContent({ url, website }, page, index) {
   console.log(`任务${index + 1}开始执行`);
   let selector = null;
@@ -67,7 +68,7 @@ async function saveContent(content, url) {
   }
 }
 
-async function start(_id) {
+async function contentStart(_id) {
   const taskList = await createTasks();
   if (taskList.length > 0) {
     info = taskInfo();
@@ -90,4 +91,4 @@ async function start(_id) {
   } else return false;
 }
 
-module.exports = { start };
+module.exports = { contentStart };
