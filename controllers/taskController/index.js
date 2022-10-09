@@ -3,7 +3,11 @@ const { createTypeTask, startTask } = require('../../middlewares');
 const { getExecutingTask, findLatestTask } = require('./controller');
 
 const dayjs = require('dayjs');
-
+/**
+ * code 1 有任务在执行
+ * code 2 无任务在执行
+ * @returns
+ */
 async function findTaskState() {
   const result = await getExecutingTask(null);
   if (result && result.length > 0) {
@@ -23,6 +27,7 @@ async function createTask(req, res) {
   const { code, creationTime, success, difference } = await findTaskState();
 
   if (code === 1) {
+    // 有任务在执行
     res.json({
       code: 200,
       data: {
@@ -32,6 +37,8 @@ async function createTask(req, res) {
       },
     });
   } else if (code === 2) {
+    // 无任务在执行
+    // 两次任务执行时间要相差两小时
     if (difference >= 2 * 60 * 60 * 1000) {
       const { _id, creationTime, taskFN } = await createTypeTask(0);
       startTask(_id, taskFN);
