@@ -39,7 +39,7 @@ async function createTask(req, res) {
   } else if (code === 2) {
     // 无任务在执行
     // 两次任务执行时间要相差两小时
-    if (difference >= 2 * 60 * 60 * 1000) {
+    if (difference >= 1 * 60 * 60 * 1000) {
       const { _id, creationTime, taskFN } = await createTypeTask(0);
       startTask(_id, taskFN);
       res.json({
