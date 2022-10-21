@@ -139,3 +139,10 @@ module.exports = {
 };
 // clearInvalidNews();
 // deleteNews(false, true);
+// ContentModel.updateMany(
+//   { state: 1, time: { $lte: dayjs().subtract(2, 'day').format() } },
+//   {
+//     segmentation: [],
+//     content: '',
+//   }
+// ).then((res) => console.log(res));
