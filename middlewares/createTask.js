@@ -58,6 +58,7 @@ async function executeTask(_id, taskFN) {
  */
 async function createAndExecuteTypeTask(type) {
   const { _id, taskFN } = await createTypeTask(type);
+  console.log(taskFN);
   return await executeTask(_id, taskFN);
 }
 
@@ -81,6 +82,7 @@ async function startTask(_id, taskFN) {
 async function start() {
   await createAndExecuteTypeTask(0);
   const result = await LinkListModel.count({ state: 0 });
+  console.log(result);
   if (result && result > 0) {
     return await createAndExecuteTypeTask(1);
   } else return result;

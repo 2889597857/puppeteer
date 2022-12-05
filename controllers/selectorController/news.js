@@ -36,3 +36,11 @@ module.exports = {
 //   contentSelector: '',
 //   timeSelector: '',
 // });
+// addContentSelect({
+//   url: 'http://www.cnr.cn/ah/news',
+//   titleSelect: '#main > div.article > div.article-header > h1',
+//   contentSelector:
+//     '#main > div.article > div.article-body.clearfix > div.article-main > div.article-content',
+//   timeSelector:
+//     '#main > div.article > div.article-header > div > span:nth-child(1)',
+// });

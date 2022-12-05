@@ -87,7 +87,7 @@ async function linksStart(_id) {
 
     await updateTaskInfo(_id, info);
     console.log(info);
-    
+
     return info;
   } else return false;
 }
