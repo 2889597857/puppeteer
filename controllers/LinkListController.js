@@ -22,9 +22,7 @@ async function findOneContentLink(url) {
  * @returns
  */
 async function findAllContentLink(state = 0) {
-  return await LinkListModel.find({ state })
-    .sort({ lastTime: -1 })
-    .limit()
+  return await LinkListModel.find({ state }).sort({ lastTime: -1 }).limit();
 }
 /**
  * 更新链接状态

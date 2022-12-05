@@ -5,6 +5,11 @@ const LinkSchema = mongoose.Schema({
     type: String,
     unique: true,
   },
+  // 0 关闭 1 开启
+  isCollected: {
+    type: Number,
+    default: 1,
+  },
   lastTime: {
     type: Date,
     default: Date.now,

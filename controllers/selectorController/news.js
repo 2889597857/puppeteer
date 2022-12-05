@@ -10,6 +10,11 @@ const { getTopURL } = require('../../utils');
 async function getContentSelect(website) {
   return await ContentSelectorModel.findOne({ website: website.toHexString() });
 }
+/**
+ * 添加选择器
+ * @param {*} options
+ * @returns
+ */
 async function addContentSelect(options) {
   const { url, titleSelect, contentSelector, timeSelector } = options;
   const topURL = getTopURL(url);
@@ -24,3 +29,10 @@ module.exports = {
   getContentSelect,
   addContentSelect,
 };
+
+// addContentSelect({
+//   url: '',
+//   titleSelect: '',
+//   contentSelector: '',
+//   timeSelector: '',
+// });

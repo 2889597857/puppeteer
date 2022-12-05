@@ -4,6 +4,8 @@ const News = require('../../controllers/newsController');
 
 router.get('/', News.getNewsList);
 
+router.get('/getNews', News.getNews);
+
 router.get('/report', News.getReportNews);
 
 router.get('/details', News.getNewsDetails);

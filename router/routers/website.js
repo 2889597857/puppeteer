@@ -1,18 +1,17 @@
-const Router = require('express')
+const Router = require('express');
 const {
   addWebsite,
-  findWebsite
-} = require('../../controllers/websiteController')
-const { start: contentStart } = require('../../start/content')
+  findWebsite,
+} = require('../../controllers/websiteController');
 
-const router = Router()
+const router = Router();
 
 router.get('/', async (req, res) => {
   // contentStart()
   res.json({
     code: 200,
-    msg: 'c '
-  })
-})
+    msg: 'c ',
+  });
+});
 
-module.exports = router
+module.exports = router;

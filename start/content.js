@@ -6,7 +6,7 @@ const {
 const { createNews } = require('../controllers/newsController');
 const { getContentSelect } = require('../controllers/selectorController');
 const { executeAsyncTask, taskInfo } = require('../utils');
-const { updateTaskInfo } = require('../controllers/taskController');
+const { updateTaskInfo } = require('../controllers/taskController/controller');
 
 let info;
 
@@ -56,20 +56,22 @@ async function getContent({ url, website }, page, index) {
 
 async function saveContent(content, url) {
   // 储存新闻
-  const result = await createNews(content);
-  if (result.length > 0) {
-    // 更新链接状态
-    await updateLinkState(url, 1);
-    info.success++;
-    return true;
-  } else {
+  try {
+    const result = await createNews(content);
+    if (result.length > 0) {
+      // 更新链接状态
+      await updateLinkState(url, 1);
+      info.success++;
+      return true;
+    }
+  } catch (error) {
     await updateLinkState(url, 2);
     info.failed++;
     return false;
   }
 }
 
-async function start(_id) {
+async function contentStart(_id) {
   info = taskInfo();
   const taskList = await createTasks();
   if (taskList.length > 0) {
@@ -83,4 +85,4 @@ async function start(_id) {
   }
 }
 
-module.exports = { start };
+module.exports = { contentStart };

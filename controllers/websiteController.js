@@ -9,10 +9,9 @@ async function addWebsite(website) {
   return res;
 }
 async function findWebsite(url) {
-  return await WebsiteModel.get('https://ah.ifeng.com');
+  return await WebsiteModel.get(url);
 }
 module.exports = {
   addWebsite,
   findWebsite,
 };
-
