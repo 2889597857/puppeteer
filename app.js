@@ -10,12 +10,12 @@ app.use(cors());
 app.use(history());
 // app.use(express.static('public'));
 app.use(express.json());
-// app.use('/', (req, res, next) => {
-//     const token = req.headers.authorization
-//     if (req.url == "/login") next();
-//     else if (token && jwt.verify(token)) next();
-//     else res.status(404).send();
-// })
+app.use('/', (req, res, next) => {
+  const token = req.headers.authorization;
+  if (req.url == '/login') next();
+  else if (token && token == 'akgjklcjvoipop54565') next();
+  else res.status(404).send();
+});
 
 routers(app);
 
