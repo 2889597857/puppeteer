@@ -128,10 +128,6 @@ async function deleteNews(_id, all = false) {
   if (!_id && all) data = await ContentModel.deleteMany({ state: 2 });
   else if (_id && !all) data = await ContentModel.deleteOne({ _id });
 
-<<<<<<< HEAD
-  if (data.acknowledged && data.deletedCount > 0) return data;
-  else return '删除失败';
-=======
   if (data.acknowledged && data.deletedCount > 0) {
     const message = _id
       ? `已删除${_id}`
@@ -139,7 +135,6 @@ async function deleteNews(_id, all = false) {
     console.log(message);
     return data;
   } else return '删除失败';
->>>>>>> 303885f5f2ecfc013f89432dc4e0aee6ce18dbfd
 }
 
 /**
@@ -170,4 +165,3 @@ module.exports = {
 };
 
 // clearInvalidNews().then(res=>console.log(res));
-

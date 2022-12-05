@@ -71,10 +71,7 @@ async function saveContent(content, url) {
 }
 
 async function contentStart(_id) {
-<<<<<<< HEAD
   info = taskInfo();
-=======
->>>>>>> 303885f5f2ecfc013f89432dc4e0aee6ce18dbfd
   const taskList = await createTasks();
   if (taskList.length > 0) {
     info = taskInfo();
