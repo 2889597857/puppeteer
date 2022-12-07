@@ -17,7 +17,7 @@ async function getNewsList(url, selector, page) {
       links,
     };
   } catch (error) {
-    console.log(error);
+    console.log(JSON.stringify(error));
     return {
       state: false,
       error,

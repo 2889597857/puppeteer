@@ -34,16 +34,16 @@ async function getContent({ url, website }, page, index) {
   if (selector) {
     // 获取页面内容
     const pageContent = await getNewsInfo(url, selector, page);
-    if (pageContent) {
+    if (pageContent.state) {
       // 储存新闻
-      const result = await saveContent(pageContent, url);
+      const result = await saveContent(pageContent.content, url);
       if (result) return true;
       else return false;
     } else {
       // 获取新闻内容失败
       // 更新链接状态
       info.failed++;
-      await updateLinkState(url, 2);
+      await updateLinkState(url, pageContent.code);
       return false;
     }
   } else {

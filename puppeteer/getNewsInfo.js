@@ -1,13 +1,27 @@
-
 const dayjs = require('dayjs');
 const { getTopURL } = require('../utils');
 const jieba = require('@node-rs/jieba');
+const ContentModel = require('../models/contentModel');
 
 async function getNewsInfo(url, selector, page) {
   try {
     const { titleSelect, timeSelector, contentSelector } = selector;
     // 打开新闻页面
     await page.goto(url);
+
+    // 获取新闻标题
+    const pageTitle = await page.$eval(titleSelect, (el) =>
+      el.innerText.trim()
+    );
+
+    const a = ContentModel.findOne({ title: pageTitle });
+
+    if (a != null) {
+      return {
+        state: false,
+        code: 3,
+      };
+    }
 
     // 获取新闻内容
     const pageContent = await page.$eval(contentSelector, (el) => {
@@ -19,7 +33,11 @@ async function getNewsInfo(url, selector, page) {
       return content.length <= 10 ? content : content.slice(0, 10);
     });
 
-    if (!pageContent || pageContent.length === 0) return false;
+    if (!pageContent || pageContent.length === 0)
+      return {
+        state: false,
+        code: 4,
+      };
 
     // 获取新闻发布时间
     let pageTime = await page.$eval(timeSelector, (el) => el.innerText.trim());
@@ -38,10 +56,6 @@ async function getNewsInfo(url, selector, page) {
     } else {
       pageTime = dayjs(pageTime.match(/\d*-\d*-\d*.?\d*:\d*:?\d*?/g)).format();
     }
-    // 获取新闻标题
-    const pageTitle = await page.$eval(titleSelect, (el) =>
-      el.innerText.trim()
-    );
 
     const topURL = getTopURL(url);
     if (topURL === 'www.ahwang.cn') {
@@ -66,20 +80,25 @@ async function getNewsInfo(url, selector, page) {
     const segmentation = keywords.map((el) => el.keyword);
 
     return {
-      title: pageTitle,
-      url,
-      time: pageTime,
-      report,
-      segmentation,
+      state: true,
+      content: {
+        title: pageTitle,
+        url,
+        time: pageTime,
+        report,
+        segmentation,
+      },
     };
   } catch (e) {
     console.log(url);
-    console.log(e);
-    return false;
+    console.log(JSON.stringify(e));
+    return {
+      state: false,
+      code: 2,
+    };
   }
 }
 module.exports = { getNewsInfo };
-
 
 // const puppeteer = require('puppeteer');
 
