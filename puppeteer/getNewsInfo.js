@@ -69,11 +69,12 @@ async function getNewsInfo(url, selector, page) {
       title: pageTitle,
       url,
       time: pageTime,
-      content,
       report,
       segmentation,
     };
   } catch (e) {
+    console.log(url);
+    console.log(e);
     return false;
   }
 }

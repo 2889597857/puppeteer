@@ -1,9 +1,9 @@
 const { createTypeTask, startTask } = require('../../middlewares');
-
 const { getExecutingTask, findLatestTask } = require('./controller');
-
 const dayjs = require('dayjs');
+  
 /**
+ *
  * code 1 有任务在执行
  * code 2 无任务在执行
  * @returns
@@ -13,13 +13,21 @@ async function findTaskState() {
   if (result && result.length > 0) {
     return {
       code: 1,
+      /** 任务创建时间 */
       creationTime: result[0].creationTime,
       success: '-',
     };
   } else {
-    const { creationTime, success } = await findLatestTask();
-    const difference = dayjs().valueOf() - dayjs(creationTime).valueOf();
-    return { code: 2, creationTime, success, difference };
+    let task = await findLatestTask();
+
+    if (task) {
+      const { creationTime, success } = task;
+      /** 距离上次任务的时间 */
+      const difference = dayjs().valueOf() - dayjs(creationTime).valueOf();
+      return { code: 2, creationTime, success, difference };
+    } else {
+      return { code: 3, creationTime: '-', difference: '-', success: 0 };
+    }
   }
 }
 
@@ -38,7 +46,7 @@ async function createTask(req, res) {
     });
   } else if (code === 2) {
     // 无任务在执行
-    // 两次任务执行时间要相差两小时
+    // 两次任务执行时间要相差1小时
     if (difference >= 1 * 60 * 60 * 1000) {
       const { _id, creationTime, taskFN } = await createTypeTask(0);
       startTask(_id, taskFN);
@@ -56,6 +64,16 @@ async function createTask(req, res) {
         message: '技能冷却中',
       });
     }
+  } else {
+    const { _id, creationTime, taskFN } = await createTypeTask(0);
+    startTask(_id, taskFN);
+    res.json({
+      code: 200,
+      data: {
+        cooldown: true,
+        creationTime,
+      },
+    });
   }
 }
 

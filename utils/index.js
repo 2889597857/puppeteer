@@ -1,4 +1,4 @@
-const { openBrowser, closeBrowser } = require('./browser');
+const { openBrowser, closeBrowser,caches } = require('./browser');
 const { executeAsyncTask, taskState ,taskInfo} = require('./executeAsyncTask');
 const { getTopURL, verifyID } = require('./common');
 
@@ -10,4 +10,5 @@ module.exports = {
   getTopURL,
   verifyID,
   taskInfo,
+  caches
 };

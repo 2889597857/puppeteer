@@ -1,6 +1,31 @@
 const dayjs = require('dayjs');
-const ContentModel = require('../../models/contentModel');
 const { verifyID } = require('../../utils');
+const ContentModel = require('../../models/contentModel');
+const { getNewsContent } = require('../../start/getNews');
+
+async function getNews(req, res) {
+  const url = req.query.url;
+  if (url) {
+    const news = await getNewsContent(url);
+    if (news) {
+      res.json({
+        code: 200,
+        data: {
+          title: news.title,
+          url: news.url,
+          report: news.report,
+          time: news.time,
+          state: news.state,
+        },
+      });
+    } else {
+      res.json({
+        code: 201,
+        message: '错误',
+      });
+    }
+  }
+}
 
 async function getNewsList(req, res) {
   let pageSize = parseInt(req.query.page, 10);
@@ -129,6 +154,7 @@ async function clearInvalidNews() {
 }
 
 module.exports = {
+  getNews,
   getNewsList,
   createNews,
   updateNewsState,

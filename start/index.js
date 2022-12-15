@@ -1,3 +1,4 @@
-const {  contentStart } = require('./content');
+const { contentStart } = require('./content');
 const { linksStart } = require('./link');
-module.exports = { contentStart, linksStart };
+const { getNewsContent } = require('./getNews');
+module.exports = { contentStart, linksStart, getNewsContent };

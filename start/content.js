@@ -55,13 +55,15 @@ async function getContent({ url, website }, page, index) {
 
 async function saveContent(content, url) {
   // 储存新闻
-  const result = await createNews(content);
-  if (result.length > 0) {
-    // 更新链接状态
-    await updateLinkState(url, 1);
-    info.success++;
-    return true;
-  } else {
+  try {
+    const result = await createNews(content);
+    if (result.length > 0) {
+      // 更新链接状态
+      await updateLinkState(url, 1);
+      info.success++;
+      return true;
+    }
+  } catch (error) {
     await updateLinkState(url, 2);
     info.failed++;
     return false;
@@ -69,6 +71,7 @@ async function saveContent(content, url) {
 }
 
 async function contentStart(_id) {
+  info = taskInfo();
   const taskList = await createTasks();
   if (taskList.length > 0) {
     info = taskInfo();

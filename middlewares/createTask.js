@@ -3,8 +3,11 @@ const {
   getExecutingTask,
   addTask,
 } = require('../controllers/taskController/controller');
+const LinkListModel = require('../models/linkListModel');
+
 const dayjs = require('dayjs');
 /**
+ * 创建任务
  * 0 链接任务
  * 1 内容任务
  * @param {number} type
@@ -15,7 +18,7 @@ async function createTask(type) {
   // 0 获取链接任务  1 获取内容任务
   const isExecuting = await getExecutingTask(type);
   if (isExecuting.length !== 0) return false;
-  // 创建任务
+  // 没有正在执行的任务，创建新任务
   const result = await addTask({
     creationTime: dayjs().format(),
     state: 0,
@@ -28,14 +31,18 @@ async function createTask(type) {
 
   return { _id, creationTime, taskFN };
 }
-
+/**
+ * 创建获取链接或获取内容任务
+ * @param {*} type 0 / 1
+ * @returns
+ */
 async function createTypeTask(type) {
   return await createTask(type);
 }
 /**
  * 开始执行任务
- * @param {string} _id
- * @param {function} taskFN
+ * @param {string} _id 任务 _id
+ * @param {function} taskFN  获取链接/获取内容
  * @returns
  */
 async function executeTask(_id, taskFN) {
@@ -63,15 +70,18 @@ async function createAndExecuteTypeTask(type) {
  * @returns
  */
 async function startTask(_id, taskFN) {
-  const result = await executeTask(_id, taskFN);
-  if (result.success > 0) {
+  await executeTask(_id, taskFN);
+  const result = await LinkListModel.count({ state: 0 });
+  console.log(result);
+  if (result && result > 0) {
     return await createAndExecuteTypeTask(1);
   } else return;
 }
 
 async function start() {
-  const result = await createAndExecuteTypeTask(0);
-  if (result && result.success > 0) {
+  await createAndExecuteTypeTask(0);
+  const result = await LinkListModel.count({ state: 0 });
+  if (result && result > 0) {
     return await createAndExecuteTypeTask(1);
   } else return result;
 }
