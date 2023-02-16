@@ -5,7 +5,7 @@ const news = require('./routers/news')
 
 module.exports = app => {
   // app.use('/website', website)
+  app.use('/news', news)
   app.use('/task', task)
   app.use('/link', link)
-  app.use('/news', news)
 }
