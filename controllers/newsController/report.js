@@ -4,7 +4,9 @@ const { verifyID } = require('../../utils');
 
 async function getReportNews(req, res) {
   const date = parseInt(req.query.date);
+  const isCount = req.query.isCount || false;
   if (date) {
+    // 查询条件
     const condition = {
       state: 1,
       reportTime: {
@@ -19,10 +21,14 @@ async function getReportNews(req, res) {
       time: 0,
       state: 0,
     };
-
-    const data = await ContentModel.find(condition, option)
-      .sort({ reportTime: 1 })
-      .exec();
+    let data;
+    if (!isCount) {
+      data = await ContentModel.find(condition, option)
+        .sort({ reportTime: 1 })
+        .exec();
+    } else {
+      data = await ContentModel.count(condition);
+    }
     if (data) {
       res.json({ code: 200, data });
     } else {
