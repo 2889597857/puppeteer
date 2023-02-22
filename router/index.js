@@ -4,7 +4,7 @@ const task = require('./routers/task')
 const news = require('./routers/news')
 
 module.exports = app => {
-  // app.use('/website', website)
+  app.use('/website', website)
   app.use('/news', news)
   app.use('/task', task)
   app.use('/link', link)

@@ -172,3 +172,9 @@ module.exports = {
 //     content: '',
 //   }
 // ).then((res) => console.log(res));
+// ['anhuinews']
+async function a() {
+  let a = new RegExp('ah.anhuinews.com', 'i');
+  console.log(await ContentModel.count({ url: { $regex: a } }));
+}
+a();
