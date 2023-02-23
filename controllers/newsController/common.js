@@ -67,9 +67,9 @@ async function getNewsList(req, res) {
 async function getNewsDetails(req, res) {
   const _id = req.query._id;
   if (verifyID(_id)) {
-    const { content } = await ContentModel.findOne({ _id });
+    const news = await ContentModel.findOne({ _id });
 
-    if (content) {
+    if (news && news.content) {
       res.json({
         code: 200,
         data: {
@@ -177,4 +177,4 @@ async function a() {
   let a = new RegExp('ah.anhuinews.com', 'i');
   console.log(await ContentModel.count({ url: { $regex: a } }));
 }
-a();
+// a();
