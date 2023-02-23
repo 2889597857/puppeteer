@@ -52,7 +52,7 @@ async function updateReportTime(req, res) {
   }
 }
 
-async function updateReport(req, res) {
+async function updateReportContent(req, res) {
   const { _id, report } = req.body;
   if (verifyID(_id) && report) {
     const data = await ContentModel.findOneAndUpdate(
@@ -84,5 +84,5 @@ async function updateReport(req, res) {
 module.exports = {
   getReportNews,
   updateReportTime,
-  updateReport,
+  updateReportContent,
 };

@@ -1,6 +1,6 @@
 const { caches, openBrowser, getTopURL } = require('../utils');
 const { getContentSelect } = require('../controllers/selectorController');
-const { findWebsite } = require('../controllers/websiteController');
+const { findWebsite } = require('../controllers/websiteController/index.js');
 const { getNewsInfo } = require('../puppeteer/getNewsInfo');
 const {
   findOneContentLink,

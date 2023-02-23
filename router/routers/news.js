@@ -8,5 +8,5 @@ router.get('/report', News.getReportNews);
 router.get('/details', News.getNewsDetails);
 router.post('/updateNewsState', News.updateNewsState);
 router.post('/updateReportTime', News.updateReportTime);
-router.post('/updateReport', News.updateReport);
+router.post('/updateReportContent', News.updateReportContent);
 module.exports = router;
