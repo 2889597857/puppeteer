@@ -4,7 +4,9 @@ const Website = require('../../controllers/websiteController')
 const router = Router();
 
 router.get('/',Website.getWebsite);
-router.get('/findName',Website.findWebsiteName);
-router.post('/addLink',Website.addWebsite);
+router.get('/find/name',Website.findWebsiteName);
+router.get('/find/url',Website.findWebsiteUrl);
+router.post('/add/link',Website.addWebsite);
+router.post('/add/selector',Website.addSelector);
 
 module.exports = router;

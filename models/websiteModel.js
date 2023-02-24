@@ -6,6 +6,7 @@ const WebsiteSchema = mongoose.Schema({
   },
   url: {
     type: String,
+    unique: true,
   },
   state: {
     type: Boolean,
@@ -17,20 +18,15 @@ const WebsiteSchema = mongoose.Schema({
   defaultListSelector: {
     type: String,
   },
-  newsList: [
+  newsLinks: [
     {
       url: {
         type: String,
-        unique: true,
       },
       // 0 关闭 1 开启
       state: {
         type: Boolean,
         default: true,
-      },
-      independentSelector: {
-        type: Boolean,
-        default: false,
       },
       selector: {
         type: String,
