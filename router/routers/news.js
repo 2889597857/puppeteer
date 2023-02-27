@@ -1,6 +1,6 @@
 const Router = require('express');
 const router = Router();
-const News = require('../../controllers/newsController');
+const { News } = require('../../controllers');
 
 router.get('/', News.getNewsList);
 router.get('/getNews', News.getNews);

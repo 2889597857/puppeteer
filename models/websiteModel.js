@@ -37,7 +37,13 @@ const WebsiteSchema = mongoose.Schema({
       },
     },
   ],
-  contentSelector: [{}],
+  contentSelector: [
+    {
+      titleSelector: String,
+      contentSelector: String,
+      timeSelector: String,
+    },
+  ],
 });
 WebsiteSchema.statics = {
   get(url) {
