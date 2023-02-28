@@ -2,10 +2,21 @@ const WebsiteModel = require('../../models/websiteModel');
 const { getTopURL, verifyID, message } = require('../../utils');
 
 async function getWebsite(req, res) {
-  // WebsiteModel.find({},{})
+  const websiteInfo = await WebsiteModel.find(
+    {},
+    {
+      _id: 1,
+      name: 1,
+      url: 1,
+      state:1,
+      newsLinks: 1,
+    }
+  );
+  if (websiteInfo && websiteInfo.length > 0) {
+  }
   res.json({
     code: 200,
-    msg: 'c ',
+    data: websiteInfo,
   });
 }
 
@@ -30,7 +41,7 @@ async function findWebsiteNames(all = true, name) {
 async function findWebsiteAllName(req, res) {
   const siteName = await findWebsiteNames();
   res.json({
-    date: siteName,
+    data: siteName,
   });
 }
 async function findWebsiteName(req, res) {
@@ -38,13 +49,27 @@ async function findWebsiteName(req, res) {
   if (name) {
     const siteName = await findWebsiteNames(false, name);
     res.json({
-      date: siteName,
+      data: siteName,
     });
   } else
     res.json({
       code: 202,
       message: message['202'],
     });
+}
+async function findWebsiteNameByUrl(req, res) {
+  const url = getTopURL(req.query.url);
+  if (url) {
+    const name = await WebsiteModel.getNameByURL(url);
+    if (name)
+      res.json({
+        code: 200,
+        data: {
+          success: true,
+          ...name,
+        },
+      });
+  }
 }
 
 async function findWebsiteUrl(req, res) {
@@ -62,7 +87,7 @@ async function findWebsiteUrl(req, res) {
 
     if (site && site.length > 0)
       res.json({
-        date: {
+        data: {
           success: true,
           _id: site[0].newsLinks[0]._id,
         },
@@ -70,7 +95,7 @@ async function findWebsiteUrl(req, res) {
     else
       res.json({
         code: 200,
-        date: {
+        data: {
           site: false,
         },
       });
@@ -94,7 +119,7 @@ async function addWebsite(req, res) {
     }
     res.json({
       code: 200,
-      date: updateSiteLink,
+      data: updateSiteLink,
     });
   } else if (name) {
     let addSite;
@@ -112,19 +137,16 @@ async function addWebsite(req, res) {
     }
     res.json({
       code: 200,
-      date: addSite,
+      data: addSite,
     });
   } else {
     res.json({
       code: 201,
-      date: '错误',
+      data: '错误',
     });
   }
   // updateOne( { _id, newsList: { $elemMatch: { _id: replyId } } }, { $push: { 'newsList.$.favour': favourMurmur } })
 }
-async function addSelector(res, req, next) {}
-// async function addLink(req, res) {
-// }
 
 async function findWebsite(req, res) {
   const { _id, name, url, selector } = req.body;
@@ -140,8 +162,9 @@ module.exports = Website = {
   getWebsite,
   findWebsiteName,
   findWebsiteAllName,
+  findWebsiteNameByUrl,
   findWebsiteUrl,
   findWebsite,
   addWebsite,
-  addSelector,
 };
+findWebsiteNameByUrl({ query: { url: 'https://ah.ifeng.fdfgdcom/asdfas' } });

@@ -46,8 +46,8 @@ const WebsiteSchema = mongoose.Schema({
   ],
 });
 WebsiteSchema.statics = {
-  get(url) {
-    return this.findOne({ url })
+  getNameByURL(url) {
+    return this.findOne({ url }, { _id: 1, name: 1 })
       .exec()
       .then((website) => website);
   },
