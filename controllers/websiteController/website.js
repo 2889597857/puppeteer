@@ -26,22 +26,17 @@ async function findWebsiteNames(all = true, name) {
   return site.length > 0
     ? {
         code: 200,
-        data: {
-          success: true,
-          name: site,
-        },
+        data:site,
       }
     : {
         code: 200,
-        data: {
-          success: false,
-        },
+        data: [],
       };
 }
 async function findWebsiteAllName(req, res) {
   const siteName = await findWebsiteNames();
   res.json({
-    data: siteName,
+    ...siteName,
   });
 }
 async function findWebsiteName(req, res) {
@@ -49,7 +44,7 @@ async function findWebsiteName(req, res) {
   if (name) {
     const siteName = await findWebsiteNames(false, name);
     res.json({
-      data: siteName,
+      ...siteName,
     });
   } else
     res.json({
