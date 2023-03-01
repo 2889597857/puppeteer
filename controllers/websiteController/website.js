@@ -8,7 +8,7 @@ async function getWebsite(req, res) {
       _id: 1,
       name: 1,
       url: 1,
-      state:1,
+      defaultListSelector: 1,
       newsLinks: 1,
     }
   );
@@ -167,4 +167,4 @@ module.exports = Website = {
   findWebsite,
   addWebsite,
 };
-findWebsiteNameByUrl({ query: { url: 'https://ah.ifeng.fdfgdcom/asdfas' } });
+// findWebsiteNameByUrl({ query: { url: 'https://ah.ifeng.fdfgdcom/asdfas' } });
