@@ -2,6 +2,11 @@ const dayjs = require('dayjs');
 const ContentModel = require('../../models/contentModel');
 const { verifyID } = require('../../utils');
 
+/**
+ * 查询报送新闻或报送条数
+ * @param {*} req
+ * @param {*} res
+ */
 async function getReportNews(req, res) {
   const date = parseInt(req.query.date);
   const isCount = parseInt(req.query.isCount) || false;
@@ -35,6 +40,11 @@ async function getReportNews(req, res) {
     res.json({ code: 201, msg: '错误' });
   }
 }
+/**
+ * 更新报送时间
+ * @param {*} req
+ * @param {*} res
+ */
 async function updateReportTime(req, res) {
   const { _id, date } = req.body;
   if (verifyID(_id) && parseInt(date)) {
@@ -51,7 +61,11 @@ async function updateReportTime(req, res) {
     res.json({ code: 202, msg: '_id ' });
   }
 }
-
+/**
+ * 更新报送内容
+ * @param {*} req
+ * @param {*} res
+ */
 async function updateReportContent(req, res) {
   const { _id, report } = req.body;
   if (verifyID(_id) && report) {

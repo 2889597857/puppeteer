@@ -2,7 +2,11 @@ const dayjs = require('dayjs');
 const { verifyID } = require('../../utils');
 const ContentModel = require('../../models/contentModel');
 const { getNewsContent } = require('../../start/getNews');
-
+/**
+ * 根据 url 获取新闻详情
+ * @param {*} req
+ * @param {*} res
+ */
 async function getNews(req, res) {
   const url = req.query.url;
   if (url) {
@@ -26,7 +30,36 @@ async function getNews(req, res) {
     }
   }
 }
+/**
+ * 根据 _id 获取新闻 content
+ * @param {*} req
+ * @param {*} res
+ */
+async function getNewsDetails(req, res) {
+  const _id = req.query._id;
+  if (verifyID(_id)) {
+    const news = await ContentModel.findOne({ _id });
 
+    if (news && news.content) {
+      res.json({
+        code: 200,
+        data: {
+          _id,
+          content,
+        },
+      });
+    } else {
+      res.json({ code: 201, msg: '参数不存在或参数错误' });
+    }
+  } else {
+    res.json({ code: 404, msg: '参数不存在或参数错误' });
+  }
+}
+/**
+ * 根据 url 获取新闻列表
+ * @param {*} req
+ * @param {*} res
+ */
 async function getNewsList(req, res) {
   let pageSize = parseInt(req.query.page, 10);
   if (pageSize && pageSize > 0) {
@@ -63,32 +96,19 @@ async function getNewsList(req, res) {
     res.json({ code: 404, msg: '参数不存在或参数错误' });
   }
 }
-
-async function getNewsDetails(req, res) {
-  const _id = req.query._id;
-  if (verifyID(_id)) {
-    const news = await ContentModel.findOne({ _id });
-
-    if (news && news.content) {
-      res.json({
-        code: 200,
-        data: {
-          _id,
-          content,
-        },
-      });
-    } else {
-      res.json({ code: 201, msg: '参数不存在或参数错误' });
-    }
-  } else {
-    res.json({ code: 404, msg: '参数不存在或参数错误' });
-  }
-}
-
+/**
+ * 删除新闻
+ * @param {*} state
+ * @returns
+ */
 async function deleteNews(state = 2) {
   return ContentModel.deleteMany({ state });
 }
-
+/**
+ * 更新新闻状态
+ * @param {*} req
+ * @param {*} res
+ */
 async function updateNewsState(req, res) {
   const { _id, state } = req.body;
 
@@ -142,10 +162,10 @@ async function deleteNews(_id, all = false) {
  * @param {*} _id
  * @returns
  */
-async function clearInvalidNews() {
+async function clearInvalidNews(day = 2) {
   const { acknowledged, deletedCount } = await ContentModel.deleteMany({
     state: 0,
-    time: { $lte: dayjs().subtract(2, 'day').format() },
+    time: { $lte: dayjs().subtract(day, 'day').format() },
   });
   if (acknowledged) {
     console.log(`已删除${deletedCount}条过期新闻`);
@@ -172,9 +192,3 @@ module.exports = {
 //     content: '',
 //   }
 // ).then((res) => console.log(res));
-// ['anhuinews']
-async function a() {
-  let a = new RegExp('ah.anhuinews.com', 'i');
-  console.log(await ContentModel.count({ url: { $regex: a } }));
-}
-// a();

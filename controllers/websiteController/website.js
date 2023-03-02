@@ -11,10 +11,6 @@ async function getWebsite(req, res) {
     },
   ]);
   if (websiteInfo && websiteInfo.length > 0) {
-    const data = websiteInfo.map((site) => {
-      const { _id, name, newsLinks: list } = site;
-      return { _id, name, list };
-    });
     res.json({
       code: 200,
       data: websiteInfo,
