@@ -1,6 +1,10 @@
 const WebsiteModel = require('../../models/websiteModel');
 const { getTopURL, verifyID, message } = require('../../utils');
-
+/**
+ * 获取新闻站点
+ * @param {*} req 
+ * @param {*} res 
+ */
 async function getWebsite(req, res) {
   const websiteInfo = await WebsiteModel.aggregate([
     {
@@ -22,7 +26,11 @@ async function getWebsite(req, res) {
     });
   }
 }
-
+/**
+ * 查询网站名称
+ * @param {boolean} all 
+ * @param {string} name 
+ */
 async function findWebsiteNames(all = true, name) {
   const option = all ? {} : { name: { $regex: name } };
   const site = await WebsiteModel.find(option, { _id: 1, name: 1 });
@@ -36,14 +44,22 @@ async function findWebsiteNames(all = true, name) {
         data: [],
       };
 }
-
+/**
+ * 获取所有网站名称
+ * @param {*} req 
+ * @param {*} res 
+ */
 async function findWebsiteAllName(req, res) {
   const siteName = await findWebsiteNames();
   res.json({
     ...siteName,
   });
 }
-
+/**
+ * 模糊查询网站名称
+ * @param {*} req 
+ * @param {*} res 
+ */
 async function findWebsiteName(req, res) {
   const name = req.query.name;
   if (name) {
@@ -57,7 +73,11 @@ async function findWebsiteName(req, res) {
       message: message['202'],
     });
 }
-
+/**
+ * 通过Url查询网站名称
+ * @param {*} req 
+ * @param {*} res 
+ */
 async function findWebsiteNameByUrl(req, res) {
   const url = getTopURL(req.query.url);
   if (url) {
@@ -72,7 +92,11 @@ async function findWebsiteNameByUrl(req, res) {
       });
   }
 }
-
+/**
+ * 查询网站Link页面的 URL
+ * @param {*} req 
+ * @param {*} res 
+ */
 async function findWebsiteLink(req, res) {
   const url = req.query.url;
   if (!url)
