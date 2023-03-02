@@ -1,5 +1,7 @@
-const urlRegExp =
-  /^(((ht|f)tps?):\/\/)?([^!@#$%^&*?.\s-]([^!@#$%^&*?.\s]{0,63}[^!@#$%^&*?.\s])?\.)+[a-z]{2,6}\/?/;
+const urlRegExp = (url) =>
+  /^(((ht|f)tps?):\/\/)?([^!@#$%^&*?.\s-]([^!@#$%^&*?.\s]{0,63}[^!@#$%^&*?.\s])?\.)+[a-z]{2,6}\/?/.test(
+    url
+  );
 const getTopURL = (url) =>
   urlRegExp.test(url)
     ? url.replace(/(^https?:\/\/.*?)(:\d+)?\/.*$/, '$1')
@@ -14,4 +16,4 @@ function verifyID(id) {
   return /^[a-fA-F0-9]{24}$/.test(id);
 }
 
-module.exports = { getTopURL, verifyID };
+module.exports = { getTopURL, verifyID,urlRegExp };

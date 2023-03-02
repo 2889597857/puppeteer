@@ -37,17 +37,17 @@ const WebsiteSchema = mongoose.Schema({
       },
     },
   ],
-  contentSelector: [
+  pageSelector: [
     {
-      titleSelector: String,
-      contentSelector: String,
-      timeSelector: String,
+      title: String,
+      time: String,
+      content: String,
     },
   ],
 });
 WebsiteSchema.statics = {
   getNameByURL(url) {
-    return this.findOne({ url }, { _id: 1, name: 1 })
+    return this.findOne({ url }, { _id: 1, name: 1 });
   },
   getWebsiteInfo() {
     return this.find(
@@ -57,7 +57,7 @@ WebsiteSchema.statics = {
         name: 1,
         newsLinks: 1,
       }
-    )
+    );
   },
 };
 const WebsiteModel = mongoose.model('Website', WebsiteSchema, 'website');

@@ -1,15 +1,16 @@
 const dayjs = require('dayjs');
-const { verifyID } = require('../../utils');
+const { verifyID, urlRegExp } = require('../../utils');
 const ContentModel = require('../../models/contentModel');
 const { getNewsContent } = require('../../start/getNews');
 /**
- * 根据 url 获取新闻详情
+ * 根据 url 爬取新闻详情
  * @param {*} req
  * @param {*} res
  */
 async function getNews(req, res) {
-  const url = req.query.url;
-  if (url) {
+  try {
+    const url = req.query.url;
+    if (!urlRegExp(url)) throw new Error('url must be a valid');
     const news = await getNewsContent(url);
     if (news) {
       res.json({
@@ -22,12 +23,12 @@ async function getNews(req, res) {
           state: news.state,
         },
       });
-    } else {
-      res.json({
-        code: 201,
-        message: '错误',
-      });
-    }
+    } else throw new Error('爬取失败');
+  } catch (error) {
+    res.json({
+      code: 201,
+      message: error.message,
+    });
   }
 }
 /**

@@ -9,5 +9,7 @@ router.get('/find/name/all',Website.findWebsiteAllName);
 router.get('/find/link',Website.findWebsiteLink);
 router.post('/add/link',Website.addWebsite);
 router.post('/add/selector',Website.addSelector);
+router.post('/add/selector/link',Website.addSelector);
+router.post('/add/selector/page',Website.addPageSelector);
 
 module.exports = router;
