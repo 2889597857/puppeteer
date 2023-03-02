@@ -2,22 +2,29 @@ const WebsiteModel = require('../../models/websiteModel');
 const { getTopURL, verifyID, message } = require('../../utils');
 
 async function getWebsite(req, res) {
-  const websiteInfo = await WebsiteModel.find(
-    {},
+  const websiteInfo = await WebsiteModel.aggregate([
     {
-      _id: 1,
-      name: 1,
-      url: 1,
-      defaultListSelector: 1,
-      newsLinks: 1,
-    }
-  );
+      $project: {
+        _id: 1,
+        list: '$newsLinks',
+      },
+    },
+  ]);
   if (websiteInfo && websiteInfo.length > 0) {
+    const data = websiteInfo.map((site) => {
+      const { _id, name, newsLinks: list } = site;
+      return { _id, name, list };
+    });
+    res.json({
+      code: 200,
+      data: websiteInfo,
+    });
+  } else {
+    res.json({
+      code: 200,
+      data: [],
+    });
   }
-  res.json({
-    code: 200,
-    data: websiteInfo,
-  });
 }
 
 async function findWebsiteNames(all = true, name) {
@@ -38,12 +45,14 @@ async function findWebsiteNames(all = true, name) {
         },
       };
 }
+
 async function findWebsiteAllName(req, res) {
   const siteName = await findWebsiteNames();
   res.json({
     data: siteName,
   });
 }
+
 async function findWebsiteName(req, res) {
   const name = req.query.name;
   if (name) {
@@ -57,6 +66,7 @@ async function findWebsiteName(req, res) {
       message: message['202'],
     });
 }
+
 async function findWebsiteNameByUrl(req, res) {
   const url = getTopURL(req.query.url);
   if (url) {
@@ -72,7 +82,7 @@ async function findWebsiteNameByUrl(req, res) {
   }
 }
 
-async function findWebsiteUrl(req, res) {
+async function findWebsiteLink(req, res) {
   const url = req.query.url;
   if (!url)
     res.json({
@@ -81,15 +91,21 @@ async function findWebsiteUrl(req, res) {
     });
   else {
     const site = await WebsiteModel.find(
-      { newsLinks: { $elemMatch: { url } } },
-      { _id: 1, newsLinks: 1 }
+      { 'newsLinks.url': url },
+      {
+        newsLinks: {
+          $elemMatch: {
+            url,
+          },
+        },
+      }
     );
 
     if (site && site.length > 0)
       res.json({
         data: {
           success: true,
-          _id: site[0].newsLinks[0]._id,
+          _id: site,
         },
       });
     else
@@ -163,8 +179,13 @@ module.exports = Website = {
   findWebsiteName,
   findWebsiteAllName,
   findWebsiteNameByUrl,
-  findWebsiteUrl,
+  findWebsiteLink,
   findWebsite,
   addWebsite,
 };
 // findWebsiteNameByUrl({ query: { url: 'https://ah.ifeng.fdfgdcom/asdfas' } });
+
+// function test() {
+//   WebsiteModel).then((res) => console.log(res));
+// }
+// test();

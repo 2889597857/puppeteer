@@ -48,8 +48,16 @@ const WebsiteSchema = mongoose.Schema({
 WebsiteSchema.statics = {
   getNameByURL(url) {
     return this.findOne({ url }, { _id: 1, name: 1 })
-      .exec()
-      .then((website) => website);
+  },
+  getWebsiteInfo() {
+    return this.find(
+      {},
+      {
+        _id: 1,
+        name: 1,
+        newsLinks: 1,
+      }
+    )
   },
 };
 const WebsiteModel = mongoose.model('Website', WebsiteSchema, 'website');
