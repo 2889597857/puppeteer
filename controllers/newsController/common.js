@@ -8,8 +8,8 @@ const { getNewsContent } = require('../../start/getNews');
  * @param {*} res
  */
 async function getNews(req, res) {
+  const url = req.query.url;
   try {
-    const url = req.query.url;
     if (!urlRegExp(url)) throw new Error('url must be a valid');
     const news = await getNewsContent(url);
     if (news) {
@@ -38,9 +38,10 @@ async function getNews(req, res) {
  */
 async function getNewsDetails(req, res) {
   const _id = req.query._id;
-  if (verifyID(_id)) {
-    const news = await ContentModel.findOne({ _id });
+  try {
+    if (!verifyID(_id)) throw new Error('参数不存在或参数错误');
 
+    const news = await ContentModel.findOne({ _id });
     if (news && news.content) {
       res.json({
         code: 200,
@@ -49,11 +50,12 @@ async function getNewsDetails(req, res) {
           content,
         },
       });
-    } else {
-      res.json({ code: 201, msg: '参数不存在或参数错误' });
-    }
-  } else {
-    res.json({ code: 404, msg: '参数不存在或参数错误' });
+    } throw new Error('参数不存在或参数错误');
+  } catch (error) {
+    res.json({
+      code: 201,
+      message: error.message,
+    });
   }
 }
 /**
