@@ -1,5 +1,5 @@
 const WebsiteModel = require('../../models/websiteModel');
-const { getTopURL, verifyID, message } = require('../../utils');
+const { getTopURL, verifyID, urlRegExp, message } = require('../../utils');
 const { siteOrSelector, findWebsiteNames } = require('./controller');
 
 /**
@@ -77,15 +77,12 @@ async function findWebsiteNameByUrl(req, res) {
  */
 async function findWebsiteLink(req, res) {
   const url = req.query.url;
-  if (!url)
-    res.json({
-      code: 201,
-      message: '参数错误',
-    });
-  else {
-    const site = await WebsiteModel.find(
+  try {
+    if (!urlRegExp(url)) throw new Error('url must be a valid');
+    const site = await WebsiteModel.findOne(
       { 'newsLinks.url': url },
       {
+        name: 1,
         newsLinks: {
           $elemMatch: {
             url,
@@ -93,21 +90,14 @@ async function findWebsiteLink(req, res) {
         },
       }
     );
-
-    if (site && site.length > 0)
-      res.json({
-        data: {
-          success: true,
-          _id: site,
-        },
-      });
-    else
-      res.json({
-        code: 200,
-        data: {
-          site: false,
-        },
-      });
+    res.json({
+      data: site,
+    });
+  } catch (error) {
+    res.json({
+      code: 201,
+      message: error.message,
+    });
   }
 }
 
@@ -176,9 +166,3 @@ module.exports = Website = {
   findWebsite,
   addWebsite,
 };
-// findWebsiteNameByUrl({ query: { url: 'https://ah.ifeng.fdfgdcom/asdfas' } });
-
-// function test() {
-//   WebsiteModel).then((res) => console.log(res));
-// }
-// test();

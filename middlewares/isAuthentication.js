@@ -22,7 +22,7 @@ exports.isAuth = async (req, res, next) => {
   // 2) 验证 Token
   const decoded = await promisify(jwt.verify)(token, Env.JWT_SECRET);
 
-  //  3) 
+  //  3) 验证 用户
   const freshUser = await User.findOne({ name: decoded.name });
 
   if (!freshUser) {
