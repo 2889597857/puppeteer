@@ -12,8 +12,7 @@ app.use(cors());
 // app.use(express.static('public'));
 app.use(express.json());
 
-app.post('/login', (req, res) => {
-  if (req.url == '/login')
+app.post('/signin', (req, res) => {
     res.json({ code: 200, data: { token: createToken(req.body) } });
 });
 

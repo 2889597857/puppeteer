@@ -3,10 +3,10 @@ const router = Router();
 const { News } = require('../../controllers');
 
 router.get('/', News.getNewsList);
-router.get('/getNews', News.getNews);
+router.get('/crawler', News.crawlerNews);
 router.get('/report', News.getReportNews);
 router.get('/details', News.getNewsDetails);
-router.post('/updateNewsState', News.updateNewsState);
-router.post('/updateReportTime', News.updateReportTime);
-router.post('/updateReportContent', News.updateReportContent);
+router.post('/update/state', News.updateNewsState);
+router.post('/update/time', News.updateReportTime);
+router.post('/update/content', News.updateReportContent);
 module.exports = router;

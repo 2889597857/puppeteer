@@ -7,7 +7,7 @@ const { getNewsContent } = require('../../start/getNews');
  * @param {*} req
  * @param {*} res
  */
-async function getNews(req, res) {
+async function crawlerNews(req, res) {
   const url = req.query.url;
   try {
     if (!urlRegExp(url)) throw new Error('url must be a valid');
@@ -177,7 +177,7 @@ async function clearInvalidNews(day = 2) {
 }
 
 module.exports = {
-  getNews,
+  crawlerNews,
   getNewsList,
   createNews,
   updateNewsState,
