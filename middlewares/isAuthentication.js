@@ -1,10 +1,10 @@
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const Env = require('../config/env');
 
-// Middleware
 exports.isAuth = async (req, res, next) => {
-  // 1) Getting token and check if its there
+  // 1) 获取token
   let token;
   if (
     req.headers.authorization &&
@@ -19,12 +19,11 @@ exports.isAuth = async (req, res, next) => {
       message: '请登录',
     });
   }
-  // 2) Verification Token
-  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  //  { username: 'levani '}
+  // 2) 验证 Token
+  const decoded = await promisify(jwt.verify)(token, Env.JWT_SECRET);
 
-  // 3) Check if user still exists  (SECURITY)
-  const freshUser = await User.findOne({ email: decoded.email });
+  //  3) 
+  const freshUser = await User.findOne({ name: decoded.name });
 
   if (!freshUser) {
     return res.status(401).json({
@@ -33,8 +32,7 @@ exports.isAuth = async (req, res, next) => {
     });
   }
 
-  // GRANT ACCESS TO PROTECTED ROUTE
-  req.user = freshUser;
-
+  req.user = freshUser.username;
+  req.role = freshUser.role;
   next();
 };

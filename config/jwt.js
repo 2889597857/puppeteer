@@ -1,16 +1,14 @@
 const { sign, verify } = require('jsonwebtoken');
-
-const secretKey = 'whcss';
-
-export function createToken({ account, role }, time = '3d') {
-  const token = sign({ account: account, role: role }, secretKey, {
+const Env = require('./env');
+function createToken({ username, role }, time = '3d') {
+  const token = sign({ username, role }, Env.JWT_SECRET, {
     expiresIn: time,
   });
   return token;
 }
 
-export function verifyToken(token) {
-  return verify(token, secretKey, (err, decode) => {
+function verifyToken(token) {
+  return verify(token, Env.JWT_SECRET, (err, decode) => {
     if (err) {
       //  时间失效的时候/ 伪造的token
       return false;
@@ -19,3 +17,7 @@ export function verifyToken(token) {
     }
   });
 }
+module.exports = {
+  createToken,
+  verifyToken,
+};

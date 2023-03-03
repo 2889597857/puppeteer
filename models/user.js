@@ -1,16 +1,15 @@
 const mongoose = require('../config/mongoose');
 
-const RouteSchema = mongoose.Schema({
-  /** 创建时间 */
+const UserSchema = mongoose.Schema({
+  username: { type: String },
+  password: { type: String },
   role: {
     type: String,
     default: 'user',
+    enum: ['user', 'admin', 'super', 'disabled'],
   },
-  account: { type: String },
-  password: { type: String },
-  route: String,
 });
 
-const RouteModel = mongoose.model('RouteSchema', RouteSchema, 'Route');
+const UserModel = mongoose.model('UserSchema', UserSchema, 'user');
 
-module.exports = RouteModel;
+module.exports = UserModel;
