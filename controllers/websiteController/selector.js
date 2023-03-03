@@ -1,5 +1,21 @@
 const WebsiteModel = require('../../models/websiteModel');
 const { getTopURL, verifyID, message } = require('../../utils');
+const { siteOrSelector } = require('./controller');
+
+async function getAllPageSelector(req, res) {
+  const websiteInfo = await siteOrSelector(true);
+  if (websiteInfo.success) {
+    res.json({
+      code: 200,
+      data: websiteInfo.websiteInfo,
+    });
+  } else {
+    res.json({
+      code: 201,
+      data: [],
+    });
+  }
+}
 
 async function addSelector(req, res) {
   const {} = req.query;
@@ -18,7 +34,7 @@ async function addPageSelector(req, res) {
     );
     res.json({ code: 200 });
   } catch (error) {
-    res.json({ error:error.message  });
+    res.json({ error: error.message });
   }
 }
 
@@ -26,4 +42,5 @@ module.exports = {
   addSelector,
   addLinkSelector,
   addPageSelector,
+  getAllPageSelector,
 };

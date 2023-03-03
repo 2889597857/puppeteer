@@ -1,53 +1,31 @@
 const WebsiteModel = require('../../models/websiteModel');
 const { getTopURL, verifyID, message } = require('../../utils');
+const { siteOrSelector, findWebsiteNames } = require('./controller');
+
 /**
  * 获取新闻站点
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 async function getWebsite(req, res) {
-  const websiteInfo = await WebsiteModel.aggregate([
-    {
-      $project: {
-        _id: 1,
-        list: '$newsLinks',
-      },
-    },
-  ]);
-  if (websiteInfo && websiteInfo.length > 0) {
+  const websiteInfo = await siteOrSelector();
+  if (websiteInfo.success) {
     res.json({
       code: 200,
-      data: websiteInfo,
+      data: websiteInfo.websiteInfo,
     });
   } else {
     res.json({
-      code: 200,
+      code: 201,
       data: [],
     });
   }
 }
-/**
- * 查询网站名称
- * @param {boolean} all 
- * @param {string} name 
- */
-async function findWebsiteNames(all = true, name) {
-  const option = all ? {} : { name: { $regex: name } };
-  const site = await WebsiteModel.find(option, { _id: 1, name: 1 });
-  return site.length > 0
-    ? {
-        code: 200,
-        data:site,
-      }
-    : {
-        code: 200,
-        data: [],
-      };
-}
+
 /**
  * 获取所有网站名称
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 async function findWebsiteAllName(req, res) {
   const siteName = await findWebsiteNames();
@@ -57,8 +35,8 @@ async function findWebsiteAllName(req, res) {
 }
 /**
  * 模糊查询网站名称
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 async function findWebsiteName(req, res) {
   const name = req.query.name;
@@ -75,8 +53,8 @@ async function findWebsiteName(req, res) {
 }
 /**
  * 通过Url查询网站名称
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 async function findWebsiteNameByUrl(req, res) {
   const url = getTopURL(req.query.url);
@@ -94,8 +72,8 @@ async function findWebsiteNameByUrl(req, res) {
 }
 /**
  * 查询网站Link页面的 URL
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 async function findWebsiteLink(req, res) {
   const url = req.query.url;
