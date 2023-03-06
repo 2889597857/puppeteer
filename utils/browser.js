@@ -2,13 +2,13 @@ const puppeteer = require('puppeteer');
 // 浏览器页面。一个任务一个浏览器
 const caches = [];
 
-async function openBrowser() {
+async function openBrowser(cache = true) {
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
     headless: true,
     timeout: 1000,
   });
-  caches.push(browser);
+  if (cache) caches.push(browser);
   return await browser.newPage();
 }
 
