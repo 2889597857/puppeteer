@@ -1,7 +1,5 @@
-const { promisify } = require('util');
-const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const Env = require('../config/env');
+const { verifyToken } = require('../config');
 
 exports.isAuth = async (req, res, next) => {
   // 1) 获取token
@@ -20,7 +18,7 @@ exports.isAuth = async (req, res, next) => {
     });
   }
   // 2) 验证 Token
-  const decoded = await promisify(jwt.verify)(token, Env.JWT_SECRET);
+  const decoded = verifyToken(token);
 
   //  3) 验证 用户
   const freshUser = await User.findOne({ name: decoded.name });
@@ -35,4 +33,13 @@ exports.isAuth = async (req, res, next) => {
   req.user = freshUser.username;
   req.role = freshUser.role;
   next();
+};
+
+exports.isAdmin = async function (req, res, next) {
+  if (req.role === 'admin') next();
+  else
+    res.json({
+      code: 202,
+      message: '权限不足',
+    });
 };
