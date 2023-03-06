@@ -2,7 +2,7 @@ const dayjs = require('dayjs');
 const { getTopURL } = require('../utils');
 const jieba = require('@node-rs/jieba');
 const ContentModel = require('../models/contentModel');
-
+const { errors } = require('puppeteer');
 async function getNewsInfo(url, selector, page) {
   try {
     const { titleSelect, timeSelector, contentSelector } = selector;
@@ -90,11 +90,15 @@ async function getNewsInfo(url, selector, page) {
       },
     };
   } catch (e) {
+    let code = 2;
+    if (e instanceof errors.TimeoutError) {
+      code = 3;
+    }
     console.log(url);
     console.log(JSON.stringify(e));
     return {
       state: false,
-      code: 2,
+      code,
     };
   }
 }

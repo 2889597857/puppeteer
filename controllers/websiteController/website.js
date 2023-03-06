@@ -71,7 +71,7 @@ async function findWebsiteNameByUrl(req, res) {
   }
 }
 /**
- * 查询网站Link页面的 URL
+ * 查询网站Link页面的URL是否存在
  * @param {*} req
  * @param {*} res
  */
@@ -83,20 +83,44 @@ async function findWebsiteLink(req, res) {
       { 'newsLinks.url': url },
       {
         name: 1,
-        newsLinks: {
-          $elemMatch: {
-            url,
-          },
-        },
+        defaultListSelector: 1,
       }
     );
     res.json({
+      code: 200,
       data: site,
     });
   } catch (error) {
     res.json({
       code: 201,
       message: error.message,
+    });
+  }
+}
+/**
+ * 根据_id查询站点信息
+ * @param {*} req
+ * @param {*} res
+ */
+
+async function findSiteInfoByID(req, res) {
+  const id = req.query._id;
+  try {
+    if (!verifyID(id)) throw new Error(`Could not find ${id}`);
+    const data = await WebsiteModel.findById(id, {
+      name: 1,
+      newsLinks: 1,
+      defaultListSelector: 1,
+      pageSelector: 1,
+    });
+    res.json({
+      code: 200,
+      data,
+    });
+  } catch (err) {
+    res.json({
+      code: 201,
+      message: err.message,
     });
   }
 }
@@ -147,22 +171,12 @@ async function addWebsite(req, res) {
   // updateOne( { _id, newsList: { $elemMatch: { _id: replyId } } }, { $push: { 'newsList.$.favour': favourMurmur } })
 }
 
-async function findWebsite(req, res) {
-  const { _id, name, url, selector } = req.body;
-  if (_id && verifyID(_id)) {
-  }
-  res.json({
-    code: 200,
-    msg: 'c ',
-  });
-}
-
 module.exports = Website = {
   getWebsite,
   findWebsiteName,
   findWebsiteAllName,
   findWebsiteNameByUrl,
   findWebsiteLink,
-  findWebsite,
+  findSiteInfoByID,
   addWebsite,
 };
