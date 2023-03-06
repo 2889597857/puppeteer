@@ -4,7 +4,12 @@ const caches = [];
 
 async function openBrowser(cache = true) {
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox', // 禁用setuid沙箱(Linux)。
+      `--disable-notifications=true`, // 关闭浏览器通知提示
+      `--blink-settings=imagesEnabled=false`, // 禁止加载图片
+    ],
     headless: true,
     timeout: 1000,
   });
@@ -25,6 +30,15 @@ async function closeBrowser() {
     cleanCache();
     resolve();
   });
+
+  // for await (const browser of caches) {
+  //   try {
+  //     await browser.close();
+  //     console.log(`关闭浏览器${i + 1}`);
+  //   } catch {
+  //     console.log(`关闭浏览器${i + 1}失败`);
+  //   }
+  // }
 }
 
 function cleanCache() {

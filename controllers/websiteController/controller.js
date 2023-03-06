@@ -24,6 +24,7 @@ async function siteOrSelector(selector = false) {
         $project: {
           _id: 1,
           name: 1,
+          defaultListSelector:1,
           list: selector ? '$pageSelector' : '$newsLinks',
         },
       },

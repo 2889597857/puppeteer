@@ -32,9 +32,9 @@ async function addPageSelector(req, res) {
       },
       { new: true }
     );
-    res.json({ code: 200 });
+    res.json({ code: 200, data: data._id });
   } catch (error) {
-    res.json({ error: error.message });
+    res.json({ code: 201, error: error.message });
   }
 }
 
