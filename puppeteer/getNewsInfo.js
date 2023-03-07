@@ -103,26 +103,3 @@ async function getNewsInfo(url, selector, page) {
   }
 }
 module.exports = { getNewsInfo };
-
-// const puppeteer = require('puppeteer');
-
-// async function openBrowser() {
-//   const browser = await puppeteer.launch({ headless: true, timeout: 1000 });
-//   return browser.newPage();
-// }
-
-// async function a() {
-//   const page = await openBrowser();
-
-//   getNewsInfo(
-//     'http://www.ahnews.com.cn/yaowen1/pc/con/2022-09/26/496_678169.html',
-//     {
-//       titleSelect: '.h-p3.clearfix.bb1 > div > div.h-title',
-//       contentSelector: '#p-detail',
-//       timeSelector: '.clearfix.bb1 > div > div.h-info > span.h-time',
-//     },
-//     page
-//   ).then((res) => console.log(res));
-// }
-
-// a();
