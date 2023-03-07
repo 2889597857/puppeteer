@@ -168,7 +168,31 @@ async function addWebsite(req, res) {
       data: '错误',
     });
   }
-  // updateOne( { _id, newsList: { $elemMatch: { _id: replyId } } }, { $push: { 'newsList.$.favour': favourMurmur } })
+}
+
+async function addSiteLink(req, res) {
+  const { _id, url, selector } = req.body;
+  try {
+    let updateSiteLink;
+    if (_id && verifyID(_id)) {
+      updateSiteLink = await WebsiteModel.findByIdAndUpdate(
+        _id,
+        {
+          $push: { newsLinks: { url, selector } },
+        },
+        { new: true }
+      );
+    } else throw new Error('_id is wrong');
+    res.json({
+      code: 200,
+      data: updateSiteLink,
+    });
+  } catch (error) {
+    res.json({
+      code: 200,
+      message: error.message,
+    });
+  }
 }
 
 module.exports = Website = {
@@ -179,4 +203,5 @@ module.exports = Website = {
   findWebsiteLink,
   findSiteInfoByID,
   addWebsite,
+  addSiteLink,
 };
