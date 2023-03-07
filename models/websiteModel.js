@@ -8,10 +8,6 @@ const WebsiteSchema = mongoose.Schema({
     type: String,
     unique: true,
   },
-  state: {
-    type: Boolean,
-    default: true,
-  },
   /**
    * 默认链接选择器
    */
