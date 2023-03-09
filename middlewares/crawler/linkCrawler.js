@@ -5,12 +5,10 @@ const {
 } = require('../../controllers/linkController');
 const { executeAsyncTask, taskInfo } = require('../../utils');
 
-// const {
-//   findOneContentLink,
-//   addContentLink,
-// } = require('../controllers/LinkListController');
-// const { updateTaskInfo } = require('../controllers/taskController/controller');
-let info;
+const {
+  findOneContentLink,
+  addContentLink,
+} = require('../controllers/LinkListController');
 
 function formatLink(Link) {
   const { _id, link, defaultListSelector } = Link;

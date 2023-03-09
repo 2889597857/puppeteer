@@ -1,5 +1,5 @@
 const { openBrowser, getTopURL } = require('../utils');
-const { getContentSelect } = require('../controllers/selectorController');
+const { getPageSelector } = require('../controllers/websiteController');
 const { findWebsite } = require('../controllers/websiteController/index.js');
 const { getNewsInfo } = require('../puppeteer/getNewsInfo');
 const {
@@ -17,7 +17,7 @@ async function getNewsContent(url) {
 
   const web = await findWebsite(getTopURL(url));
   if (web && web._id) {
-    let selector = await getContentSelect(web._id);
+    let selector = await getPageSelector(web._id);
     if (selector) {
       let page = await openBrowser(false);
       // 开始爬取新闻

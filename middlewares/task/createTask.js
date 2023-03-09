@@ -30,7 +30,8 @@ async function createTask(type) {
   if (isExecuting.length !== 0) return false;
 
   // 没有正在执行的任务，创建新任务
-  const taskQueue = type ? createContentTask() : createAllLinkTask();
+  const fn = type ? createContentTask : createAllLinkTask;
+  const taskQueue = await fn();
 
   if (taskQueue.length > 0) {
     const result = await addTask({
@@ -38,11 +39,11 @@ async function createTask(type) {
       state: 0,
       type,
     });
-    const { _id: taskID } = result[0];
+    const { _id: taskID, creationTime } = result[0];
 
     const taskActuator = type ? getContent : getURL;
 
-    return { taskID, taskQueue, taskActuator };
+    return { taskID, creationTime, taskQueue, taskActuator };
   } else {
     return false;
   }

@@ -2,27 +2,20 @@ const { getNewsInfo } = require('../../puppeteer/getNewsInfo');
 const {
   updateLinkState,
   findAllContentLink,
-} = require('../../controllers/LinkListController');
+} = require('../../controllers/urlListController');
+const { getPageSelector } = require('../../controllers/websiteController');
 const { createNews } = require('../../controllers/newsController');
-const { getContentSelect } = require('../../controllers/selectorController');
-const { executeAsyncTask, taskInfo } = require('../../utils');
-const {
-  updateTaskInfo,
-} = require('../../controllers/taskController/controller');
-
-let info;
 
 async function createContentTask() {
   const linkList = await findAllContentLink();
   if (linkList.length !== 0) {
-    const taskList = [];
+    const taskQueue = [];
     for (const link of linkList) {
       const { url, website } = link;
-      taskList.push({ url, website });
+      taskQueue.push({ url, website });
     }
-
-    return taskList;
-  } else return [];
+    return taskQueue;
+  } else return false;
 }
 
 async function getContent({ url, website }, page, index) {
@@ -30,7 +23,7 @@ async function getContent({ url, website }, page, index) {
   let selector = null;
   if (website && url) {
     // 获取选择器
-    selector = await getContentSelect(website);
+    selector = await getPageSelector(website);
   }
   if (selector) {
     // 获取页面内容
@@ -71,28 +64,28 @@ async function saveContent(content, url) {
   }
 }
 
-async function contentStart(_id) {
-  info = taskInfo();
-  const taskList = await createContentTask();
-  if (taskList.length > 0) {
-    info = taskInfo();
-    info.count = taskList.length;
+// async function contentStart(_id) {
+//   info = taskInfo();
+//   const taskList = await createContentTask();
+//   if (taskList.length > 0) {
+//     info = taskInfo();
+//     info.count = taskList.length;
 
-    let time = new Date();
+//     let time = new Date();
 
-    console.log('开始执行获取新闻内容任务');
+//     console.log('开始执行获取新闻内容任务');
 
-    await executeAsyncTask(taskList, getContent);
+//     await executeAsyncTask(taskList, getContent);
 
-    // 计算任务执行时间
-    info.elapsedTime = new Date() - time;
-    info.state = 1;
+//     // 计算任务执行时间
+//     info.elapsedTime = new Date() - time;
+//     info.state = 1;
 
-    await updateTaskInfo(_id, info);
-    console.log(info);
+//     await updateTaskInfo(_id, info);
+//     console.log(info);
 
-    return info;
-  } else return false;
-}
+//     return info;
+//   } else return false;
+// }
 
-module.exports = { contentStart, createContentTask, getContent };
+module.exports = { createContentTask, getContent };
