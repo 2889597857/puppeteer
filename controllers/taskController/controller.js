@@ -1,8 +1,21 @@
 const TaskModel = require('../../models/taskModel');
 
 async function addTask(options) {
-  return await TaskModel.insertMany([options]);
+  try {
+    return await TaskModel.insertMany([options]);
+  } catch (error) {
+    return false;
+  }
 }
+
+async function deleteTask(_id) {
+  try {
+    return await TaskModel.findByIdAndDelete(_id);
+  } catch (error) {
+    return false;
+  }
+}
+
 /**
  * 0 链接任务
  * 1 内容任务
@@ -47,6 +60,7 @@ async function findLatestTask(type = 1) {
 
 module.exports = {
   addTask,
+  deleteTask,
   getTaskList,
   getExecutingTask,
   updateTaskInfo,

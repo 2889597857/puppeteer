@@ -1,12 +1,12 @@
-const { findOneAndUpdate } = require('../models/linkListModel');
-const LinkListModel = require('../models/linkListModel');
+const { findOneAndUpdate } = require('../../models/linkListModel');
+const LinkListModel = require('../../models/linkListModel');
 
 // 添加新闻链接
 async function addContentLink(links) {
   return await LinkListModel.insertMany(links);
 }
 /**
- * 查询链接
+ * 查询链接是否存在
  * @param {string} url
  * @returns
  */
@@ -22,7 +22,7 @@ async function findOneContentLink(url) {
  * @returns
  */
 async function findAllContentLink(state = 0) {
-  return await LinkListModel.find({ state }).sort({ lastTime: -1 }).limit();
+  return await LinkListModel.find({ state }).sort({ lastTime: -1 });
 }
 /**
  * 更新链接状态

@@ -1,17 +1,18 @@
-const { getNewsInfo } = require('../puppeteer/getNewsInfo');
+const { getNewsInfo } = require('../../puppeteer/getNewsInfo');
 const {
   updateLinkState,
   findAllContentLink,
-} = require('../controllers/LinkListController');
-const { createNews } = require('../controllers/newsController');
-const { getContentSelect } = require('../controllers/selectorController');
-const { executeAsyncTask, taskInfo } = require('../utils');
-const { updateTaskInfo } = require('../controllers/taskController/controller');
+} = require('../../controllers/LinkListController');
+const { createNews } = require('../../controllers/newsController');
+const { getContentSelect } = require('../../controllers/selectorController');
+const { executeAsyncTask, taskInfo } = require('../../utils');
+const {
+  updateTaskInfo,
+} = require('../../controllers/taskController/controller');
 
 let info;
 
-async function createTasks() {
-  // 获取链接（每次获取 100 条）
+async function createContentTask() {
   const linkList = await findAllContentLink();
   if (linkList.length !== 0) {
     const taskList = [];
@@ -72,7 +73,7 @@ async function saveContent(content, url) {
 
 async function contentStart(_id) {
   info = taskInfo();
-  const taskList = await createTasks();
+  const taskList = await createContentTask();
   if (taskList.length > 0) {
     info = taskInfo();
     info.count = taskList.length;
@@ -94,4 +95,4 @@ async function contentStart(_id) {
   } else return false;
 }
 
-module.exports = { contentStart };
+module.exports = { contentStart, createContentTask, getContent };

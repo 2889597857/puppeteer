@@ -1,5 +1,5 @@
-const User = require('../models/user');
-const { verifyToken } = require('../config');
+const User = require('../../models/user');
+const { verifyToken } = require('../../config');
 
 exports.isAuth = async (req, res, next) => {
   // 1) 获取token

@@ -1,11 +1,21 @@
-const { contentStart, linksStart } = require('../start');
+const dayjs = require('dayjs');
+
+const {
+  createLinkTask,
+  getLink,
+  createContentTask,
+  getContent,
+} = require('../crawler');
+
 const {
   getExecutingTask,
   addTask,
-} = require('../controllers/taskController/controller');
-const LinkListModel = require('../models/linkListModel');
+} = require('../../controllers/taskController/controller');
 
-const dayjs = require('dayjs');
+const { executeAsyncTask, taskInfo } = require('../../utils');
+
+const LinkListModel = require('../../models/linkListModel');
+
 /**
  * 创建任务
  * 0 链接任务
@@ -18,19 +28,50 @@ async function createTask(type) {
   // 0 获取链接任务  1 获取内容任务
   const isExecuting = await getExecutingTask(type);
   if (isExecuting.length !== 0) return false;
-  // 没有正在执行的任务，创建新任务
-  const result = await addTask({
-    creationTime: dayjs().format(),
-    state: 0,
-    type,
-  });
 
-  const { _id, creationTime } = result[0];
+  const taskQueue = type ? createContentTask() : createLinkTask();
 
-  const taskFN = type ? contentStart : linksStart;
+  if (taskQueue.length > 0) {
+    // 没有正在执行的任务，创建新任务
+    const result = await addTask({
+      creationTime: dayjs().format(),
+      state: 0,
+      type,
+    });
 
-  return { _id, creationTime, taskFN };
+    const taskActuator = type ? getContent : getLink;
+
+    const { _id: taskID } = result[0];
+
+    return { taskID, taskQueue, taskActuator };
+  } else {
+    return false;
+  }
 }
+
+async function executeTask(_id, taskQueue, taskActuator, type) {
+  if (typeof taskActuator === 'function') {
+    // 任务开始执行事件
+    let time = new Date();
+    // 开始执行异步任务
+    const tip = type ? '开始执行获取新闻内容任务' : '开始执行获取新闻链接任务';
+    console.log(tip);
+    const info = await executeAsyncTask(taskQueue, taskActuator);
+
+    // 计算任务耗时
+    info.elapsedTime = new Date() - time;
+    // 把任务状态改成已完成
+    info.state = 1;
+    // 更新任务状态
+    await updateTaskInfo(_id, info);
+    console.log(info);
+
+    return info;
+
+    return await taskFN(_id);
+  } else return false;
+}
+
 /**
  * 创建获取链接或获取内容任务
  * @param {*} type 0 / 1
@@ -39,17 +80,7 @@ async function createTask(type) {
 async function createTypeTask(type) {
   return await createTask(type);
 }
-/**
- * 开始执行任务
- * @param {string} _id 任务 _id
- * @param {function} taskFN  获取链接/获取内容
- * @returns
- */
-async function executeTask(_id, taskFN) {
-  if (typeof taskFN === 'function') {
-    return await taskFN(_id);
-  } else return false;
-}
+
 /**
  * 0 启动链接任务
  * 1 启动内容任务

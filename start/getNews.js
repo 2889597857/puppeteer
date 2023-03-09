@@ -5,7 +5,7 @@ const { getNewsInfo } = require('../puppeteer/getNewsInfo');
 const {
   findOneContentLink,
   addContentLink,
-} = require('../controllers/LinkListController');
+} = require('../controllers/urlListController');
 
 const ContentModel = require('../models/contentModel');
 
