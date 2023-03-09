@@ -3,7 +3,11 @@ const LinkListModel = require('../../models/linkListModel');
 
 // 添加新闻链接
 async function addContentLink(links) {
-  return await LinkListModel.insertMany(links);
+  try {
+    return await LinkListModel.insertMany(links);
+  } catch (error) {
+    return false;
+  }
 }
 /**
  * 查询链接是否存在

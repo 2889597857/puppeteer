@@ -20,14 +20,14 @@ async function createContentTask() {
 
 async function getContent({ url, website }, page, index) {
   console.log(`任务${index + 1}开始执行`);
-  let selector = null;
+  let selectors = null;
   if (website && url) {
     // 获取选择器
-    selector = await getPageSelector(website);
+    selectors = await getPageSelector(website);
   }
-  if (selector) {
+  if (selectors) {
     // 获取页面内容
-    const pageContent = await getNewsInfo(url, selector, page);
+    const pageContent = await getNewsInfo(url, selectors, page);
     if (pageContent.state) {
       // 储存新闻
       const result = await saveContent(pageContent.content, url);
