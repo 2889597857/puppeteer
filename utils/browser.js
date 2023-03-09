@@ -19,9 +19,9 @@ async function openBrowser(cache = true) {
 
 async function closeBrowser() {
   return new Promise(async (resolve, reject) => {
-    for (let i = 0; i < caches.length; i++) {
+    for await (const browser of caches) {
       try {
-        await caches[i].close();
+        await browser.close();
         console.log(`关闭浏览器${i + 1}`);
       } catch {
         console.log(`关闭浏览器${i + 1}失败`);
@@ -30,15 +30,6 @@ async function closeBrowser() {
     cleanCache();
     resolve();
   });
-
-  // for await (const browser of caches) {
-  //   try {
-  //     await browser.close();
-  //     console.log(`关闭浏览器${i + 1}`);
-  //   } catch {
-  //     console.log(`关闭浏览器${i + 1}失败`);
-  //   }
-  // }
 }
 
 function cleanCache() {
