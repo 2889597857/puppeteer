@@ -1,8 +1,8 @@
 const dayjs = require('dayjs');
 
 const {
-  createLinkTask,
-  getLink,
+  createAllLinkTask,
+  getURL,
   createContentTask,
   getContent,
 } = require('../crawler');
@@ -29,19 +29,18 @@ async function createTask(type) {
   const isExecuting = await getExecutingTask(type);
   if (isExecuting.length !== 0) return false;
 
-  const taskQueue = type ? createContentTask() : createLinkTask();
+  // 没有正在执行的任务，创建新任务
+  const taskQueue = type ? createContentTask() : createAllLinkTask();
 
   if (taskQueue.length > 0) {
-    // 没有正在执行的任务，创建新任务
     const result = await addTask({
       creationTime: dayjs().format(),
       state: 0,
       type,
     });
-
-    const taskActuator = type ? getContent : getLink;
-
     const { _id: taskID } = result[0];
+
+    const taskActuator = type ? getContent : getURL;
 
     return { taskID, taskQueue, taskActuator };
   } else {
@@ -52,7 +51,7 @@ async function createTask(type) {
 async function executeTask(_id, taskQueue, taskActuator, type) {
   if (typeof taskActuator === 'function') {
     // 任务开始执行事件
-    let time = new Date();
+    const time = new Date();
     // 开始执行异步任务
     const tip = type ? '开始执行获取新闻内容任务' : '开始执行获取新闻链接任务';
     console.log(tip);
@@ -67,8 +66,6 @@ async function executeTask(_id, taskQueue, taskActuator, type) {
     console.log(info);
 
     return info;
-
-    return await taskFN(_id);
   } else return false;
 }
 
@@ -88,9 +85,8 @@ async function createTypeTask(type) {
  * @returns
  */
 async function createAndExecuteTypeTask(type) {
-  const { _id, taskFN } = await createTypeTask(type);
-  console.log(taskFN);
-  return await executeTask(_id, taskFN);
+  const { taskID, taskQueue, taskActuator } = await createTypeTask(type);
+  return await executeTask(taskID, taskQueue, taskActuator);
 }
 
 /**

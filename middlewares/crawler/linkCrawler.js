@@ -55,6 +55,7 @@ async function getURL({ url, selector, website }, page, index) {
     info.count += linkList.links.length;
     const success = await saveURL(linkList.links, website);
     info.success += success;
+    await updateLinkTime(url);
     return info;
   } else {
     info.failed++;
