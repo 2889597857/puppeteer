@@ -3,6 +3,6 @@ const {
   executeTask,
   startTask,
   createAndExecuteTypeTask,
-} = require('./createTask');
+} = require('./task');
 
 module.exports = { createTypeTask, executeTask, startTask, createAndExecuteTypeTask };

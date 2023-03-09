@@ -1,7 +1,7 @@
 const dayjs = require('dayjs');
 const { verifyID, urlRegExp } = require('../../utils');
 const ContentModel = require('../../models/contentModel');
-const { getNewsContent } = require('../../start/getNews');
+const { crawlerNewsContent } = require('../../middlewares/crawler');
 /**
  * 根据 url 爬取新闻详情
  * @param {*} req
@@ -11,7 +11,7 @@ async function crawlerNews(req, res) {
   const url = req.query.url;
   try {
     if (!urlRegExp(url)) throw new Error('url must be a valid');
-    const news = await getNewsContent(url);
+    const news = await crawlerNewsContent(url);
     if (news) {
       res.json({
         code: 200,
@@ -50,7 +50,8 @@ async function getNewsDetails(req, res) {
           content,
         },
       });
-    } throw new Error('参数不存在或参数错误');
+    }
+    throw new Error('参数不存在或参数错误');
   } catch (error) {
     res.json({
       code: 201,

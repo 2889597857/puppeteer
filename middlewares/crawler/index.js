@@ -1,3 +1,4 @@
 const linkCrawler = require('./linkCrawler');
 const pageCrawler = require('./pageCrawler');
-module.exports = { ...linkCrawler, ...pageCrawler };
+const crawlerNewsContent = require('./crawlerNews');
+module.exports = { ...linkCrawler, ...pageCrawler, crawlerNewsContent };

@@ -16,13 +16,24 @@ async function getAllPageSelector(req, res) {
     });
   }
 }
-async function getPageSelector(_id) {
+async function getPageSelectorByID(_id) {
   const selector = await WebsiteModel.findById(_id, {
     pageSelector: 1,
   });
   if (selector.pageSelector) return selector.pageSelector;
   else return false;
 }
+async function getPageSelectorByURL(url) {
+  const selector = await WebsiteModel.findOne(
+    { url },
+    {
+      pageSelector: 1,
+    }
+  );
+  if (selector.pageSelector) return selector;
+  else return false;
+}
+
 async function addSelector(req, res) {
   const {} = req.query;
 }
@@ -49,5 +60,6 @@ module.exports = {
   addLinkSelector,
   addPageSelector,
   getAllPageSelector,
-  getPageSelector,
+  getPageSelectorByID,
+  getPageSelectorByURL,
 };

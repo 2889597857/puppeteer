@@ -20,7 +20,7 @@ async function getTitle(selector, page) {
 
 async function getTime(selector, page) {
   // 获取新闻发布时间
-  const pageTime = await page.$eval(selector, (el) => el.innerText.trim());
+  let pageTime = await page.$eval(selector, (el) => el.innerText.trim());
   if (!pageTime) return '';
   // 发布时间有多种格式
   // 2022-07-01 07:14:58
@@ -37,6 +37,7 @@ async function getTime(selector, page) {
   } else {
     pageTime = dayjs(pageTime.match(/\d*-\d*-\d*.?\d*:\d*:?\d*?/g)).format();
   }
+  return pageTime;
 }
 /**
  * 获取新闻内容
@@ -57,19 +58,20 @@ async function getContent(selector, page) {
  * @param {*} content
  * @returns array
  */
-function formaFirstText(content) {
+function formaFirstText(content, url) {
   const topURL = getTopURL(url);
   if (topURL === 'www.ahwang.cn') {
     if (content[0].includes('凡本报记者署名文字')) return content.shift();
   }
+  return content;
 }
 /**
  * 获取报送内容和新闻关键字
  * @param {*} content
  * @returns
  */
-async function formatContent(content) {
-  const textArr = formaFirstText(content);
+async function formatContent(content, url) {
+  const textArr = formaFirstText(content, url);
 
   // 默认报送内容为新闻前两段
   // 如果新闻第一段字数大于 75 字。报送内容为新闻第一段
@@ -99,47 +101,44 @@ async function getNewsInfo(url, selectors, page) {
     let pageTitle = '',
       pageTime = '',
       pageContent = [];
-
+    // 打开链接
+    await page.goto(url);
     for await (const selector of selectors) {
       const {
         title: titleSelector,
         time: timeSelector,
         content: Selector,
       } = selector;
-
-      if (!pageTitle) await getTitle(titleSelector, page);
-      if (!pageTime) await getTime(timeSelector, page);
+      if (!pageTitle) pageTitle = await getTitle(titleSelector, page);
+      if (!pageTime) pageTime = await getTime(timeSelector, page);
       if (pageContent.length === 0)
         pageContent = await getContent(Selector, page);
 
       if (pageTitle && pageTime && pageContent.length !== 0) break;
     }
 
-    if (pageTitle)
+    if (!pageTitle)
       return {
         state: false,
         code: 1001,
       };
-    if (pageTime)
-      return {
-        state: false,
-        code: 1002,
-      };
-    if (pageContent.length === 0)
-      return {
-        state: false,
-        code: 1003,
-      };
 
     const a = await ContentModel.findOne({ title: pageTitle });
-
     if (a != null)
       return {
         state: false,
         code: 10011,
       };
 
-    const { report, segmentation } = await formatContent(pageContent);
+    if (pageContent.length === 0)
+      return {
+        state: false,
+        code: 1003,
+      };
+
+    if (!pageTime) pageTime = new Date();
+
+    const { report, segmentation } = await formatContent(pageContent, url);
 
     return {
       state: true,
@@ -155,6 +154,7 @@ async function getNewsInfo(url, selectors, page) {
     return {
       state: false,
       code: 1004,
+      message: e.message,
     };
   }
 }

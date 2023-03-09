@@ -4,7 +4,7 @@ const LinkListModel = require('../../models/linkListModel');
 // 添加新闻链接
 async function addContentLink(links) {
   try {
-    return await LinkListModel.insertMany(links);
+    return await LinkListModel.insertMany([links]);
   } catch (error) {
     return false;
   }

@@ -3,9 +3,7 @@ const urlRegExp = (url) =>
     url
   );
 const getTopURL = (url) =>
-  urlRegExp.test(url)
-    ? url.replace(/(^https?:\/\/.*?)(:\d+)?\/.*$/, '$1')
-    : false;
+  urlRegExp(url) ? url.replace(/(^https?:\/\/.*?)(:\d+)?\/.*$/, '$1') : false;
 /**
  * 验证 _id 是否合法
  * @param {string} id
@@ -16,4 +14,4 @@ function verifyID(id) {
   return /^[a-fA-F0-9]{24}$/.test(id);
 }
 
-module.exports = { getTopURL, verifyID,urlRegExp };
+module.exports = { getTopURL, verifyID, urlRegExp };
