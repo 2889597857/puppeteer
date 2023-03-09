@@ -2,82 +2,144 @@ const dayjs = require('dayjs');
 const { getTopURL } = require('../utils');
 const jieba = require('@node-rs/jieba');
 const ContentModel = require('../models/contentModel');
-const { errors } = require('puppeteer');
-async function getNewsInfo(url, selector, page) {
-  try {
-    const { titleSelect, timeSelector, contentSelector } = selector;
-    // 打开新闻页面
-    await page.goto(url);
+/**
+ * 获取新闻标题
+ * @param {*} selector
+ * @param {*} page
+ * @returns string
+ */
+async function getTitle(selector, page) {
+  return await page.$eval(selector, (el) => el.innerText.trim());
+}
+/**
+ * 获取新闻发布时间
+ * @param {*} selector
+ * @param {*} page
+ * @returns string
+ */
 
-    // 获取新闻标题
-    const pageTitle = await page.$eval(titleSelect, (el) =>
-      el.innerText.trim()
+async function getTime(selector, page) {
+  // 获取新闻发布时间
+  const pageTime = await page.$eval(selector, (el) => el.innerText.trim());
+  if (!pageTime) return '';
+  // 发布时间有多种格式
+  // 2022-07-01 07:14:58
+  // 2022年06月30日17:20
+  if (pageTime.includes('年')) {
+    const reg = pageTime.match(
+      /(\d*)年(\d*)月(\d*)日\s?([0-9]*:[0-9]*:?[0-9]*?)/
     );
+    const year = reg[1];
+    const mouth = reg[2];
+    const day = reg[3];
+    const time = reg[4];
+    pageTime = dayjs(year + mouth + day + ' ' + time).format();
+  } else {
+    pageTime = dayjs(pageTime.match(/\d*-\d*-\d*.?\d*:\d*:?\d*?/g)).format();
+  }
+}
+/**
+ * 获取新闻内容
+ * @param {*} selector
+ * @param {*} page
+ * @returns array
+ */
+async function getContent(selector, page) {
+  return await page.$eval(selector, (el) =>
+    el.innerText
+      .split('\n')
+      .filter(Boolean)
+      .map((el) => el.trim())
+  );
+}
+/**
+ * 对新闻第一段内容进行处理
+ * @param {*} content
+ * @returns array
+ */
+function formaFirstText(content) {
+  const topURL = getTopURL(url);
+  if (topURL === 'www.ahwang.cn') {
+    if (content[0].includes('凡本报记者署名文字')) return content.shift();
+  }
+}
+/**
+ * 获取报送内容和新闻关键字
+ * @param {*} content
+ * @returns
+ */
+async function formatContent(content) {
+  const textArr = formaFirstText(content);
 
-    const a = ContentModel.findOne({ title: pageTitle });
+  // 默认报送内容为新闻前两段
+  // 如果新闻第一段字数大于 75 字。报送内容为新闻第一段
+  const reportLength = textArr.length >= 2 && textArr[0].length <= 75;
+  /** 新闻摘要 */
+  const report = reportLength ? `${textArr[0]}${textArr[1]}` : textArr[0];
 
-    if (a != null) {
+  // 获取新闻关键词
+  const MAX = 10;
+  const keywords = jieba.extract(textArr.join(''), MAX);
+  const segmentation = keywords.map((el) => el.keyword);
+
+  return {
+    report,
+    segmentation,
+  };
+}
+/**
+ * 获取新闻信息
+ * @param {*} url
+ * @param {*} selectors
+ * @param {*} page
+ * @returns
+ */
+async function getNewsInfo(url, selectors, page) {
+  try {
+    let pageTitle = '',
+      pageTime = '',
+      pageContent = [];
+
+    for await (const selector of selectors) {
+      const {
+        title: titleSelector,
+        time: timeSelector,
+        content: Selector,
+      } = selector;
+
+      if (!pageTitle) await getTitle(titleSelector, page);
+      if (!pageTime) await getTime(timeSelector, page);
+      if (pageContent.length === 0)
+        pageContent = await getContent(Selector, page);
+
+      if (pageTitle && pageTime && pageContent.length !== 0) break;
+    }
+
+    if (pageTitle)
       return {
         state: false,
-        code: 3,
+        code: 1001,
       };
-    }
-
-    // 获取新闻内容
-    const pageContent = await page.$eval(contentSelector, (el) => {
-      // 新闻内容进行处理，去除 \n 等无效内容
-      let content = el.innerText
-        .split('\n')
-        .filter(Boolean)
-        .map((el) => el.trim());
-      return content.length <= 10 ? content : content.slice(0, 10);
-    });
-
-    if (!pageContent || pageContent.length === 0)
+    if (pageTime)
       return {
         state: false,
-        code: 4,
+        code: 1002,
+      };
+    if (pageContent.length === 0)
+      return {
+        state: false,
+        code: 1003,
       };
 
-    // 获取新闻发布时间
-    let pageTime = await page.$eval(timeSelector, (el) => el.innerText.trim());
-    // 发布时间有多种格式
-    // 2022-07-01 07:14:58
-    // 2022年06月30日17:20
-    if (pageTime.includes('年')) {
-      const reg = pageTime.match(
-        /(\d*)年(\d*)月(\d*)日\s?([0-9]*:[0-9]*:?[0-9]*?)/
-      );
-      const year = reg[1];
-      const mouth = reg[2];
-      const day = reg[3];
-      const time = reg[4];
-      pageTime = dayjs(year + mouth + day + ' ' + time).format();
-    } else {
-      pageTime = dayjs(pageTime.match(/\d*-\d*-\d*.?\d*:\d*:?\d*?/g)).format();
-    }
+    const a = await ContentModel.findOne({ title: pageTitle });
 
-    const topURL = getTopURL(url);
-    if (topURL === 'www.ahwang.cn') {
-      if (pageContent[0].includes('凡本报记者署名文字')) {
-        pageContent.shift();
-      }
-    }
+    if (a != null)
+      return {
+        state: false,
+        code: 10011,
+      };
 
-    // 默认报送内容为新闻前两段
-    // 如果新闻第一段字数大于 75 字。报送内容为新闻第一段
-    const contentLength =
-      pageContent.length >= 2 && pageContent[0].length <= 75;
-    /** 新闻摘要 */
-    const report = contentLength
-      ? `${pageContent[0]}${pageContent[1]}`
-      : pageContent[0];
-
-    // 获取新闻关键词
-    const topN = 10;
-    const content = pageContent.join('');
-    const keywords = jieba.extract(content, topN);
-    const segmentation = keywords.map((el) => el.keyword);
+    const { report, segmentation } = await formatContent(pageContent);
 
     return {
       state: true,
@@ -90,15 +152,9 @@ async function getNewsInfo(url, selector, page) {
       },
     };
   } catch (e) {
-    let code = 2;
-    if (e instanceof errors.TimeoutError) {
-      code = 3;
-    }
-    console.log(url);
-    console.log(JSON.stringify(e));
     return {
       state: false,
-      code,
+      code: 1004,
     };
   }
 }
