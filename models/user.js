@@ -2,7 +2,7 @@ const mongoose = require('../config/mongoose');
 
 const UserSchema = mongoose.Schema({
   username: { type: String },
-  password: { type: String },
+  password: { type: String, select: false },
   role: {
     type: String,
     default: 'user',

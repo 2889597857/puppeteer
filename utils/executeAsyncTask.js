@@ -36,16 +36,14 @@ function resetTaskState() {
 async function executeAsyncTask(taskList, fn) {
   MAX = taskList.length;
   console.log(`共计${MAX}个任务`);
-  
+
   let promises = [];
 
   for (let i = 0; i < CONCURRENCY; i++) {
     locks = true;
     let p = new Promise((resolve) => {
       (async function loop(index, page) {
-        if (!page) {
-          page = await openBrowser();
-        }
+        if (!page) page = await openBrowser();
         if (index < MAX) {
           await fn(taskList[index], page, index);
           loop(cnt++, page);
