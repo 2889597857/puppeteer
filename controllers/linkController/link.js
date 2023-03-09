@@ -1,6 +1,6 @@
 const WebsiteModel = require('../../models/websiteModel');
 
-async function getAllLinks() {
+async function getAllLinksInfo() {
   try {
     const Links = await WebsiteModel.aggregate([
       { $unwind: '$newsLinks' },
@@ -27,6 +27,32 @@ async function getAllLinks() {
   }
 }
 
+async function getLinkInfo(_id) {
+  try {
+    const Link = await WebsiteModel.findOne(
+      {
+        'newsLinks._id': _id,
+      },
+      {
+        _id: 1,
+        defaultListSelector: 1,
+        newsLinks: {
+          $elemMatch: {
+            ' _id': _id,
+          },
+        },
+      }
+    );
+    if (Link) {
+      const { _id, defaultListSelector, newsLinks } = Link;
+      return { _id, defaultListSelector, link: newsLinks[0] };
+    } else throw new Error();
+  } catch (error) {
+    console.log(error.message);
+    return false;
+  }
+}
+
 async function updateLinkTime(url) {
   try {
     const data = await WebsiteModel.updateOne(
@@ -41,9 +67,27 @@ async function updateLinkTime(url) {
   }
 }
 
+async function addLinkURL({ _id, url, selector }) {
+  try {
+    const updateSiteLink = await WebsiteModel.findByIdAndUpdate(
+      _id,
+      {
+        $push: { newsLinks: { url, selector } },
+      },
+      { new: true }
+    );
+    if (updateSiteLink) return true;
+    else return false;
+  } catch (error) {
+    return false;
+  }
+}
+
 module.exports = {
-  getAllLinks,
+  getAllLinksInfo,
+  getLinkInfo,
   updateLinkTime,
+  addLinkURL,
 };
 
 // // 添加获取新闻列表页面的URL

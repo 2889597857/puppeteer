@@ -1,5 +1,6 @@
 const {
-  getAllLinks,
+  getAllLinksInfo,
+  getLinkInfo,
   updateLinkTime,
 } = require('../../controllers/linkController');
 const { executeAsyncTask, taskInfo } = require('../../utils');
@@ -11,44 +12,57 @@ const { executeAsyncTask, taskInfo } = require('../../utils');
 // const { updateTaskInfo } = require('../controllers/taskController/controller');
 let info;
 
-async function createLinkTask() {
+function formatLink(Link) {
+  const { _id, link, defaultListSelector } = Link;
+  const selector = link.selector || defaultListSelector;
+  return { website: _id, url: link.url, selector };
+}
+
+async function createAllLinkTask() {
   // 获取新闻列表页面的URL
-  const links = await getAllLinks();
+  const links = await getAllLinksInfo();
   // 任务队列
   const taskQueue = [];
   if (links) {
-    links.forEach((site) => {
-      const { link, defaultListSelector, _id } = site;
-      const selector = link.selector || defaultListSelector;
-      taskQueue.push({ website: _id, url: link.url, selector });
-    });
-  }
-  return taskQueue;
+    links.forEach((Link) => taskQueue.push(formatLink(Link)));
+    console.log(taskQueue);
+    return taskQueue;
+  } else return false;
+}
+async function createLinkTask(_id) {
+  // 获取新闻列表页面的URL
+  const link = await getLinkInfo(_id);
+  // 任务队列
+  const taskQueue = [];
+  if (link) {
+    taskQueue.push(formatLink(link));
+    console.log(taskQueue);
+    return taskQueue;
+  } else return false;
 }
 
-// time: 0,
-// count: 0,
-// success: 0,
-// failed: 0,
-// let info;
-
-async function getLink({ url, selector, website }, page, index) {
+async function getURL({ url, selector, website }, page, index) {
   /** 获取新闻链接 [] */
   console.log(`任务${index}开始执行`);
+  let info = {
+    success: 0,
+    failed: 0,
+    count: 0,
+  };
   const linkList = await getNewsList(url, selector, page);
   if (linkList.state) {
     /** 将收集到的链接放入数据库 */
     info.count += linkList.links.length;
-    const success = await saveLink(linkList.links, website);
+    const success = await saveURL(linkList.links, website);
     info.success += success;
-    return;
+    return info;
   } else {
     info.failed++;
-    return;
+    return info;
   }
 }
 
-async function saveLink(linkList, website) {
+async function saveURL(linkList, website) {
   let count = 0;
   for await (const link of linkList) {
     try {
@@ -92,4 +106,4 @@ async function linksStart(_id) {
   } else return false;
 }
 
-module.exports = { linksStart, createLinkTask, getLink };
+module.exports = { linksStart, createAllLinkTask, getURL };

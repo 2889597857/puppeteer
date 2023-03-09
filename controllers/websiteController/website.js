@@ -1,6 +1,7 @@
 const WebsiteModel = require('../../models/websiteModel');
 const { getTopURL, verifyID, urlRegExp, message } = require('../../utils');
 const { siteOrSelector, findWebsiteNames } = require('./controller');
+const { addLinkURL } = require('../linkController');
 
 /**
  * 获取新闻站点
@@ -173,23 +174,17 @@ async function addWebsite(req, res) {
 async function addSiteLink(req, res) {
   const { _id, url, selector } = req.body;
   try {
-    let updateSiteLink;
+    let data;
     if (_id && verifyID(_id)) {
-      updateSiteLink = await WebsiteModel.findByIdAndUpdate(
-        _id,
-        {
-          $push: { newsLinks: { url, selector } },
-        },
-        { new: true }
-      );
+      data = await addLinkURL({ _id, url, selector });
     } else throw new Error('_id is wrong');
     res.json({
       code: 200,
-      data: updateSiteLink,
+      data: data,
     });
   } catch (error) {
     res.json({
-      code: 200,
+      code: 201,
       message: error.message,
     });
   }
