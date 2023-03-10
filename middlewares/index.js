@@ -5,7 +5,7 @@ const {
   createAndExecuteTypeTask,
 } = require('./task');
 
-const { isAuth } = require('./auth/isAuthentication');
+const { isAuth, isAdmin } = require('./auth/isAuthentication');
 
 const {
   createAllLinkTask,
@@ -22,6 +22,7 @@ module.exports = {
   startTask,
   createAndExecuteTypeTask,
   isAuth,
+  isAdmin,
   createAllLinkTask,
   createLinkTask,
   getURL,
