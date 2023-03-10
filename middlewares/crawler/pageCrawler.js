@@ -1,4 +1,4 @@
-const { getNewsInfo } = require('../../puppeteer/getNewsInfo');
+const getNewsInfo = require('../../puppeteer/getNewsInfo');
 const {
   updateLinkState,
   findAllContentLink,

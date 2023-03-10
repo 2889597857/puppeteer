@@ -96,7 +96,7 @@ async function formatContent(content, url) {
  * @param {*} page
  * @returns
  */
-async function getNewsInfo(url, selectors, page) {
+module.exports = async function getNewsInfo(url, selectors, page) {
   try {
     let pageTitle = '',
       pageTime = '',
@@ -157,5 +157,4 @@ async function getNewsInfo(url, selectors, page) {
       message: e.message,
     };
   }
-}
-module.exports = { getNewsInfo };
+};

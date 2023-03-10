@@ -1,4 +1,12 @@
-const linkCrawler = require('./linkCrawler');
-const pageCrawler = require('./pageCrawler');
+const { createAllLinkTask, createLinkTask, getURL } = require('./linkCrawler');
+const { createContentTask, getContent } = require('./pageCrawler');
 const crawlerNewsContent = require('./crawlerNews');
-module.exports = { ...linkCrawler, ...pageCrawler, crawlerNewsContent };
+
+module.exports = {
+  createAllLinkTask,
+  createLinkTask,
+  getURL,
+  createContentTask,
+  getContent,
+  crawlerNewsContent,
+};
