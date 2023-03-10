@@ -1,7 +1,7 @@
 const dayjs = require('dayjs');
 const { verifyID, urlRegExp } = require('../../utils');
 const ContentModel = require('../../models/contentModel');
-const { crawlerNewsContent } = require('../../middlewares');
+const { crawlerNewsContent } = require('../../middlewares/crawler/crawlerNews');
 /**
  * 根据 url 爬取新闻详情
  * @param {*} req
