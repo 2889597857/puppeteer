@@ -43,3 +43,12 @@ exports.isAdmin = async function (req, res, next) {
       message: '权限不足',
     });
 };
+
+exports.isSuper = async function (req, res, next) {
+  if (req.role === 'super') next();
+  else
+    res.json({
+      code: 202,
+      message: '权限不足',
+    });
+};
