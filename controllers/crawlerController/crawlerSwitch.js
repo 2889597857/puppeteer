@@ -1,5 +1,6 @@
 const WebsiteModel = require('../../models/websiteModel');
 const { verifyID } = require('../../utils');
+const crawlerNewsUrl = require('../../middlewares/crawler/crawlerURL');
 /**
  * 检查 req.query 格式
  * @param {*} req
@@ -94,9 +95,38 @@ async function changeLinkState(req, res) {
   }
 }
 
+/**
+ * 测试 Link
+ * @param {*} req
+ * @param {*} res
+ */
+async function testLink(req, res) {
+  const _id = req.query._id;
+  try {
+    const data = await crawlerNewsUrl(_id);
+    if (data.state) {
+      res.json({
+        code: 200,
+        data: data.links,
+      });
+    } else {
+      res.json({
+        code: 201,
+        message: data.message,
+      });
+    }
+  } catch (error) {
+    res.json({
+      code: 201,
+      message: error.message,
+    });
+  }
+}
+
 module.exports = {
   changeAllState,
   changeSiteState,
   changeLinkState,
   formatChangeParams,
+  testLink,
 };

@@ -2,7 +2,7 @@ const { getLinkSelectorByID } = require('../../controllers/websiteController');
 const getNewsList = require('../../puppeteer/NewsList');
 const { openBrowser } = require('../../puppeteer/browser');
 
-async function crawlerNewsContent(_id) {
+async function crawlerNewsUrl(_id) {
   try {
     const Link = await getLinkSelectorByID(_id);
 
@@ -14,7 +14,7 @@ async function crawlerNewsContent(_id) {
       // 爬取结束，关闭爬虫（浏览器）
       page.browser().close();
 
-      if (url.state) return url.links;
+      if (url.state) return url;
       else
         return {
           state: false,
@@ -30,4 +30,4 @@ async function crawlerNewsContent(_id) {
     return false;
   }
 }
-module.exports = crawlerNewsContent;
+module.exports = crawlerNewsUrl;
