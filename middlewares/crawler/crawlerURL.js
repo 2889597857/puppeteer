@@ -1,7 +1,7 @@
-const { getTopURL } = require('../../utils');
+const { getTopURL } = require('../../puppeteer/browser');
 const { getPageSelectorByURL } = require('../../controllers/websiteController');
-const { openBrowser } = require('../../puppeteer/browser');
-const getNewsInfo = require('../../puppeteer/NewsInfo');
+const getNewsList = require('../../puppeteer/NewsList');
+const openBrowser = require('../../puppeteer/browser');
 
 const {
   findOneContentLink,
@@ -12,19 +12,12 @@ const ContentModel = require('../../models/contentModel');
 
 async function crawlerNewsContent(url) {
   try {
-    // url 是否被爬取过
-    const content = await ContentModel.findOne({ url });
-    // 爬取过，直接返回内容
-    if (content) return content;
-
     const selectors = await getPageSelectorByURL(getTopURL(url));
-    console.log(selectors);
     if (selectors) {
       // 打开浏览器
-      const page = await openBrowser();
+      const page = await openBrowser(false);
       // 开始爬取新闻
-      const news = await getNewsInfo(url, selectors.pageSelector, page);
-      console.log();
+      const news = await getNewsList(url, selectors.pageSelector, page);
       // 爬取结束，关闭爬虫（浏览器）
       page.browser().close();
 
@@ -40,7 +33,7 @@ async function crawlerNewsContent(url) {
       } else {
         if (isExecuting)
           addContentLink([{ url, state: 2, website: selectors._id }]);
-        return news;
+        return false;
       }
     }
   } catch (error) {

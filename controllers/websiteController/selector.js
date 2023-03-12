@@ -20,7 +20,7 @@ async function getPageSelectorByID(_id) {
   const selector = await WebsiteModel.findById(_id, {
     pageSelector: 1,
   });
-  if (selector.pageSelector) return selector.pageSelector;
+  if (selector.pageSelector) return selector;
   else return false;
 }
 async function getPageSelectorByURL(url) {
@@ -33,7 +33,14 @@ async function getPageSelectorByURL(url) {
   if (selector.pageSelector) return selector;
   else return false;
 }
-
+async function getLinkSelectorByID(_id) {
+  const selector = await WebsiteModel.findOne(
+    { newsLinks: { $elemMatch: { _id } } },
+    { defaultListSelector: 1, newsLinks: { _id } }
+  );
+  if (selector.pageSelector) return selector.pageSelector;
+  else return false;
+}
 async function addSelector(req, res) {
   const {} = req.query;
 }
@@ -49,7 +56,9 @@ async function addPageSelector(req, res) {
       },
       { new: true }
     );
-    res.json({ code: 200, data: data._id });
+    if (data) {
+      res.json({ code: 200, data: data._id });
+    } else throw new Error('添加失败');
   } catch (error) {
     res.json({ code: 201, error: error.message });
   }
@@ -62,4 +71,5 @@ module.exports = {
   getAllPageSelector,
   getPageSelectorByID,
   getPageSelectorByURL,
+  getLinkSelectorByID,
 };

@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 // 浏览器页面。一个任务一个浏览器
 const caches = [];
 
-async function openBrowser(cache = true) {
+async function openBrowser() {
   const browser = await puppeteer.launch({
     args: [
       '--no-sandbox',
@@ -12,9 +12,9 @@ async function openBrowser(cache = true) {
     ],
     headless: true,
     timeout: 1000,
-    userDataDir:"./userDataDir"
+    userDataDir: './userDataDir',
   });
-  if (cache) caches.push(browser);
+  caches.push(browser);
   return await browser.newPage();
 }
 

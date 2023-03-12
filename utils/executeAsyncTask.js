@@ -1,4 +1,4 @@
-const { openBrowser, closeBrowser } = require('./browser');
+const { openBrowser, closeBrowser } = require('../puppeteer/browser');
 
 // 任务计数器
 const INIT = 0;

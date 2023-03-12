@@ -1,4 +1,4 @@
-const { getTopURL } = require('../../utils');
+const { getTopURL } = require('../../../../utils');
 const jieba = require('@node-rs/jieba');
 
 /**

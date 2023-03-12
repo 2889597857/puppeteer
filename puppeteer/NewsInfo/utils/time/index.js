@@ -1,3 +1,4 @@
+const dayjs = require('dayjs');
 /**
  * 获取新闻发布时间
  * @param {*} selector
