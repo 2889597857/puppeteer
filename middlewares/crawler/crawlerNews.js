@@ -18,25 +18,25 @@ async function crawlerNewsContent(url) {
     if (content) return content;
 
     const selectors = await getPageSelectorByURL(getTopURL(url));
-    console.log(selectors);
-    if (selectors) {
+     if (selectors) {
       // 打开浏览器
       const page = await openBrowser();
       // 开始爬取新闻
       const news = await getNewsInfo(url, selectors.pageSelector, page);
-      console.log();
       // 爬取结束，关闭爬虫（浏览器）
       page.browser().close();
 
       // urlList 表是否有 url
       const isExecuting = await findOneContentLink(url);
       if (news.state) {
-        if (isExecuting == null)
-          // 存 URL
-          addContentLink({ url, state: 1, website: selectors._id });
         // 存新闻
         let res = await ContentModel.insertMany([news.content]);
-        return res[0];
+        if (res[0]) {
+          if (isExecuting == null)
+            // 存 URL
+            addContentLink({ url, state: 1, website: selectors._id });
+          return res[0];
+        }
       } else {
         if (isExecuting)
           addContentLink([{ url, state: 2, website: selectors._id }]);

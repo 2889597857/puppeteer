@@ -15,7 +15,11 @@ async function addContentLink(links) {
  * @returns
  */
 async function findOneContentLink(url) {
-  return await LinkListModel.findOne({ url });
+  try {
+    return await LinkListModel.findOne({ url });
+  } catch (error) {
+    return false;
+  }
 }
 /**
  * 查询全部新闻链接
