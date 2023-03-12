@@ -35,11 +35,23 @@ async function getPageSelectorByURL(url) {
 }
 async function getLinkSelectorByID(_id) {
   const selector = await WebsiteModel.findOne(
-    { newsLinks: { $elemMatch: { _id } } },
-    { defaultListSelector: 1, newsLinks: { _id } }
+    { 'newsLinks._id ': _id },
+    {
+      defaultListSelector: 1,
+      newsLinks: {
+        $elemMatch: {
+          ' _id': _id,
+        },
+      },
+    }
   );
-  if (selector.pageSelector) return selector.pageSelector;
-  else return false;
+  if (selector) {
+    const { defaultListSelector, newsLinks } = selector;
+    return {
+      url: newsLinks[0].url,
+      selector: newsLinks[0].selector ?? defaultListSelector,
+    };
+  } else return false;
 }
 async function addSelector(req, res) {
   const {} = req.query;
