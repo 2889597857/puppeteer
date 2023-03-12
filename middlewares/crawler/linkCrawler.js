@@ -9,9 +9,9 @@ const {
   addContentLink,
 } = require('../../controllers/urlListController');
 
-const getNewsList = require('../../puppeteer/getNewsList');
+const getNewsList = require('../../puppeteer/NewsList');
 
-function formatLink(Link) {
+function formatTaskInfo(Link) {
   const { _id, link, defaultListSelector } = Link;
   const selector = link.selector || defaultListSelector;
   return { website: _id, url: link.url, selector };
@@ -26,7 +26,7 @@ async function createAllLinkTask() {
   // 任务队列
   const taskQueue = [];
   if (links) {
-    links.forEach((Link) => taskQueue.push(formatLink(Link)));
+    links.forEach((Link) => taskQueue.push(formatTaskInfo(Link)));
     console.log(taskQueue);
     return taskQueue;
   } else return false;
@@ -41,7 +41,7 @@ async function createLinkTask(_id) {
   // 任务队列
   const taskQueue = [];
   if (link) {
-    taskQueue.push(formatLink(link));
+    taskQueue.push(formatTaskInfo(link));
     console.log(taskQueue);
     return taskQueue;
   } else return false;

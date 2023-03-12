@@ -12,6 +12,7 @@ async function openBrowser(cache = true) {
     ],
     headless: true,
     timeout: 1000,
+    userDataDir:"./userDataDir"
   });
   if (cache) caches.push(browser);
   return await browser.newPage();

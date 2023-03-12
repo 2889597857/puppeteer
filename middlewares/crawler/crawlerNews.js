@@ -1,6 +1,6 @@
-const { openBrowser, getTopURL } = require('../../utils');
+const { openBrowser, getTopURL } = require('../../puppeteer/browser');
 const { getPageSelectorByURL } = require('../../controllers/websiteController');
-const getNewsInfo = require('../../puppeteer/getNewsInfo');
+const getNewsInfo = require('../../puppeteer/NewsList/getNewsInfo');
 const {
   findOneContentLink,
   addContentLink,
@@ -23,15 +23,19 @@ async function crawlerNewsContent(url) {
       const news = await getNewsInfo(url, selectors.pageSelector, page);
       // 爬取结束，关闭爬虫（浏览器）
       page.browser().close();
+
       // urlList 表是否有 url
       const isExecuting = await findOneContentLink(url);
       if (news.state) {
         if (isExecuting == null)
+          // 存 URL
           addContentLink({ url, state: 1, website: selectors._id });
+        // 存新闻
         let res = await ContentModel.insertMany([news.content]);
         return res[0];
       } else {
-        addContentLink([{ url, state: 2, website: selectors._id }]);
+        if (isExecuting)
+          addContentLink([{ url, state: 2, website: selectors._id }]);
         return false;
       }
     }
