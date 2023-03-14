@@ -1,1 +1,2 @@
-let a = document
+let a = document;
+let b = 123;
