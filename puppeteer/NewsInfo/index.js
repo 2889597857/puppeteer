@@ -29,7 +29,6 @@ module.exports = async function getNewsInfo(url, selectors, page) {
 
       if (pageTitle && pageTime && pageContent.length !== 0) break;
     }
-    console.log(selectors);
     if (!pageTitle)
       return {
         state: false,
