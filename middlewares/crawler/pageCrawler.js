@@ -64,28 +64,4 @@ async function saveContent(content, url) {
   }
 }
 
-// async function contentStart(_id) {
-//   info = taskInfo();
-//   const taskList = await createContentTask();
-//   if (taskList.length > 0) {
-//     info = taskInfo();
-//     info.count = taskList.length;
-
-//     let time = new Date();
-
-//     console.log('开始执行获取新闻内容任务');
-
-//     await executeAsyncTask(taskList, getContent);
-
-//     // 计算任务执行时间
-//     info.elapsedTime = new Date() - time;
-//     info.state = 1;
-
-//     await updateTaskInfo(_id, info);
-//     console.log(info);
-
-//     return info;
-//   } else return false;
-// }
-
 module.exports = { createContentTask, getContent };

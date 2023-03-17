@@ -37,6 +37,9 @@ async function executeAsyncTask(taskList, fn) {
   MAX = taskList.length;
   console.log(`共计${MAX}个任务`);
 
+  const info = taskInfo();
+  info.count = MAX;
+
   let promises = [];
 
   for (let i = 0; i < CONCURRENCY; i++) {
@@ -45,7 +48,9 @@ async function executeAsyncTask(taskList, fn) {
       (async function loop(index, page) {
         if (!page) page = await openBrowser();
         if (index < MAX) {
-          await fn(taskList[index], page, index);
+          const res = await fn(taskList[index], page, index);
+          if (res) info.success += 1;
+          else info.failed += 1;
           loop(cnt++, page);
           return;
         }

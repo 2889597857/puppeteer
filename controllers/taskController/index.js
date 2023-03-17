@@ -1,21 +1,20 @@
 const { createTypeTask, startTask } = require('../../middlewares');
 const { getExecutingTask, findLatestTask } = require('./controller');
 const dayjs = require('dayjs');
-  
+
 /**
- *
  * code 1 有任务在执行
  * code 2 无任务在执行
  * @returns
  */
 async function findTaskState() {
-  const result = await getExecutingTask(null);
-  if (result && result.length > 0) {
+  const taskInfo = await getExecutingTask();
+  if (taskInfo) {
     return {
       code: 1,
       /** 任务创建时间 */
-      creationTime: result[0].creationTime,
-      success: '-',
+      creationTime: taskInfo.creationTime,
+      success: taskInfo.success,
     };
   } else {
     let task = await findLatestTask();
