@@ -2,14 +2,16 @@
 	"name": "app",
 	"version": "1.0.0",
 	"dependencies": {
-		"@node-rs/jieba": "^1.6.1",
+		"@node-rs/jieba": "^1.6.2",
 		"connect-history-api-fallback": "^2.0.0",
 		"cors": "^2.8.5",
-		"dayjs": "^1.11.3",
-		"dotenv": "^16.0.1",
-		"express": "^4.18.1",
+		"cron": "^2.3.0",
+		"dayjs": "^1.11.7",
+		"dotenv": "^16.0.3",
+		"express": "^4.18.2",
 		"jsonwebtoken": "^9.0.0",
-		"mongoose": "^6.3.6",
-		"puppeteer": "^14.3.0"
+		"log4js": "^6.9.1",
+		"mongoose": "^6.10.3",
+		"puppeteer": "^19.7.5"
 	}
 }

@@ -23,7 +23,11 @@ async function createTask(type) {
   // 查询是否有正在执行的任务
   // 0 获取链接任务  1 获取内容任务
   const isExecuting = await getExecutingTask(type);
-  if (isExecuting) return false;
+  if (isExecuting)
+    return {
+      stateL: false,
+      message:'任务正在进行中......'
+    };
 
   // 没有正在执行的任务，创建新任务
   const fn = type ? createContentTask : createAllLinkTask;
@@ -55,5 +59,5 @@ async function createTypeTask(type) {
 }
 module.exports = {
   createTypeTask,
-  createTask
+  createTask,
 };

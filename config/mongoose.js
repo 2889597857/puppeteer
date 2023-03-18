@@ -5,8 +5,10 @@ const host = `${DBEnv.IP}:${DBEnv.PORT}/`;
 const database = DBEnv.DATABASE;
 const mongoURL = `mongodb://${auth + host + database}?authSource=admin`;
 
+const mongoDocker = 'mongodb://whcss:whcss520@mongo/my-database'
+
 mongoose.connect(
-  mongoURL,
+  mongoDocker,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

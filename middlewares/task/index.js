@@ -38,4 +38,4 @@ module.exports = {
   createAndExecuteTypeTask,
 };
 
-createTask().then((res) => console.log(res));
+// createTask().then((res) => console.log(res));
