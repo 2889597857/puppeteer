@@ -26,7 +26,7 @@ async function findTaskState() {
       return { code: 2, creationTime, success, difference };
     } else {
       return { code: 3, creationTime: '-', difference: '-', success: 0 };
-    }
+    } 
   }
 }
 

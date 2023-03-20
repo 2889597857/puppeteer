@@ -20,12 +20,13 @@ async function openBrowser() {
 
 async function closeBrowser() {
   return new Promise(async (resolve, reject) => {
+    let i = 0;
     for await (const browser of caches) {
       try {
         await browser.close();
-        console.log(`关闭浏览器${i + 1}`);
+        console.log(`关闭浏览器${i++}`);
       } catch {
-        console.log(`关闭浏览器${i + 1}失败`);
+        console.log(`关闭浏览器${i++}失败`);
       }
     }
     cleanCache();

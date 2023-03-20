@@ -3,7 +3,7 @@ const {
   updateLinkState,
   findAllContentLink,
 } = require('../../controllers/urlListController');
-const { getPageSelector } = require('../../controllers/websiteController');
+const { getPageSelectorByID } = require('../../controllers/websiteController');
 const { createNews } = require('../../controllers/newsController');
 
 async function createContentTask() {
@@ -23,27 +23,36 @@ async function getContent({ url, website }, page, index) {
   let selectors = null;
   if (website && url) {
     // 获取选择器
-    selectors = await getPageSelector(website);
+    selectors = await getPageSelectorByID(website);
   }
   if (selectors) {
     // 获取页面内容
-    const pageContent = await getNewsInfo(url, selectors, page);
+    const pageContent = await getNewsInfo(url, selectors.pageSelector, page);
     if (pageContent.state) {
       // 储存新闻
       const result = await saveContent(pageContent.content, url);
-      if (result) return true;
-      else return false;
+      if (result)
+        return {
+          state: true,
+          result: 1,
+        };
+      else
+        return {
+          state: false,
+        };
     } else {
       // 获取新闻内容失败
       // 更新链接状态
-      info.failed++;
       await updateLinkState(url, pageContent.code);
-      return false;
+      return {
+        state: false,
+      };
     }
   } else {
-    info.failed++;
     // 获取选择器失败
-    return false;
+    return {
+      state: false,
+    };
   }
 }
 
@@ -54,12 +63,10 @@ async function saveContent(content, url) {
     if (result.length > 0) {
       // 更新链接状态
       await updateLinkState(url, 1);
-      info.success++;
       return true;
     }
   } catch (error) {
     await updateLinkState(url, 2);
-    info.failed++;
     return false;
   }
 }

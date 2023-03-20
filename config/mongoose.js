@@ -7,8 +7,10 @@ const mongoURL = `mongodb://${auth + host + database}?authSource=admin`;
 
 const mongoDocker = 'mongodb://whcss:whcss520@mongo/my-database'
 
+mongoose.set('strictQuery',false)
+
 mongoose.connect(
-  mongoDocker,
+  mongoURL,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

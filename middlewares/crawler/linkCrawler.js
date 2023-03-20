@@ -55,12 +55,17 @@ async function getURL({ url, selector, website }, page, index) {
   const linkList = await getNewsList(url, selector, page);
   if (linkList.state) {
     /** 将收集到的链接放入数据库 */
-    await saveURL(linkList.links, website);
+    const result = await saveURL(linkList.links, website);
     // 更新采集时间
     await updateLinkTime(url);
-    return true;
+    return {
+      state: true,
+      result,
+    };
   } else {
-    return false;
+    return {
+      state: false,
+    };
   }
 }
 /**
@@ -68,10 +73,15 @@ async function getURL({ url, selector, website }, page, index) {
  */
 async function saveURL(linkList, website) {
   for await (const link of linkList) {
+    let count = 0;
     // 链接是否存在.不存在返回 null
     const isExistenceLink = await findOneContentLink(link);
     // 不存在 存入数据库
-    if (isExistenceLink == null) await addContentLink([{ url: link, website }]);
+    if (isExistenceLink == null) {
+      await addContentLink({ url: link, website });
+      count += 1;
+    }
+    return count;
   }
 }
 

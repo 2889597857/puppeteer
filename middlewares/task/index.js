@@ -1,4 +1,4 @@
-const { createTypeTask, createTask } = require('./createTask');
+const { createTypeTask } = require('./createTask');
 const { executeTask } = require('./executeTask');
 
 /**
@@ -31,11 +31,11 @@ async function startTask(_id, taskQueue) {
   return await createAndExecuteTypeTask(1);
 }
 
+// createAndExecuteTypeTask(1)
+
 module.exports = {
   createTypeTask,
   executeTask,
   startTask,
   createAndExecuteTypeTask,
 };
-
-// createTask().then((res) => console.log(res));

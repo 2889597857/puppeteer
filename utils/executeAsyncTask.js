@@ -26,6 +26,7 @@ function taskInfo() {
     count: 0,
     success: 0,
     failed: 0,
+    result: 0,
   };
 }
 function resetTaskState() {
@@ -46,28 +47,40 @@ async function executeAsyncTask(taskList, fn) {
     locks = true;
     let p = new Promise((resolve) => {
       (async function loop(index, page) {
-        if (!page) page = await openBrowser();
+        const task = taskList[index];
         if (index < MAX) {
-          const res = await fn(taskList[index], page, index);
-          if (res) info.success += 1;
-          else info.failed += 1;
+          if (!page) page = await openBrowser();
+
+          const res = await fn(task, page, index);
+
+          if (res.state) {
+            info.success += 1;
+            info.result += res.result;
+          } else {
+            info.failed += 1;
+          }
+
           loop(cnt++, page);
+
           return;
         }
+
         resolve();
       })(cnt++);
     });
+
     promises.push(p);
   }
 
   await Promise.all(promises);
+
   console.log('任务执行结束');
 
   console.log('开始关闭浏览器');
   await closeBrowser();
   resetTaskState();
-
-  return;
+  
+  return info;
 }
 
 module.exports = { executeAsyncTask, taskState, taskInfo };

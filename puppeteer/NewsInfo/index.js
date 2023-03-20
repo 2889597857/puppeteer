@@ -63,6 +63,7 @@ module.exports = async function getNewsInfo(url, selectors, page) {
       },
     };
   } catch (e) {
+    console.log(e);
     return {
       state: false,
       code: 1004,
