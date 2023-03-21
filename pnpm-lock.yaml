@@ -13,6 +13,7 @@ specifiers:
   log4js: ^6.9.1
   mongoose: ^6.10.3
   puppeteer: ^19.7.5
+  xlsx: https://cdn.sheetjs.com/xlsx-0.19.2/xlsx-0.19.2.tgz
 
 dependencies:
   '@node-rs/jieba': 1.6.2
@@ -27,6 +28,7 @@ dependencies:
   log4js: 6.9.1
   mongoose: 6.10.3
   puppeteer: 19.7.5
+  xlsx: '@cdn.sheetjs.com/xlsx-0.19.2/xlsx-0.19.2.tgz'
 
 packages:
 
@@ -2261,4 +2263,12 @@ packages:
     dependencies:
       buffer-crc32: 0.2.13
       fd-slicer: 1.1.0
+    dev: false
+
+  '@cdn.sheetjs.com/xlsx-0.19.2/xlsx-0.19.2.tgz':
+    resolution: {tarball: https://cdn.sheetjs.com/xlsx-0.19.2/xlsx-0.19.2.tgz}
+    name: xlsx
+    version: 0.19.2
+    engines: {node: '>=0.8'}
+    hasBin: true
     dev: false
