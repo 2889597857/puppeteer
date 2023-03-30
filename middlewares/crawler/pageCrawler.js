@@ -30,6 +30,7 @@ async function getContent({ url, website }, page, index) {
     const pageContent = await getNewsInfo(url, selectors.pageSelector, page);
     if (pageContent.state) {
       // 储存新闻
+      pageContent.content.website = website;
       const result = await saveContent(pageContent.content, url);
       if (result)
         return {
