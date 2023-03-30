@@ -14,7 +14,7 @@ async function createAndExecuteTypeTask(type) {
 
   const { taskID, taskQueue, taskActuator } = task;
 
-  return await executeTask(taskID, taskQueue, taskActuator);
+  return await executeTask(taskID, taskQueue, taskActuator, type);
 }
 
 /**
@@ -25,13 +25,10 @@ async function createAndExecuteTypeTask(type) {
  * @param {function} taskQueue
  * @returns
  */
-async function startTask(_id, taskQueue) {
-  const result = await executeTask(_id, taskQueue);
-  console.log(result);
+async function startTask(taskID, taskActuator, taskQueue) {
+  await executeTask(taskID, taskActuator, taskQueue);
   return await createAndExecuteTypeTask(1);
 }
-
-// createAndExecuteTypeTask(1)
 
 module.exports = {
   createTypeTask,

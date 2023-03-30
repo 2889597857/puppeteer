@@ -26,7 +26,7 @@ async function findTaskState() {
       return { code: 2, creationTime, success, difference };
     } else {
       return { code: 3, creationTime: '-', difference: '-', success: 0 };
-    } 
+    }
   }
 }
 
@@ -47,8 +47,9 @@ async function createTask(req, res) {
     // 无任务在执行
     // 两次任务执行时间要相差1小时
     if (difference >= 1 * 60 * 60 * 1000) {
-      const { _id, creationTime, taskFN } = await createTypeTask(0);
-      startTask(_id, taskFN);
+      const { taskID, creationTime, taskQueue, taskActuator } =
+        await createTypeTask(0);
+      startTask(taskID, taskActuator, taskQueue);
       res.json({
         code: 200,
         data: {

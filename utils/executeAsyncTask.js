@@ -22,10 +22,6 @@ function taskState() {
 }
 function taskInfo() {
   return {
-    time: 0,
-    count: 0,
-    success: 0,
-    failed: 0,
     result: 0,
   };
 }
@@ -39,7 +35,6 @@ async function executeAsyncTask(taskList, fn) {
   console.log(`共计${MAX}个任务`);
 
   const info = taskInfo();
-  info.count = MAX;
 
   let promises = [];
 
@@ -54,7 +49,6 @@ async function executeAsyncTask(taskList, fn) {
           const res = await fn(task, page, index);
 
           if (res.state) {
-            info.success += 1;
             info.result += res.result;
           } else {
             info.failed += 1;
@@ -79,7 +73,7 @@ async function executeAsyncTask(taskList, fn) {
   console.log('开始关闭浏览器');
   await closeBrowser();
   resetTaskState();
-  
+
   return info;
 }
 

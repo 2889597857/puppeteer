@@ -43,13 +43,10 @@ async function updateTaskInfo(_id, info) {
 }
 /**
  * 获取正在执行的任务
- * null 全部
- * 0 链接任务
- * 1 内容任务
  * @param {null|number} type
  * @returns
  */
-async function getExecutingTask(type = 0, state = 0) {
+async function getExecutingTask(state = 0) {
   return await TaskModel.findOne({ state }).sort({ creationTime: -1 });
 }
 /**
@@ -57,8 +54,8 @@ async function getExecutingTask(type = 0, state = 0) {
  * @param {null|number} type
  * @returns
  */
-async function findLatestTask(type = 1) {
-  return await TaskModel.findOne({ state: 1, type }).sort({ creationTime: -1 });
+async function findLatestTask() {
+  return await getExecutingTask(1);
 }
 
 module.exports = {

@@ -22,18 +22,18 @@ const {
 async function createTask(type) {
   // 查询是否有正在执行的任务
   // 0 获取链接任务  1 获取内容任务
-  const isExecuting = await getExecutingTask(type);
+  const isExecuting = await getExecutingTask();
 
   if (isExecuting)
     return {
-      stateL: false,
-      message:'任务正在进行中......'
+      state: false,
+      message: '任务正在进行中......',
     };
   // 没有正在执行的任务，创建新任务
   const fn = type ? createContentTask : createAllLinkTask;
   const taskQueue = await fn();
 
-  if (taskQueue.length > 0) {
+  if (taskQueue && taskQueue.length > 0) {
     const result = await addTask({
       creationTime: dayjs().format(),
       state: 0,
