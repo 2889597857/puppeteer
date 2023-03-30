@@ -14,27 +14,3 @@ async function getNewsCount() {
   }
   return countInfo;
 }
-
-async function task() {
-  const info = await TaskModel.find({}).sort({ _id: -1 });
-  let a = [];
-  for (let index = 0; index < info.length; index += 2) {
-    const current = info[index];
-    const next = info[index + 1];
-
-    a.push({
-      count: current.count,
-      success: current.success,
-      failed: current.failed,
-      elapsedTime: current.elapsedTime,
-    });
-  }
-  a = JSON.stringify(a);
-  const data = fs.writeFileSync('a.txt', a, (e) => {
-    console.log(e);
-  });
-  console.log(data);
-}
-// task();
-let a1 = fs.readFileSync('./a.json');
-console.log(JSON.parse(a1));

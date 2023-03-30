@@ -23,6 +23,7 @@ function taskState() {
 function taskInfo() {
   return {
     result: 0,
+    linkFailed: [],
   };
 }
 function resetTaskState() {
@@ -51,7 +52,7 @@ async function executeAsyncTask(taskList, fn) {
           if (res.state) {
             info.result += res.result;
           } else {
-            info.failed += 1;
+            if (res.website) info.linkFailed.push(website);
           }
 
           loop(cnt++, page);

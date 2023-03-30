@@ -65,6 +65,7 @@ async function getURL({ url, selector, website }, page, index) {
   } else {
     return {
       state: false,
+      website,
     };
   }
 }

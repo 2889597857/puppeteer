@@ -46,8 +46,10 @@ async function updateTaskInfo(_id, info) {
  * @param {null|number} type
  * @returns
  */
-async function getExecutingTask(state = 0) {
-  return await TaskModel.findOne({ state }).sort({ creationTime: -1 });
+async function getExecutingTask(state = 2) {
+  return await TaskModel.findOne({ state: { $gte: 0, $lt: state } }).sort({
+    creationTime: -1,
+  });
 }
 /**
  * 获取上次执行任务
@@ -55,7 +57,11 @@ async function getExecutingTask(state = 0) {
  * @returns
  */
 async function findLatestTask() {
-  return await getExecutingTask(1);
+  return await getExecutingTask(3);
+}
+
+async function findTaskByID(_id) {
+  await TaskModel.findById(_id);
 }
 
 module.exports = {
@@ -65,5 +71,6 @@ module.exports = {
   getExecutingTask,
   updateTaskInfo,
   findLatestTask,
+  findTaskByID,
 };
 // findLatestTask().then((res) => console.log(res));

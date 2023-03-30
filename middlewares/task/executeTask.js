@@ -1,6 +1,7 @@
 const { executeAsyncTask } = require('../../utils');
 const {
   updateTaskInfo,
+  findTaskByID,
 } = require('../../controllers/taskController/controller');
 /**
  *
@@ -23,19 +24,19 @@ async function executeTask(taskID, taskQueue, taskActuator, type = 0) {
 
     // 计算任务耗时
     info.elapsedTime = new Date() - time;
+
     if (!type) {
-      // 链接任务
-    
+      // 把链接任务状态改成已完成
+      info.state = 1;
+      info.count = info.result;
+      await updateTaskInfo(taskID, info);
     } else {
-      // 内容任务
+      const taskInfo = await findTaskByID(taskID);
+      taskInfo.elapsedTime += info.elapsedTime;
+      taskInfo.task = 2;
+      taskInfo.success = info.result;
+      taskInfo.save();
     }
-
-    // 把任务状态改成已完成
-    info.state = 1;
-    // 更新任务状态
-    await updateTaskInfo(taskID, info);
-
-    console.log(info);
 
     return info;
   } else return false;
