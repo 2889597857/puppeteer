@@ -1,8 +1,8 @@
 const WebsiteModel = require('../../models/websiteModel');
 const ContentModel = require('../../models/ContentModel');
 const TaskModel = require('../../models/TaskModel');
-
 const fs = require('fs');
+const dayjs = require('dayjs');
 
 async function getNewsCount() {
   const sites = await WebsiteModel.find({}, { _id: 1, name: 1 });
@@ -14,3 +14,8 @@ async function getNewsCount() {
   }
   return countInfo;
 }
+// getNewsCount().then((res) => console.log(res));
+
+module.exports = {
+  getNewsCount,
+};
