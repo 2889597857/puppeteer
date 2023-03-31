@@ -1,10 +1,10 @@
 const WebsiteModel = require('../../models/websiteModel');
-const ContentModel = require('../../models/ContentModel');
-const TaskModel = require('../../models/TaskModel');
+const ContentModel = require('../../models/contentModel');
+const TaskModel = require('../../models/taskModel');
 const fs = require('fs');
 const dayjs = require('dayjs');
 
-async function getNewsCount() {
+async function getNewsCount(req, res) {
   const sites = await WebsiteModel.find({}, { _id: 1, name: 1 });
   const countInfo = [];
   for await (const site of sites) {
@@ -12,9 +12,12 @@ async function getNewsCount() {
     const report = await ContentModel.count({ website: site._id, state: 1 });
     countInfo.push({ _id: site._id, name: site.name, count, report });
   }
-  return countInfo;
+
+  res.json({
+    code: 200,
+    data: countInfo,
+  });
 }
-// getNewsCount().then((res) => console.log(res));
 
 module.exports = {
   getNewsCount,

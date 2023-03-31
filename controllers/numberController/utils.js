@@ -1,6 +1,6 @@
 const WebsiteModel = require('../../models/websiteModel');
-const ContentModel = require('../../models/ContentModel');
-const TaskModel = require('../../models/TaskModel');
+const ContentModel = require('../../models/contentModel');
+const TaskModel = require('../../models/taskModel');
 const fs = require('fs');
 const dayjs = require('dayjs');
 

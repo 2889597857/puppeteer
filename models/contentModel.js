@@ -1,6 +1,6 @@
 const mongoose = require('../config/mongoose');
 
-const NewsContent = {
+const ContentSchema = mongoose.Schema({
   /** 新闻标题 */
   title: {
     type: String,
@@ -42,9 +42,7 @@ const NewsContent = {
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'website',
   },
-};
-
-const ContentSchema = mongoose.Schema(NewsContent);
+});
 
 const ContentModel = mongoose.model('ContentSchema', ContentSchema, 'content');
 

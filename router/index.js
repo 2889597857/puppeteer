@@ -3,6 +3,7 @@ const task = require('./routers/task');
 const news = require('./routers/news');
 const crawler = require('./routers/crawler');
 const number = require('./routers/number');
+const log = require('./routers/log');
 
 module.exports = (app) => {
   app.use('/news', news);
