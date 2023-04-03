@@ -27,7 +27,6 @@ async function createAllLinkTask() {
   const taskQueue = [];
   if (links) {
     links.forEach((Link) => taskQueue.push(formatTaskInfo(Link)));
-    console.log(taskQueue);
     return taskQueue;
   } else return false;
 }

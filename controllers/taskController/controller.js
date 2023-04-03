@@ -2,7 +2,7 @@ const TaskModel = require('../../models/taskModel');
 
 async function addTask(options) {
   try {
-    return await TaskModel.insertMany([options]);
+    return await TaskModel.create(options);
   } catch (error) {
     return false;
   }
@@ -46,9 +46,10 @@ async function updateTaskInfo(_id, info) {
  * @param {null|number} type
  * @returns
  */
-async function getExecutingTask(state = 2) {
-  return await TaskModel.findOne({ state: { $gte: 0, $lt: state } }).sort({
-    creationTime: -1,
+async function getExecutingTask(executing = true) {
+  const options = executing ? { state: { $gte: 0, $lte: 2 } } : { state: 3 };
+  return await TaskModel.findOne(options).sort({
+    time: -1,
   });
 }
 /**
@@ -57,7 +58,7 @@ async function getExecutingTask(state = 2) {
  * @returns
  */
 async function findLatestTask() {
-  return await getExecutingTask(3);
+  return await getExecutingTask(false);
 }
 
 async function findTaskByID(_id) {
