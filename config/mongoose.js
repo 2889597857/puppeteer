@@ -9,8 +9,24 @@ const mongoDocker = 'mongodb://whcss:whcss520@mongo/my-database'
 
 mongoose.set('strictQuery',false)
 
+// mongoose.connect(
+//   mongoURL,
+//   {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   },
+//   (err) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       console.log(`数据库 ${database} 连接成功`);
+//     }
+//   }
+// );
+
+
 mongoose.connect(
-  mongoURL,
+  'mongodb://localhost:27017/student',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -19,7 +35,7 @@ mongoose.connect(
     if (err) {
       console.log(err);
     } else {
-      console.log(`数据库 ${database} 连接成功`);
+      console.log(`数据库连接成功`);
     }
   }
 );

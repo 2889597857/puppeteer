@@ -19,10 +19,10 @@ async function getAllLinksInfo() {
         },
       },
     ]);
+    console.log('Links', Link);
     if (Links && Links.length > 0) return Links;
     else throw new Error();
   } catch (error) {
-    console.log(error.message);
     return false;
   }
 }
@@ -48,7 +48,6 @@ async function getLinkInfo(_id) {
       return { _id, defaultListSelector, link: newsLinks[0] };
     } else throw new Error();
   } catch (error) {
-    console.log(error.message);
     return false;
   }
 }
@@ -62,7 +61,6 @@ async function updateLinkTime(url) {
     if (data.acknowledged) return true;
     else throw new Error();
   } catch (error) {
-    console.log(error.message);
     return false;
   }
 }
@@ -134,5 +132,5 @@ module.exports = {
 //   getAllLinks,
 // };
 
-// addLink('http://www.cnr.cn/ah/news').then((res) => console.log(res));
-// addLink('http://www.ahnews.com.cn/yaowen1/pc/lay/node_496.html').then((res) => console.log(res));
+// addLink('http://www.cnr.cn/ah/news').then((res) =>
+// addLink('http://www.ahnews.com.cn/yaowen1/pc/lay/node_496.html').then((res) =>

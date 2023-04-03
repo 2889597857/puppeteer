@@ -71,31 +71,35 @@ async function getNewsList(req, res) {
     const totalCount = await ContentModel.count({ state: 0 });
     const totalPages = Math.ceil(totalCount / pageCount);
 
-    // 参数页数是否大于最大页数，大于返回最后一页
-    pageSize = pageSize > totalPages ? totalPages : pageSize;
+    if (totalCount) {
+      // 参数页数是否大于最大页数，大于返回最后一页
+      pageSize = pageSize > totalPages ? totalPages : pageSize;
 
-    const option = {
-      __v: 0,
-      content: 0,
-      segmentation: 0,
-      reportTime: 0,
-      state: 0,
-    };
+      const option = {
+        __v: 0,
+        content: 0,
+        segmentation: 0,
+        reportTime: 0,
+        state: 0,
+      };
 
-    const data = await ContentModel.find({ state: 0 }, option)
-      .sort({ time: -1 })
-      .skip((pageSize - 1) * pageCount)
-      .limit(pageCount)
-      .exec();
+      const data = await ContentModel.find({ state: 0 }, option)
+        .sort({ time: -1 })
+        .skip((pageSize - 1) * pageCount)
+        .limit(pageCount)
+        .exec();
 
-    res.json({
-      code: 200,
-      data: {
-        currentPage: pageSize,
-        totalPages,
-        data,
-      },
-    });
+      res.json({
+        code: 200,
+        data: {
+          currentPage: pageSize,
+          totalPages,
+          data,
+        },
+      });
+    } else {
+      res.json({ code: 200, msg: '参数不存在或参数错误' });
+    }
   } else {
     res.json({ code: 404, msg: '参数不存在或参数错误' });
   }
