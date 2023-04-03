@@ -3,6 +3,7 @@ const {
   updateTaskInfo,
   findTaskByID,
 } = require('../../controllers/taskController/controller');
+const dayjs = require('dayjs');
 /**
  *
  * @param {*} taskID 任务 _id
@@ -42,6 +43,11 @@ async function executeTask(taskID, taskQueue, taskActuator, type = 0) {
   } else return false;
 }
 
+async function updateTaskState({ taskID, state }) {
+  await updateTaskInfo(taskID, { state, completed: dayjs().format() });
+}
+
 module.exports = {
   executeTask,
+  updateTaskState,
 };

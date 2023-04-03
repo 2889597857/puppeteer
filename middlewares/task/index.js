@@ -1,5 +1,5 @@
 const { createTypeTask } = require('./createTask');
-const { executeTask } = require('./executeTask');
+const { executeTask, updateTaskState } = require('./executeTask');
 
 /**
  * 0 启动链接任务
@@ -27,7 +27,9 @@ async function createAndExecuteTypeTask(type) {
  */
 async function startTask(taskID, taskActuator, taskQueue) {
   await executeTask(taskID, taskActuator, taskQueue);
-  return await createAndExecuteTypeTask(1);
+  const contentTask = await createAndExecuteTypeTask(1);
+  if (!contentTask) updateTaskState({ taskID, state: 3 });
+  return;
 }
 
 module.exports = {

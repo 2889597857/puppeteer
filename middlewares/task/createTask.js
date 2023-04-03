@@ -1,4 +1,5 @@
 const dayjs = require('dayjs');
+const Env = require('../../config/env');
 
 const {
   createAllLinkTask,
@@ -9,6 +10,7 @@ const {
 
 const {
   getExecutingTask,
+  findLatestTask,
   addTask,
 } = require('../../controllers/taskController/controller');
 
@@ -19,35 +21,50 @@ const {
  * @param {number} type
  * @returns
  */
-async function createTask(type) {
+async function createTask(type, cooldown = true) {
   // 查询是否有正在执行的任务
   // 0 获取链接任务  1 获取内容任务
   const isExecuting = await getExecutingTask();
-
-  if (isExecuting)
+  if (isExecuting) {
     return {
-      state: false,
+      state: 1,
       message: '任务正在进行中......',
     };
+  }
+
+  if (cooldown) {
+    const coolTime = await calculateCoolDown();
+    if (!coolTime) {
+      return {
+        state: 2,
+        message: '技能冷却中......',
+      };
+    }
+  }
+
   // 没有正在执行的任务，创建新任务
   const fn = type ? createContentTask : createAllLinkTask;
   const taskQueue = await fn();
 
   if (taskQueue && taskQueue.length > 0) {
     const result = await addTask({
-      creationTime: dayjs().format(),
+      time: dayjs().format(),
       state: 0,
       type,
     });
-    const { _id: taskID, creationTime } = result[0];
+
+    const { _id: taskID, creationTime } = result;
 
     const taskActuator = type ? getContent : getURL;
-    return { taskID, creationTime, taskQueue, taskActuator };
+
+    return {
+      state: 3,
+      data: { taskID, creationTime, taskQueue, taskActuator },
+    };
   } else {
     return false;
   }
 }
-
 /**
  * 创建获取链接或获取内容任务
  * @param {*} type 0 / 1
@@ -56,6 +73,13 @@ async function createTask(type) {
 async function createTypeTask(type) {
   return await createTask(type);
 }
+
+async function calculateCoolDown() {
+  const coolTime = Env.Cool_Down * 60 * 1000;
+  const info = await findLatestTask();
+  return dayjs().valueOf() - dayjs(info.completed).valueOf() >= coolTime;
+}
+calculateCoolDown();
 module.exports = {
   createTypeTask,
   createTask,

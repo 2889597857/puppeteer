@@ -13,72 +13,31 @@ async function findTaskState() {
     return {
       code: 1,
       /** 任务创建时间 */
-      creationTime: taskInfo.creationTime,
+      creationTime: taskInfo.time,
       success: taskInfo.success,
     };
   } else {
     let task = await findLatestTask();
 
     if (task) {
-      const { creationTime, success } = task;
+      const { time, success } = task;
       /** 距离上次任务的时间 */
-      const difference = dayjs().valueOf() - dayjs(creationTime).valueOf();
-      return { code: 2, creationTime, success, difference };
+      const difference = dayjs().valueOf() - dayjs(time).valueOf();
+      return { code: 2, time, success, difference };
     } else {
-      return { code: 3, creationTime: '-', difference: '-', success: 0 };
+      return { code: 3, message: 'task not created}' };
     }
   }
 }
 
 async function createTask(req, res) {
-  const { code, creationTime, success, difference } = await findTaskState();
-
-  if (code === 1) {
-    // 有任务在执行
-    res.json({
-      code: 200,
-      data: {
-        isExecuting: false,
-        creationTime,
-        success,
-      },
-    });
-  } else if (code === 2) {
-    // 无任务在执行
-    // 两次任务执行时间要相差1小时
-    if (difference >= 1 * 60 * 60 * 1000) {
-      const { taskID, creationTime, taskQueue, taskActuator } =
-        await createTypeTask(0);
-      startTask(taskID, taskActuator, taskQueue);
-      res.json({
-        code: 200,
-        data: {
-          cooldown: true,
-          creationTime,
-        },
-      });
-    } else {
-      res.json({
-        code: 201,
-        data: { cooldown: false },
-        message: '技能冷却中',
-      });
-    }
-  } else {
-    const { _id, creationTime, taskFN } = await createTypeTask(0);
-    startTask(_id, taskFN);
-    res.json({
-      code: 200,
-      data: {
-        cooldown: true,
-        creationTime,
-      },
-    });
-  }
+  const { state, data, message } = await createTypeTask(0);
+  console.log(state, data, message);
+  res.json({ code: 200, data: 123 });
 }
 
 async function findTask(req, res) {
-  const { code, creationTime, success, difference } = await findTaskState();
+  const { code, time, success, difference } = await findTaskState();
 
   const isExecuting = code === 1 ? true : false;
 
@@ -87,7 +46,7 @@ async function findTask(req, res) {
     data: {
       isExecuting,
       success,
-      creationTime,
+      time,
       difference,
       success,
     },
