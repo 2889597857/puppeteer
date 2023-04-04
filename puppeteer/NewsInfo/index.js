@@ -32,20 +32,20 @@ module.exports = async function getNewsInfo(url, selectors, page) {
     if (!pageTitle)
       return {
         state: false,
-        code: 1001,
+        code: 101,
       };
         
     const a = await ContentModel.findOne({ title: pageTitle });
     if (a != null)
       return {
         state: false,
-        code: 10011,
+        code: 1011,
       };
 
     if (pageContent.length === 0)
       return {
         state: false,
-        code: 1003,
+        code: 103,
       };
 
     if (!pageTime) pageTime = new Date();
@@ -66,7 +66,7 @@ module.exports = async function getNewsInfo(url, selectors, page) {
     console.log(e);
     return {
       state: false,
-      code: 1004,
+      code: 104,
       message: e.message,
     };
   }

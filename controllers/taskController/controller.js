@@ -16,23 +16,6 @@ async function deleteTask(_id) {
 }
 
 /**
- * 0 链接任务
- * 1 内容任务
- * 2 全部任务
- * @param {number} type
- * @returns
- */
-async function getTaskList(type) {
-  if (type == 2) {
-    return await TaskModel.find({}, { __v: 0, type: 0 });
-  } else {
-    return await TaskModel.find(
-      { type: { $gte: type, $lt: ++type } },
-      { __v: 0, type: 0 }
-    );
-  }
-}
-/**
  * 更新任务信息
  * @param {string} _id
  * @param {object} info
@@ -45,30 +28,61 @@ async function updateTaskInfo(_id, info) {
  * @param {null|number} type
  * @returns
  */
-async function getExecutingTask(type = 3) {
+async function getExecutingTypeTask(type = 3) {
   return await TaskModel.findOne({ state: type }).sort({
     time: -1,
   });
 }
 /**
- * 获取上次执行任务
+ * 获取上次执行完成任务
  * @param {null|number} type
  * @returns
  */
 async function findLatestTask() {
-  return await getExecutingTask();
+  return await getExecutingTypeTask();
 }
 
 async function findTaskByID(_id) {
   return await TaskModel.findById(_id);
 }
 
+async function getExecutingTaskList() {
+  return await TaskModel.find({ state: { $lt: 3 } }).sort({
+    time: -1,
+  });
+}
+
+async function getExecutedTaskList(skip = 1) {
+  return await TaskModel.find({ state: 3 })
+    .sort({
+      time: -1,
+    })
+    .skip(10 * skip)
+    .limit(10);
+}
+
+async function getNewTask() {
+  const task = await TaskModel.findOne().sort({
+    time: -1,
+  });
+  
+  if (!task) return [];
+  
+  const isExecuting = task.state < 3;
+  return {
+    isExecuting,
+    ...task,
+  };
+}
+
 module.exports = {
   addTask,
   deleteTask,
-  getTaskList,
-  getExecutingTask,
+  getNewTask,
+  getExecutingTypeTask,
   updateTaskInfo,
   findLatestTask,
   findTaskByID,
+  getExecutingTaskList,
+  getExecutedTaskList,
 };

@@ -1,34 +1,5 @@
 const { createTypeTask, startTask } = require('../../middlewares');
-const { getExecutingTask, findLatestTask } = require('./controller');
-const dayjs = require('dayjs');
-
-/**
- * code 1 有任务在执行
- * code 2 无任务在执行
- * @returns
- */
-async function findTaskState() {
-  const taskInfo = await getExecutingTask();
-  if (taskInfo) {
-    return {
-      code: 1,
-      /** 任务创建时间 */
-      creationTime: taskInfo.time,
-      success: taskInfo.success,
-    };
-  } else {
-    let task = await findLatestTask();
-
-    if (task) {
-      const { time, success } = task;
-      /** 距离上次任务的时间 */
-      const difference = dayjs().valueOf() - dayjs(time).valueOf();
-      return { code: 2, time, success, difference };
-    } else {
-      return { code: 3, message: 'task not created}' };
-    }
-  }
-}
+const { getNewTask, getExecutedTaskList } = require('./controller');
 
 async function createTask(req, res) {
   const { state, data, message } = await createTypeTask({ type: 0 });
@@ -41,24 +12,18 @@ async function createTask(req, res) {
   }
 }
 
-async function findTask(req, res) {
-  const { code, time, success, difference } = await findTaskState();
+async function findNewTask(req, res) {
+  const data = await getNewTask();
+  res.json({ code: 200, data });
+}
 
-  const isExecuting = code === 1 ? true : false;
-
-  res.json({
-    code: 200,
-    data: {
-      isExecuting,
-      success,
-      time,
-      difference,
-      success,
-    },
-  });
+async function findAllTask(req, res) {
+  const data = await getExecutedTaskList();
+  res.json({ code: 200, data });
 }
 
 module.exports = {
   createTask,
-  findTask,
+  findNewTask,
+  findAllTask,
 };

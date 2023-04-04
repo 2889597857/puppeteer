@@ -9,7 +9,7 @@ const {
 } = require('../crawler');
 
 const {
-  getExecutingTask,
+  getExecutingTypeTask,
   findLatestTask,
   addTask,
   updateTaskInfo,
@@ -27,7 +27,7 @@ async function createTask(type, taskID, cooldown = false) {
   // 0 获取链接任务  1 获取内容任务
   const _type = type == 1 ? 2 : 0;
 
-  const isExecuting = await getExecutingTask(_type);
+  const isExecuting = await getExecutingTypeTask(_type);
 
   if (isExecuting) {
     return {
