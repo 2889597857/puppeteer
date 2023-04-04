@@ -71,8 +71,8 @@ async function getURL({ url, selector, website }, page, index) {
  * 存新闻链接
  */
 async function saveURL(linkList, website) {
+  let count = 0;
   for await (const link of linkList) {
-    let count = 0;
     // 链接是否存在.不存在返回 null
     const isExistenceLink = await findOneContentLink(link);
     // 不存在 存入数据库
@@ -80,8 +80,8 @@ async function saveURL(linkList, website) {
       await addContentLink({ url: link, website });
       count += 1;
     }
-    return count;
   }
+  return count;
 }
 
 module.exports = { createAllLinkTask, createLinkTask, getURL };

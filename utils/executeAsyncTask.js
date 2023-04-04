@@ -53,7 +53,7 @@ async function executeAsyncTask(taskList, fn) {
           if (res.state) {
             info.result += res.result;
           } else {
-            if (res.website) info.linkFailed.push(website);
+            if (res.website) info.linkFailed.push(res.website);
             else info.failed += 1;
           }
 
