@@ -19,7 +19,6 @@ async function getAllLinksInfo() {
         },
       },
     ]);
-    console.log('Links', Link);
     if (Links && Links.length > 0) return Links;
     else throw new Error();
   } catch (error) {

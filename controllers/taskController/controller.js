@@ -7,7 +7,6 @@ async function addTask(options) {
     return false;
   }
 }
-
 async function deleteTask(_id) {
   try {
     return await TaskModel.findByIdAndDelete(_id);
@@ -46,9 +45,8 @@ async function updateTaskInfo(_id, info) {
  * @param {null|number} type
  * @returns
  */
-async function getExecutingTask(executing = true) {
-  const options = executing ? { state: { $gte: 0, $lte: 2 } } : { state: 3 };
-  return await TaskModel.findOne(options).sort({
+async function getExecutingTask(type = 3) {
+  return await TaskModel.findOne({ state: type }).sort({
     time: -1,
   });
 }
@@ -58,11 +56,11 @@ async function getExecutingTask(executing = true) {
  * @returns
  */
 async function findLatestTask() {
-  return await getExecutingTask(false);
+  return await getExecutingTask();
 }
 
 async function findTaskByID(_id) {
-  await TaskModel.findById(_id);
+  return await TaskModel.findById(_id);
 }
 
 module.exports = {
@@ -74,4 +72,3 @@ module.exports = {
   findLatestTask,
   findTaskByID,
 };
-// findLatestTask().then((res) => console.log(res));

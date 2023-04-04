@@ -3,19 +3,23 @@ const puppeteer = require('puppeteer');
 const caches = [];
 
 async function openBrowser() {
-  const browser = await puppeteer.launch({
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox', // 禁用setuid沙箱(Linux)。
-      `--disable-notifications=true`, // 关闭浏览器通知提示
-      `--blink-settings=imagesEnabled=false`, // 禁止加载图片
-    ],
-    headless: true,
-    timeout: 1000,
-    userDataDir: './userDataDir',
-  });
-  caches.push(browser);
-  return await browser.newPage();
+  try {
+    const browser = await puppeteer.launch({
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox', // 禁用setuid沙箱(Linux)。
+        `--disable-notifications=true`, // 关闭浏览器通知提示
+        `--blink-settings=imagesEnabled=false`, // 禁止加载图片
+      ],
+      headless: true,
+      timeout: 1000,
+      userDataDir: './userDataDir',
+    });
+    caches.push(browser);
+    return await browser.newPage();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function closeBrowser() {

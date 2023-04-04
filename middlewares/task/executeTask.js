@@ -12,7 +12,7 @@ const dayjs = require('dayjs');
  * @param {*} type 任务类型
  * @returns
  */
-async function executeTask(taskID, taskQueue, taskActuator, type = 0) {
+async function executeTask({ taskID, taskQueue, taskActuator }, type = 0) {
   if (typeof taskActuator === 'function') {
     // 任务开始执行时间
     const time = new Date();
@@ -33,9 +33,10 @@ async function executeTask(taskID, taskQueue, taskActuator, type = 0) {
       await updateTaskInfo(taskID, info);
     } else {
       const taskInfo = await findTaskByID(taskID);
-      taskInfo.elapsedTime += info.elapsedTime;
-      taskInfo.task = 2;
+      taskInfo.task = 3;
       taskInfo.success = info.result;
+      taskInfo.elapsedTime += info.elapsedTime;
+      taskInfo.completed = new Date();
       taskInfo.save();
     }
 

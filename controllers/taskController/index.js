@@ -31,9 +31,14 @@ async function findTaskState() {
 }
 
 async function createTask(req, res) {
-  const { state, data, message } = await createTypeTask(0);
-  console.log(state, data, message);
-  res.json({ code: 200, data: 123 });
+  const { state, data, message } = await createTypeTask({ type: 0 });
+  if (state === 3) {
+    const { taskID, time, taskQueue, taskActuator } = data;
+    startTask({ taskID, taskQueue, taskActuator });
+    res.json({ code: 200, data: { taskID, time } });
+  } else {
+    res.json({ code: 200, message });
+  }
 }
 
 async function findTask(req, res) {

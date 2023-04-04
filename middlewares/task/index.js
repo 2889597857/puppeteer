@@ -7,14 +7,14 @@ const { executeTask, updateTaskState } = require('./executeTask');
  * @param {number} type 0 | 1
  * @returns
  */
-async function createAndExecuteTypeTask(type) {
-  const task = await createTypeTask(type);
-
-  if (!task) return false;
-
-  const { taskID, taskQueue, taskActuator } = task;
-
-  return await executeTask(taskID, taskQueue, taskActuator, type);
+async function createAndExecuteTypeTask({ taskID, type }) {
+  const task = await createTypeTask({ taskID, type });
+  if (task.state == 3) {
+    const { taskQueue, taskActuator } = task.data;
+    return await executeTask({ taskID, taskQueue, taskActuator }, type);
+  } else {
+    return false;
+  }
 }
 
 /**
@@ -25,10 +25,10 @@ async function createAndExecuteTypeTask(type) {
  * @param {function} taskQueue
  * @returns
  */
-async function startTask(taskID, taskActuator, taskQueue) {
-  await executeTask(taskID, taskActuator, taskQueue);
-  const contentTask = await createAndExecuteTypeTask(1);
-  if (!contentTask) updateTaskState({ taskID, state: 3 });
+async function startTask({ taskID, taskQueue, taskActuator }) {
+  await executeTask({ taskID, taskQueue, taskActuator });
+  const contentTask = await createAndExecuteTypeTask({ taskID, type: 1 });
+  if (!contentTask) updateTaskState({ taskID, state: 4 });
   return;
 }
 

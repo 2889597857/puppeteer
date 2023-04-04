@@ -41,7 +41,6 @@ async function createLinkTask(_id) {
   const taskQueue = [];
   if (link) {
     taskQueue.push(formatTaskInfo(link));
-    console.log(taskQueue);
     return taskQueue;
   } else return false;
 }

@@ -23,6 +23,7 @@ function taskState() {
 function taskInfo() {
   return {
     result: 0,
+    failed: 0,
     linkFailed: [],
   };
 }
@@ -53,6 +54,7 @@ async function executeAsyncTask(taskList, fn) {
             info.result += res.result;
           } else {
             if (res.website) info.linkFailed.push(website);
+            else info.failed += 1;
           }
 
           loop(cnt++, page);
