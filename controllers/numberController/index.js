@@ -1,6 +1,8 @@
 const WebsiteModel = require('../../models/websiteModel');
 const ContentModel = require('../../models/contentModel');
-const TaskModel = require('../../models/taskModel');
+const {
+  getExecutedTaskList,
+} = require('../../controllers/taskController/controller');
 const fs = require('fs');
 const dayjs = require('dayjs');
 
@@ -19,14 +21,8 @@ async function getNewsCount(req, res) {
 }
 
 async function task(req, res) {
-  const list = await TaskModel.find(
-    {
-      state: 3,
-    },
-    { _id: 0, count: 1, success: 1, time: 1 }
-  )
-    .sort({ time: -1 })
-    .limit(10);
+  const skip = req.query.skip || 1;
+  const list = await getExecutedTaskList(skip);
 
   res.json({
     code: 200,

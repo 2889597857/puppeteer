@@ -3,7 +3,7 @@ const { NewsNumber } = require('../../controllers');
 
 const router = Router();
 
-router.get('/', NewsNumber.getNewsCount);
+router.get('/news', NewsNumber.getNewsCount);
 router.get('/task', NewsNumber.task);
 
 
