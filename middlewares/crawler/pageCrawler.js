@@ -44,7 +44,7 @@ async function getContent({ url, website }, page, index) {
     } else {
       // 获取新闻内容失败
       // 更新链接状态
-      await updateLinkState(url, pageContent.code);
+      await updateLinkState(url, pageContent.code, pageContent.message);
       return {
         state: false,
       };

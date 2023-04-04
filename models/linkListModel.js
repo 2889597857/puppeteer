@@ -6,7 +6,7 @@ const LinkListSchema = mongoose.Schema({
     type: String,
     unique: true,
   },
-  /** 
+  /**
    * 0 内容未采集
    * 1 采集成功
    * 2 采集失败
@@ -22,6 +22,7 @@ const LinkListSchema = mongoose.Schema({
     type: Date,
     default: dayjs().format(),
   },
+  error: String,
   website: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'website',

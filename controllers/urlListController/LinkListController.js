@@ -46,10 +46,10 @@ async function findAllContentLink(state = 0) {
 //  { state }, // 更新链接的状态 0 未抓取 1 抓取成功 2 抓取失败
 //  { new: true } //  返回更新后的数据 默认返回更新前的数据
 
-async function updateLinkState(url, state) {
+async function updateLinkState(url, state, error) {
   return await LinkListModel.updateOne(
     { url }, // 条件
-    { state } // 更新链接的状态 0 未抓取 1 抓取成功 2 抓取失败
+    { state, error } // 更新链接的状态 0 未抓取 1 抓取成功 2 抓取失败
   );
 }
 module.exports = {
