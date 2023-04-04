@@ -33,7 +33,7 @@ async function executeTask({ taskID, taskQueue, taskActuator }, type = 0) {
       await updateTaskInfo(taskID, info);
     } else {
       const taskInfo = await findTaskByID(taskID);
-      taskInfo.task = 3;
+      taskInfo.state = 3;
       taskInfo.success = info.result;
       taskInfo.elapsedTime += info.elapsedTime;
       taskInfo.completed = new Date();

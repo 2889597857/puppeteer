@@ -65,13 +65,14 @@ async function getNewTask() {
   const task = await TaskModel.findOne().sort({
     time: -1,
   });
-  
-  if (!task) return [];
-  
+
+  if (!task) return {};
+  const { success, time } = task;
   const isExecuting = task.state < 3;
   return {
     isExecuting,
-    ...task,
+    success,
+    time,
   };
 }
 

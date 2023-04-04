@@ -6,7 +6,7 @@ async function createTask(req, res) {
   if (state === 3) {
     const { taskID, time, taskQueue, taskActuator } = data;
     startTask({ taskID, taskQueue, taskActuator });
-    res.json({ code: 200, data: { taskID, time } });
+    res.json({ code: 200, data: { id: taskID, time } });
   } else {
     res.json({ code: 200, message });
   }
