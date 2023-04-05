@@ -20,6 +20,15 @@ async function getNewsCount(req, res) {
   });
 }
 
+async function base(req, res) {
+  const count = await ContentModel.count();
+  const report = await ContentModel.count({ state: 1 });
+  res.json({
+    code: 200,
+    data: { count, report },
+  });
+}
+
 async function task(req, res) {
   const skip = req.query.skip || 1;
   const list = await getExecutedTaskList(skip);
@@ -32,4 +41,5 @@ async function task(req, res) {
 module.exports = {
   getNewsCount,
   task,
+  base,
 };

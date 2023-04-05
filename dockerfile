@@ -5,4 +5,4 @@ RUN npm install --registry=https://registry.npmmirror.com/
 RUN npm install -g pm2
 COPY . .
 CMD [ "pm2-runtime", "app.js"]
-EXPOSE 888
+EXPOSE 80
