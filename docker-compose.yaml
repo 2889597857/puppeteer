@@ -9,8 +9,6 @@ services:
       # context: ./epidemic-server
     ports:
       - 888:888
-    networks:
-      - news-net
     # 容器启动顺序
     depends_on:
       - mongo
@@ -38,8 +36,6 @@ services:
       - ./mongodb/db:/data/db
       - ./mongodb/log:/data/log
       - ./config/init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-    networks:
-      - news-net
     ports:
       - 27017:27017
     healthcheck:
@@ -48,6 +44,3 @@ services:
       timeout: 10s
       retries: 5
       start_period: 40s
-
-networks:
-  news-net:
