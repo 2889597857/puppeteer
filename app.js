@@ -1,17 +1,17 @@
 const express = require('express');
 const ws = require('express-ws');
 const cors = require('cors');
-const { createToken, verifyToken } = require('./config/jwt');
-const { isAuth } = require('./middlewares');
+// const { createToken, verifyToken } = require('./config/jwt');
+// const { isAuth } = require('./middlewares');
 
-const history = require('connect-history-api-fallback');
+// const history = require('connect-history-api-fallback');
 
 const app = ws(express()).app;
-const port = 80;
+const port = 888;
 
 app.use(cors());
-app.use(history());
-app.use(express.static('public'));
+// app.use(history());
+// app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 
@@ -27,3 +27,4 @@ routers(app);
 app.listen(port, () => {
   console.log(`监听端口:${port}`);
 });
+// docker-compose up -d --build
