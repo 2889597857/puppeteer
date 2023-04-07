@@ -14,23 +14,21 @@ async function getNewsCount() {
   }
   return countInfo;
 }
-getNewsCount();
 
-async function a() {
-  const sites = WebsiteModel.find({}, { _id: 1, url: 1 });
+// async function a() {
+//   const sites = WebsiteModel.find({}, { _id: 1, url: 1 });
 
-  for await (const site of sites) {
-    console.log(site.url);
-    const url = site.url.slice(8);
-    console.log(url);
-    await ContentModel.updateMany(
-      { url: { $regex: url }, website: { $eq: null } },
-      {
-        website: site._id,
-      }
-    );
-  }
-}
+//   for await (const site of sites) {
+//     console.log(site.url);
+//     const url = site.url.slice(8);
+//     await ContentModel.updateMany(
+//       { url: { $regex: url }, website: { $eq: null } },
+//       {
+//         website: site._id,
+//       }
+//     );
+//   }
+// }
 
 async function task() {
   // const info = await TaskModel.find({}).sort({ _id: -1 });

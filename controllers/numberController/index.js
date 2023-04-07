@@ -30,7 +30,7 @@ async function base(req, res) {
 }
 
 async function task(req, res) {
-  const skip = req.query.skip || 1;
+  const skip = req.query.skip || 0;
   const list = await getExecutedTaskList(skip);
 
   res.json({

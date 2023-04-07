@@ -52,7 +52,7 @@ async function getExecutingTaskList() {
   });
 }
 
-async function getExecutedTaskList(skip = 1) {
+async function getExecutedTaskList(skip = 0) {
   return await TaskModel.find({ state: 3 })
     .sort({
       time: -1,
