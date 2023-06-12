@@ -5,42 +5,12 @@ const host = `${DBEnv.IP}:${DBEnv.PORT}/`;
 const database = DBEnv.DATABASE;
 const mongoURL = `mongodb://${auth + host + database}?authSource=admin`;
 
-const mongoDocker = 'mongodb://whcss:whcss520@mongo/my-database';
+// const mongoDocker = 'mongodb://whcss:whcss520@mongo/my-database';
 
 mongoose.set('strictQuery', false);
 
-// mongoose.connect(
-//   mongoURL,
-//   {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   },
-//   (err) => {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       console.log(`数据库 ${database} 连接成功`);
-//     }
-//   }
-// );
-
-// mongoose.connect(
-//   'mongodb://localhost:27017/student',
-//   {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   },
-//   (err) => {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       console.log(`数据库连接成功`);
-//     }
-//   }
-// );
-
 mongoose.connect(
-  'mongodb://root:admin@localhost:27017/news',
+  mongoURL,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -55,5 +25,3 @@ mongoose.connect(
 );
 
 module.exports = mongoose;
-
-// export default mongoose
