@@ -13,7 +13,7 @@
 		"jsonwebtoken": "^9.0.0",
 		"log4js": "^6.9.1",
 		"mongoose": "^6.10.3",
-		"puppeteer": "^19.7.5",
+		"puppeteer": "^24.10.0",
 		"xlsx": "https://cdn.sheetjs.com/xlsx-0.19.2/xlsx-0.19.2.tgz"
 	}
 }
